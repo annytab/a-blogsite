@@ -107,8 +107,8 @@ csx
 AppPackages/
 
 # User specific files
-Webshop/app.config
-Webshop/DatabaseFiles/DatabaseVersion.xml.gz
+Blogsite/app.config
+Blogsite/DatabaseFiles/DatabaseVersion.xml.gz
 
 # Images and other files
 Blogsite/Content/administrators/
