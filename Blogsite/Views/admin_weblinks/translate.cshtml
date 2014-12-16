@@ -1,0 +1,92 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get values
+    Int32 languageId = ViewBag.LanguageId;
+    List<Language> languages = ViewBag.Languages;
+    Weblink standardWeblink = ViewBag.StandardWeblink;
+    Weblink translatedWeblink = ViewBag.TranslatedWeblink;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string returnUrl = ViewBag.ReturnUrl;
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
+
+    // Get translated texts
+    string translate_tt = tt.Get("translate");
+    string no_choice_tt = tt.Get("no_choice");
+    string language_tt = tt.Get("language");
+    string weblink_tt = tt.Get("weblink");
+    string linkname_tt = tt.Get("linkname");
+    string url_tt = tt.Get("url");
+    string inactive_tt = tt.Get("inactive");
+    string delete_tt = tt.Get("delete");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    ViewBag.Title = weblink_tt + " - " + translate_tt.ToLower();
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("~/Views/admin_weblinks/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("translate", "admin_weblinks", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <input type="hidden" name="hiddenWeblinkId" value="@standardWeblink.id" />
+    
+    @*Input form table*@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(language_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select id="selectLanguage" name="selectLanguage" class="annytab-form-select">
+                    <option value="0" data-url="@("/admin_weblinks/translate/" + standardWeblink.id.ToString() + "?returnUrl=" + Server.UrlEncode(returnUrl))" @(languageId == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
+                    @foreach (Language language in languages)
+                    {
+                        <option value="@language.id" data-url="@("/admin_weblinks/translate/" + standardWeblink.id.ToString() + "?returnUrl=" + Server.UrlEncode(returnUrl) + "&lang=" + language.id.ToString())" @(language.id == languageId ? Html.Raw("selected='selected'") : Html.Raw(""))>@language.name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="annytab-basic-space"></div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(linkname_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtStandardLinkname" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@standardWeblink.link_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">&nbsp;</div>
+            <div class="annytab-input-form-column-input"><input name="txtTranslatedLinkname" type="text" class="annytab-form-textbox" value="@(translatedWeblink != null ? translatedWeblink.link_name : "")" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(url_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtStandardUrl" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@standardWeblink.url" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">&nbsp;</div>
+            <div class="annytab-input-form-column-input"><input name="txtTranslatedUrl" type="text" class="annytab-form-textbox" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) value="@(translatedWeblink != null ? translatedWeblink.url : "")" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(inactive_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="cbInactive" type="checkbox" class="annytab-form-checkbox" value="true" @(translatedWeblink != null && translatedWeblink.inactive == true ? Html.Raw("checked='checked'") : Html.Raw("")) @(languageId == 0 ? Html.Raw("disabled='disabled'") : Html.Raw("")) /></div>
+        </div>
+    </div>
+
+    @*Button panel*@
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@translate_tt" @(languageId == 0 ? Html.Raw("disabled='disabled'") : Html.Raw("")) />
+        <input data-id="deletePost" type="button" class="annytab-form-button" value="@delete_tt" @(Html.Raw("data-url='/admin_weblinks/delete/" + standardWeblink.id.ToString() + "?returnUrl=" + Server.UrlEncode(returnUrl) + "&lang=" + languageId.ToString() + "'")) @(languageId == 0 ? Html.Raw("disabled='disabled'") : Html.Raw("")) />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $("#selectLanguage").focus();
+        $("#selectLanguage").on("change", function () { $(location).attr("href", $(this).find(":selected").attr("data-url")); });
+    </script>
+}
+

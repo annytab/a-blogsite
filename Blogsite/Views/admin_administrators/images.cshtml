@@ -1,0 +1,67 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get form values
+    Administrator administrator = ViewBag.Administrator;
+    string mainImageUrl = ViewBag.MainImageUrl;
+    string returnUrl = ViewBag.ReturnUrl;
+
+    // Get translated texts
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string administrator_tt = tt.Get("administrator");
+    string images_tt = tt.Get("images");
+    string image_tt = tt.Get("image");
+    string id_tt = tt.Get("id");
+    string user_name_tt = tt.Get("user_name");
+    string author_name_tt = tt.Get("author_name");
+    string main_image_tt = tt.Get("main_image");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title
+    ViewBag.Title = administrator_tt + " - " + images_tt.ToLower();
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("~/Views/admin_administrators/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("images", "admin_administrators", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    
+    @* Input form table *@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@administrator.id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(user_name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtUserName" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@administrator.admin_user_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(author_name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtAuthorName" type="text" class="annytab-form-textbox" tabindex=" -1" readonly="readonly" value="@administrator.author_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(main_image_tt + ", max 1 mb, jpg|jpeg (1:1):")</div>
+            <div class="annytab-input-form-column-input"><img id="mainImage" src="@Url.Content(mainImageUrl)" alt="@image_tt" style="max-width:300px;margin:2px;padding:1px;border:1px solid #cccccc;" /><br /><input id="uploadMainImage" type="file" name="uploadMainImage" class="annytab-form-upload" accept="image/jpeg" /></div>
+        </div>
+    </div>
+
+    // Save form button
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='/admin_administrators" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $("#uploadMainImage").focus();
+    </script>
+}

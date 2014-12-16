@@ -1,0 +1,307 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+    
+    // Declare variables
+    Int32 pageSize = 10;
+    
+    // Get form data
+    Domain domain = ViewBag.CurrentDomain;
+    List<Category> mainCategories = Category.GetChildCategories(0, domain.back_end_language, "title", "ASC");
+    Post post = ViewBag.Post;
+    Administrator administrator = post.administrator_id != 0 ? Administrator.GetOneById(post.administrator_id) : Administrator.GetSignedInAdministrator();
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : "";
+    string returnUrl = ViewBag.ReturnUrl;
+    string keywords = ViewBag.Keywords;
+    Int32 page = ViewBag.CurrentPage;
+    
+    // Create a clean string with keywords
+    string cleanKeywords = keywords.Replace("+", "");
+
+    // Create an array with search words
+    string[] words = cleanKeywords.Split(' ');
+
+    // Count the number of posts
+    Int32 count = MediaFile.GetCountBySearch(words);
+
+    // Get the number of pages
+    Int32 numberOfPages = Convert.ToInt32(Math.Ceiling(((double)count / pageSize)));
+    numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
+
+    // Get mediafiles by keywords in search
+    List<MediaFile> mediaFiles = MediaFile.GetBySearch(words, pageSize, page, "title", "ASC");
+    
+    // Get translated texts
+    string post_tt = tt.Get("post");
+    string new_tt = tt.Get("new");
+    string edit_tt = tt.Get("edit");
+    string category_tt = tt.Get("category");
+    string no_choice_tt = tt.Get("no_choice");
+    string id_tt = tt.Get("id");
+    string author_tt = tt.Get("author");
+    string title_tt = tt.Get("title");
+    string description_tt = tt.Get("description");
+    string meta_description_tt = tt.Get("meta_description");
+    string keywords_tt = tt.Get("keywords");
+    string page_name_tt = tt.Get("page_name");
+    string date_tt = tt.Get("date");
+    string added_tt = tt.Get("added");
+    string inactive_tt = tt.Get("inactive"); 
+    string media_files_tt = tt.Get("media_files");
+    string search_tt = tt.Get("search");
+    string media_type_tt = tt.Get("media_type");
+    string source_tt = tt.Get("source");
+    string preview_tt = tt.Get("preview");
+    string add_tt = tt.Get("add");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    if (post.id == 0)
+    {
+        ViewBag.Title = post_tt + " - " + new_tt.ToLower();
+    }
+    else
+    {
+        ViewBag.Title = post_tt + " - " + edit_tt.ToLower();
+    }
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("/Views/admin_posts/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("edit", "admin_posts", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <input name="hiddenAdministratorId" type="hidden" value="@administrator.id" />
+    <input name="hiddenPage" type="hidden" value="@page" />
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    
+    @*Title and content*@
+    <div style="display:block;padding:0px 10px 0px 0px;">
+        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;">@(title_tt)</div>
+        <div><input id="txtTitle" name="txtTitle" type="text" class="annytab-form-textbox" style="max-width:100%;margin-right:5px;" value="@post.title" /></div>
+        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;margin-top:5px;">@(description_tt)</div>
+        <div>
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" style="font-weight:bold;" value="b" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" style="font-style:italic" value="i" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="br" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h1" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h2" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h3" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h4" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="p" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="code" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="span" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="div" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="line" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="space" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="url" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="img" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="font" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="list" />
+            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="table" />
+        </div>
+        <div><textarea id="txtDescription" name="txtDescription" class="annytab-form-textarea" contenteditable="true" spellcheck="false" style="max-width:100%;margin-right:5px;" rows="40">@post.main_content</textarea></div>
+    </div>
+    
+    <div class="annytab-basic-line"></div>
+    
+    @*Media files*@
+    <div class="annytab-list-container">
+
+        @*Search box*@
+        <div style="padding:5px;margin:0px 0px 5px 0px;">
+            <span>@(media_files_tt + ": ")</span>
+            <input name="txtSearch" type="text" class="annytab-form-textbox" style="width:150px;" />
+            <input name="btnSearch" type="submit" class="annytab-form-button" value="@search_tt" />
+        </div>
+
+        @*List*@
+        <div class="annytab-list-table" style="width:1000px;">
+            <div class="anntyab-list-row">
+                <div class="annytab-list-column-head" style="text-align:center;width:100px;">@id_tt</div>
+                <div class="annytab-list-column-head" style="text-align:left;width:200px;">@title_tt</div>
+                <div class="annytab-list-column-head" style="text-align:left;width:200px;">@media_type_tt</div>
+                <div class="annytab-list-column-head" style="text-align:left;width:200px;">@source_tt</div>
+                <div class="annytab-list-column-head" style="text-align:center;width:200px;">@preview_tt</div>
+                <div class="annytab-list-column-head" style="text-align:center;width:100px;">@add_tt</div>
+            </div>
+
+            @for (int i = 0; i < mediaFiles.Count; i++)
+            {
+                @:<div class="@(i % 2 != 0 ? "annytab-list-row-main" : "annytab-list-row-alt")">
+                @:<div class="annytab-list-column" style="text-align:center;width:100px;">@mediaFiles[i].id.ToString()</div>
+                @:<div class="annytab-list-column" style="text-align:left;width:200px;">@mediaFiles[i].title</div>
+                @:<div class="annytab-list-column" style="text-align:left;width:200px;">@mediaFiles[i].media_type</div>
+                @:<div class="annytab-list-column" style="text-align:left;width:200px;">@mediaFiles[i].src</div>
+                @:<div class="annytab-list-column" style="text-align:center;width:200px;"><input data-id="btnPreviewMediaFile" type="button" class="annytab-form-button" data-title="@mediaFiles[i].title" data-media-type="@mediaFiles[i].media_type" data-src="@mediaFiles[i].src" value="@preview_tt" /></div>
+                @:<div class="annytab-list-column" style="text-align:center;width:100px;"><input data-id="btnAddMediaFile" type="button" class="annytab-form-button" data-title="@mediaFiles[i].title" data-media-type="@mediaFiles[i].media_type" data-src="@mediaFiles[i].src" value="@add_tt" /></div>
+                @:</div>
+            }
+        </div>
+    </div>
+    
+    <div class="annytab-basic-space"></div>
+
+    @* Paging menu *@
+    <div class="annytab-basic-container" style="text-align:center;">
+        @if (page > 1)
+        {
+            @:<div style="float:left;text-align:left;"><input name="btnPreviousPage" type="submit" class="annytab-navigate-button" value="@Html.Raw("&#60;&#60;")" /></div>
+        }
+        else
+        {
+            @:<div style="float:left;text-align:left;"><span class="annytab-inactive-navigate-button">@Html.Raw("&#60;&#60;")</span></div>
+        }
+
+        <span class="annytab-page-information">@(tt.Get("page") + " " + page.ToString() + " " + tt.Get("of").ToLower() + " " + numberOfPages)</span>
+
+        @if (page < numberOfPages)
+        {
+            @:<div style="float:right;text-align:right;"><input name="btnNextPage" type="submit" class="annytab-navigate-button" value="@Html.Raw("&#62;&#62;")" /></div>
+        }
+        else
+        {
+            @:<div style="float:right;text-align:right;"><span class="annytab-inactive-navigate-button">@Html.Raw("&#62;&#62;")</span></div>
+        }
+    </div>
+    
+    <div class="annytab-basic-line"></div>
+
+    @*Input form table*@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(category_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select id="selectCategory" name="selectCategory" class="annytab-form-select">
+                    <option value="0" @(post.category_id == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
+                    @CreateChildOptions(0, mainCategories, post.category_id, domain.back_end_language)
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row" style="@(post.id != 0 ? "display:table-row;" : "display:none;")">
+            <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@post.id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(author_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtAuthor" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@administrator.admin_user_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(meta_description_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><textarea name="txtMetaDescription" class="annytab-form-textarea" rows="3">@post.meta_description</textarea></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(keywords_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtMetaKeywords" type="text" class="annytab-form-textbox" value="@post.meta_keywords" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@("Robots:")</div>
+            <div class="annytab-input-form-column-input">
+                <select name="selectMetaRobots" class="annytab-form-select">
+                    <option value="index, follow" @(post.meta_robots == "index, follow" ? Html.Raw("selected='selected'") : Html.Raw(""))>index, follow</option>
+                    <option value="index, nofollow" @(post.meta_robots == "index, nofollow" ? Html.Raw("selected='selected'") : Html.Raw(""))>index, nofollow</option>
+                    <option value="noindex, follow" @(post.meta_robots == "noindex, follow" ? Html.Raw("selected='selected'") : Html.Raw(""))>noindex, follow</option>
+                    <option value="noindex, nofollow" @(post.meta_robots == "noindex, nofollow" ? Html.Raw("selected='selected'") : Html.Raw(""))>noindex, nofollow</option>
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(page_name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtPageName" type="text" class="annytab-form-textbox" value="@post.page_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(added_tt + ", " + date_tt.ToLower() + " (yyyy-mm-dd):")</div>
+            <div class="annytab-input-form-column-input"><input id="txtDateAdded" name="txtDateAdded" type="text" class="annytab-form-textbox" value="@post.date_added.ToString("yyyy-MM-dd")" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(inactive_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="cbInactive" type="checkbox" class="annytab-form-checkbox" value="true" @(post != null && post.inactive == true ? Html.Raw("checked='checked'") : Html.Raw("")) /></div>
+        </div>
+    </div>
+    
+    @*Button panel*@
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnPreviewPost" type="button" class="annytab-form-button" value="@preview_tt" />
+        <input name="btnSave" class="annytab-form-button" type="submit" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <link href="/Content/jquery_css/jquery-ui.min.css" rel="stylesheet" />
+    <script src="/Scripts/rangyinputs-jquery.js"></script>
+    <script type="text/javascript">
+        $("#txtTitle").focus();
+        $("#txtDateAdded").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#btnPreviewPost").click(previewPost);
+
+        // Preview a post
+        function previewPost()
+        {
+            // Get data
+            var title = $("#txtTitle").val();
+            var text_area = $("#txtDescription");
+
+            // Create the string to print
+            var html = '<!DOCTYPE html><html><head><title>' + title + '</title>';
+            html += '<link type="text/css" rel="stylesheet" href="@(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_default_style.css" : "/Content/theme/front_default_style.css")" />';
+            html += '<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"><\/script>';
+            html += '</head><body>';
+
+            // Set the media content
+            html += text_area.val();
+
+            // Add the final touch to the html
+            html += '</body></html>';
+
+            // Calculate offsets
+            var left = (screen.width / 2) - (1280 / 2);
+            var top = (screen.height / 2) - (720 / 2);
+
+            // Create the preview window
+            var printWindow = window.open("", "", "resizable=yes,scrollbars=yes,height=720,width=1280,top=" + top + ",left=" + left, true);
+            printWindow.document.write(html);
+            printWindow.document.close();
+
+        } // End of the previewPost method
+    </script>
+}
+
+@helper CreateChildOptions(Int32 level, List<Category> categories, Int32 productCategoryId, Int32 languageId)
+{
+
+    // Create the intendation
+    string intendation = "";
+    for (int i = 0; i < level; i++)
+    {
+        intendation += "-&nbsp;";
+    }
+
+    // Loop all the categories
+    for (int i = 0; i < categories.Count; i++)
+    {
+        // Reset the level
+        if (categories[i].parent_category_id == 0)
+        {
+            level = 0;
+        }
+            
+        // Create the option
+        <option style="@(categories[i].parent_category_id == 0 ? Html.Raw("background-color:#cccccc;") : Html.Raw("background-color:#ffffff;"))" value="@categories[i].id.ToString()" @(productCategoryId == categories[i].id ? Html.Raw("selected='selected'") : Html.Raw(""))>@Html.Raw(intendation + categories[i].title)</option>
+
+        // Get the child categories
+        List<Category> childCategories = Category.GetChildCategories(categories[i].id, languageId, "title", "ASC");
+
+        if (childCategories.Count > 0)
+        {
+            level += 1;
+            @CreateChildOptions(level, childCategories, productCategoryId, languageId);
+        }
+    }
+}

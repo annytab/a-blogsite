@@ -1,0 +1,35 @@
+﻿@{
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    Administrator user = ViewBag.User;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    
+    // Get translated texts
+    string start_page_tt = tt.Get("start_page");
+    string connect_tt = tt.Get("connect");
+    string edit_tt = tt.Get("edit");
+    string user_details_tt = tt.Get("user_details");
+    string comments_tt = tt.Get("comments");
+    string ratings_tt = tt.Get("ratings");
+    string log_out_tt = tt.Get("log_out");
+}
+
+@* Menu *@
+<div class="annytab-basic-container" style="text-align:right;">
+    @* External login *@
+    @if (user.facebook_user_id == "" && domain.facebook_app_id != "")
+    {
+        <button type="button" class="annytab-facebook-button" onclick="location.href='@Url.Action("facebook_login", "user")'"><img src="~/Content/images/annytab_design/facebook_logo.png" alt="Facebook logo" style="height:16px;vertical-align:top;" />&nbsp;&nbsp;@connect_tt</button>
+    }
+    @if (user.google_user_id == "" && domain.google_app_id != "")
+    {
+        <button type="button" class="annytab-google-button" onclick="location.href='@Url.Action("google_login", "user")'"><img src="~/Content/images/annytab_design/google_plus.png" alt="Google plus" style="height:24px;" />&nbsp;@connect_tt</button>
+    }
+    <button class="annytab-basic-button" onclick="location.href='@("/user")'">@start_page_tt</button>
+    <button class="annytab-basic-button" onclick="location.href='@("/user/edit")'">@(edit_tt + " " + user_details_tt.ToLower())</button>
+    <button class="annytab-basic-button" onclick="location.href='@("/user/edit_comments")'">@comments_tt</button>
+    <button class="annytab-basic-button" onclick="location.href='@("/user/edit_ratings")'">@ratings_tt</button>
+    <button class="annytab-basic-button" onclick="location.href='@("/user/logout")'">@log_out_tt</button>
+</div>
+
+<div class="annytab-basic-space"></div>

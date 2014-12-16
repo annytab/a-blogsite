@@ -1,0 +1,134 @@
+﻿@using System.Diagnostics
+@{
+    // Set the robots tag
+    ViewBag.Robots = "noindex, nofollow";
+    
+    // Set the admin session variable
+    bool adminSession = ViewBag.AdminSession != null ? ViewBag.AdminSession : false;
+    
+    // An admin error code
+    Int32 errorCode = ViewBag.AdminErrorCode != null ? ViewBag.AdminErrorCode : 0;
+    
+    // Get form data
+    Domain domain = ViewBag.CurrentDomain;
+    KeyStringList imageUrls = Tools.GetDomainImageUrls(domain.id);
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    
+    // Get translated texts
+    string administrators_tt = tt.Get("administrators");
+    string cancel_tt = tt.Get("cancel");
+    string categories_tt = tt.Get("categories");
+    string comments_tt = tt.Get("comments");
+    string copyright_information_tt = tt.Get("copyright_information");
+    string custom_design_tt = tt.Get("custom_design");
+    string domains_tt = tt.Get("domains");
+    string languages_tt = tt.Get("languages");
+    string log_out_tt = tt.Get("log_out");
+    string media_files_tt = tt.Get("media_files");
+    string message_box_title_1_tt = tt.Get("message_box_title_1");
+    string message_box_title_2_tt = tt.Get("message_box_title_2");
+    string message_box_title_3_tt = tt.Get("message_box_title_3");
+    string message_box_title_4_tt = tt.Get("message_box_title_4");
+    string message_box_title_5_tt = tt.Get("message_box_title_5");
+    string message_box_message_1_tt = tt.Get("message_box_message_1");
+    string message_box_message_2_tt = tt.Get("message_box_message_2");
+    string message_box_message_3_tt = tt.Get("message_box_message_3");
+    string message_box_message_4_tt = tt.Get("message_box_message_4");
+    string message_box_message_5_tt = tt.Get("message_box_message_5");
+    string ok_tt = tt.Get("ok");
+    string posts_tt = tt.Get("posts");
+    string ratings_tt = tt.Get("ratings");
+    string settings_tt = tt.Get("settings");
+    string start_page_tt = tt.Get("start_page");
+    string static_pages_tt = tt.Get("static_pages");
+    string static_texts_tt = tt.Get("static_texts");
+    string weblinks_tt = tt.Get("weblinks");
+    string ads_tt = tt.Get("ads");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    @* Title and meta tags *@
+    <title>@ViewBag.Title</title>
+    <meta name="robots" content="@ViewBag.Robots" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="google" content="notranslate">
+
+    @* Resources *@
+    <link href="@imageUrls.Get("small_icon")" rel="shortcut icon" type="image/x-icon" />
+    @Styles.Render("/Content/admin_css")
+    
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="padding:20px 10px 20px 10px;"><a href="/admin_default" class="annytab-header-title">@domain.website_name</a></div>
+        </div>
+        <div class="leftContent">
+            <div id="adminMenu" style="padding: 10px 10px 10px 10px;@(adminSession ? "display:block;":"display:none;")">
+                <a href="/admin_default" class="annytab-basic-button">@start_page_tt</a>
+                <a href="/admin_domains" class="annytab-basic-button">@domains_tt</a>
+                <a href="/admin_administrators" class="annytab-basic-button">@administrators_tt</a>
+                <a href="/admin_website_settings" class="annytab-basic-button">@settings_tt</a>
+                <a href="/admin_languages" class="annytab-basic-button">@languages_tt</a>
+                <a href="/admin_custom_design" class="annytab-basic-button">@custom_design_tt</a>
+                <a href="/admin_static_texts" class="annytab-basic-button">@static_texts_tt</a>
+                <a href="/admin_static_pages" class="annytab-basic-button">@static_pages_tt</a>
+                <a href="/admin_media_files" class="annytab-basic-button">@media_files_tt</a>
+                <a href="/admin_weblinks" class="annytab-basic-button">@weblinks_tt</a>
+                <a href="/admin_categories" class="annytab-basic-button">@categories_tt</a>
+                <a href="/admin_posts" class="annytab-basic-button">@posts_tt</a>
+                <a href="/admin_comments" class="annytab-basic-button">@comments_tt</a>
+                <a href="/admin_ratings" class="annytab-basic-button">@ratings_tt</a>
+                <a href="/admin_ads" class="annytab-basic-button">@ads_tt</a>
+                <a href="/admin_login/logout" class="annytab-basic-button">@log_out_tt</a>
+            </div>
+        </div>
+        <div class="mainContent">
+            <div style="padding:10px 10px 10px 10px;">
+                @RenderBody()
+            </div>
+        </div>
+        <div class="footer">
+            <div style="padding:10px 10px 10px 10px;color:#808080;text-shadow:1px 1px 1px #ffffff;">
+                @Html.Raw(copyright_information_tt)
+            </div>
+        </div>
+    </div>
+
+    @* Used to check for errors *@
+    <div id="errorCode" data-error="@errorCode" style="display:none;"></div>
+
+    @*Message box*@
+    <div id="messageBoxContainer" style="display:none;top:0;left:0;z-index:1;position:fixed;width:100%;height:100%;background-image:url('/Content/images/annytab_design/transparent_background.png');">
+        <div id="messageBox" style="z-index:2;position:absolute;top:10px;right:10px;bottom:10px;left:10px;width:420px;height:183px;margin:auto auto auto auto;background-color:#ffffff;border-radius:4px;border:4px solid #57abe8;">
+            <img id="messageBoxClose" src="@Url.Content("/Content/images/annytab_design/black_circle_cross.png")" alt="Close" style="position:absolute;width:20px;height:20px;top:3px;right:3px;cursor:pointer;" />
+            <div id="messageBoxHeader" style="clear:both;height:28px;background-image:url('/Content/images/annytab_design/message_box_header.png');background-repeat:repeat-x;padding:0px 0px 0px 8px;font-size:14px;line-height:28px;font-weight:bold;color:#ffffff;">
+                <span id="messageBoxTitle1" data-number="1" style="display:none">@message_box_title_1_tt</span>
+                <span id="messageBoxTitle2" data-number="2" style="display:none">@message_box_title_2_tt</span>
+                <span id="messageBoxTitle3" data-number="3" style="display:none">@message_box_title_3_tt</span>
+                <span id="messageBoxTitle4" data-number="4" style="display:none">@message_box_title_4_tt</span>
+                <span id="messageBoxTitle5" data-number="5" style="display:none">@message_box_title_5_tt</span>
+            </div>
+            <div id="messageBoxMessage" style="clear:both;height:80px;padding:15px">
+                <span id="messageBoxMessage1" data-number="1" style="display:none">@message_box_message_1_tt</span>
+                <span id="messageBoxMessage2" data-number="2" style="display:none">@message_box_message_2_tt</span>
+                <span id="messageBoxMessage3" data-number="3" style="display:none">@message_box_message_3_tt</span>
+                <span id="messageBoxMessage4" data-number="4" style="display:none">@message_box_message_4_tt</span>
+                <span id="messageBoxMessage5" data-number="5" style="display:none">@message_box_message_5_tt</span>
+            </div>
+            <div id="messageBoxButtonPanel" style="clear: both; background-color: #dcdcdc;bottom: 0px; height: 44px; border-top: 1px solid #adadad;">
+                <input id="messageBoxCancelButton" type="button" class="annytab-basic-button" value="@cancel_tt" style="width:80px;float:right;height:24px;margin:10px 15px 10px 0px;" />
+                <input id="messageBoxOkButton" type="button" class="annytab-basic-button" value="@ok_tt" style="width:80px;float:right;height:24px;margin:10px 15px 10px 0px;" />
+            </div>
+        </div>
+    </div>
+
+    @* Scripts *@
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/annytab_admin")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

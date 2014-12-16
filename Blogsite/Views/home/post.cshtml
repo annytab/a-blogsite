@@ -1,0 +1,119 @@
+﻿@using System.Globalization
+@{
+    // Get the layout type from the cookie
+    ViewBag.LayoutType = "standard";
+    if (Request.Cookies["LayoutType"] != null)
+    {
+        ViewBag.LayoutType = Request.Cookies["LayoutType"].Value;
+    }
+
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    Language language = ViewBag.CurrentLanguage;
+    Post post = ViewBag.Post;
+    Administrator author = ViewBag.Author;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    CultureInfo cultureInfo = ViewBag.CultureInfo;
+    List<Ad> adsTop = Ad.GetByAdSlot("4", domain.front_end_language, "name", "ASC");
+    List<Ad> adsBottom = Ad.GetByAdSlot("5", domain.front_end_language, "name", "ASC");
+
+    // Count the number of comments
+    Int32 commentCount = PostComment.GetCountByPostId(post.id, domain.front_end_language);
+    ViewBag.CommentCount = commentCount;
+    
+    // Count the number of ratings
+    Int32 ratingCount = PostRating.GetCountByPostId(post.id, domain.front_end_language);
+
+    // Set meta data
+    ViewBag.Title = post.title;
+    ViewBag.MetaTitle = post.title;
+    ViewBag.MetaDescription = post.meta_description;
+    ViewBag.MetaKeywords = post.meta_keywords;
+    ViewBag.MetaCanonical = domain.web_address + "/home/post/" + post.page_name;
+    ViewBag.MetaRobots = post.meta_robots;
+
+    // Get translated texts
+    string post_tt = tt.Get("post");
+    string comments_tt = tt.Get("comments");
+    string by_tt = tt.Get("by");
+    string added_tt = tt.Get("added");
+    string updated_tt = tt.Get("updated");
+    string votes_tt = tt.Get("votes");
+    string rating_tt = tt.Get("rating");
+    string page_views_tt = tt.Get("page_views");
+
+    // Set the layout for the page
+    if (ViewBag.LayoutType == "mobile")
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_mobile_layout.cshtml" : "/Views/theme/front_mobile_layout.cshtml";
+    }
+    else
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
+    }
+}
+
+@* Google markup (Product) *@
+<div itemscope itemtype="http://schema.org/Article">
+
+    @* Title *@
+    <h1 itemprop="name">@post.title</h1>
+
+    @* Share content *@
+    <div class="annytab-share-container">
+        <div class="annytab-share-button"><div class="fb-like" data-layout="button" data-action="like" data-show-faces="false" data-share="true" data-href="@ViewBag.MetaCanonical"></div></div>
+        <div class="annytab-share-button"><a href="https://twitter.com/share" data-count="none" class="twitter-share-button" data-href="@ViewBag.MetaCanonical" data-lang="@language.language_code.ToLower()">Tweet</a></div>
+        <div class="annytab-share-button"><div class="g-plusone" data-annotation="none" data-size="medium" data-href="@ViewBag.MetaCanonical"></div></div>
+        <div class="annytab-share-button"><a href="//se.pinterest.com/pin/create/button/" data-pin-do="buttonBookmark" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png" /></a></div>
+        <div class="annytab-share-button"><script type="IN/Share" data-url="@ViewBag.MetaCanonical"></script></div>
+    </div>
+
+    @* Date and author*@
+    <div style="display:block;margin:6px 2px 6px 2px;">
+        <span class="annytab-basic-text-normal">@(by_tt + ": ")</span><a href="@("/home/author/" + author.id)" class="annytab-basic-text-normal">@author.author_name</a><span>@(" | ")</span>
+        <span class="annytab-basic-text-normal">@(added_tt + ": " + post.date_added.ToString("d MMMM yyyy", cultureInfo))</span>
+        <span>@(" | ")</span><span class="annytab-basic-text-normal">@(updated_tt + ": " + post.date_updated.ToString("d MMMM yyyy", cultureInfo))</span>
+    </div>
+
+    @* Review and rating *@
+    <div itemscope itemtype="http://data-vocabulary.org/Review-aggregate" style="margin-bottom:5px;">
+        <div class="rateit" title="@post.rating.ToString()" data-rateit-value="@post.rating.ToString(CultureInfo.InvariantCulture)" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+        <span itemprop="itemreviewed" style="display:none;">@post.title</span><span>@(" | ")</span><span class="annytab-basic-text-normal" itemprop="rating">@(rating_tt + ": " + post.rating.ToString("##,0.##", cultureInfo))</span>
+        <span>@(" | ")</span><span class="annytab-basic-text-normal">@(votes_tt + ": ")</span><span itemprop="votes" class="annytab-basic-text-normal">@ratingCount</span><span>@(" | ")</span>
+        <span class="annytab-basic-text-normal">@(page_views_tt + ": " + post.page_views.ToString())</span><span>@(" | ")</span>
+        <a href="#comments" style="vertical-align:middle;">@(comments_tt + " (" + commentCount + ")")</a>
+    </div>
+
+    <div class="annytab-basic-line"></div>
+
+    @* Top ads *@
+    @foreach(Ad ad in adsTop)
+    {
+        <div style="margin:10px 0px 10px 0px;">@Html.Raw(ad.ad_code)</div>
+    }
+
+    @* Main content *@
+    <div itemprop="description" class="annytab-basic-bread-text">@Html.Raw(post.main_content)</div>
+
+    @* Bottom ads *@
+    @foreach (Ad ad in adsBottom)
+    {
+        <div style="margin:10px 0px 10px 0px;">@Html.Raw(ad.ad_code)</div>
+    }
+
+    <div class="annytab-basic-space"></div>
+
+    @* Files *@
+    @Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_post_files.cshtml" : "/Views/theme/front_post_files.cshtml")
+
+    @* Comments *@
+    @Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_post_comments.cshtml" : "/Views/theme/front_post_comments.cshtml")
+
+</div>
+
+@section scripts {
+    <script>$("#txtSearch").focus();</script>
+    @Scripts.Render(domain.custom_theme_id == 0 ? "/Scripts/annytab_front/annytab.post-functions.js" : "/Scripts/theme/annytab.post-functions.js")
+    @Scripts.Render("/Scripts/jquery.rateit.min.js")
+    @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/rateit.css" : "/Content/theme/rateit.css")
+}

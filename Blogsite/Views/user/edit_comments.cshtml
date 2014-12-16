@@ -1,0 +1,119 @@
+﻿@using System.Globalization
+@{
+    // Paging variables
+    Int32 pageSize = 5;
+    Int32 page = 1;
+
+    // Get the layout type from the cookie
+    ViewBag.LayoutType = "standard";
+    if (Request.Cookies["LayoutType"] != null)
+    {
+        ViewBag.LayoutType = Request.Cookies["LayoutType"].Value;
+    }
+
+    // Get the page number
+    if (Request.Params["qp"] != null)
+    {
+        try
+        {
+            page = Int32.Parse(Request.Params["qp"]);
+        }
+        catch (Exception ex)
+        {
+            string exceptionMessage = ex.Message;
+            page = 1;
+        }
+    }
+
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    Administrator user = ViewBag.User;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    CultureInfo cultureInfo = ViewBag.CultureInfo;
+
+    // Count the number of posts
+    Int32 count = PostComment.GetCountByAdministratorId(user.id);
+
+    // Get the number of pages
+    Int32 numberOfPages = Convert.ToInt32(Math.Ceiling(((double)count / pageSize)));
+    numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
+
+    // Get all the comments by the user
+    List<PostComment> comments = PostComment.GetByAdministratorId(user.id, pageSize, page, "comment_date", "DESC");
+
+    // Get translated texts
+    string comments_tt = tt.Get("comments");
+    string edit_tt = tt.Get("edit");
+    string delete_tt = tt.Get("delete");
+
+    // Set the title
+    string title = edit_tt + " " + comments_tt.ToLower();
+
+    // Set meta data
+    ViewBag.Title = title;
+    ViewBag.MetaTitle = title;
+    ViewBag.MetaDescription = title;
+    ViewBag.MetaKeywords = title;
+    ViewBag.MetaCanonical = domain.web_address + "/user/edit_comments";
+    ViewBag.MetaRobots = "noindex, nofollow";
+
+    // Set paging data
+    ViewBag.CurrentPage = page;
+    ViewBag.NumberOfPages = numberOfPages;
+    ViewBag.NavigateUrl = "/user/edit_comments?qp={0}";
+
+    // Set the layout for the page
+    if (ViewBag.LayoutType == "mobile")
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_mobile_layout.cshtml" : "/Views/theme/front_mobile_layout.cshtml";
+    }
+    else
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
+    }
+}
+
+@* Title *@
+<h1>@ViewBag.Title</h1>
+
+@* Menu *@
+@Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
+
+@* Comments *@
+<div class="annytab-basic-container">
+    @for (int i = 0; i < comments.Count; i++)
+    {
+        @* Input form *@
+        using (Html.BeginForm("edit_comment", "user", FormMethod.Post))
+        {
+            @* Get the post *@
+            Post post = Post.GetOneById(comments[i].post_id, domain.front_end_language);
+
+            @* Hidden data *@
+            <input name="hiddenId" type="hidden" value="@comments[i].id" />
+
+            @* A comment *@
+            <div class="annytab-basic-inner-container">
+                <div style="margin:0px 0px 0px 2px;">
+                    <span class="annytab-basic-text-bold">@post.title</span><span>@(" | ")</span><span class="annytab-basic-text-normal">@comments[i].comment_date.ToString("d", cultureInfo)</span><br />
+                </div>
+                <div style="margin:6px 6px 6px 2px;">
+                    <textarea name="txtCommentText" class="annytab-form-textarea" rows="5" style="margin:0px;width:100%;">@comments[i].comment_text.Replace("<br />", Environment.NewLine)</textarea>
+                </div>
+                <div style="clear:both;margin:4px 0px 0px 0px;">
+                    <input type="submit" value="@edit_tt" class="annytab-basic-button" />
+                    <input type="button" class="annytab-basic-button" value="@delete_tt" onclick="location.href='@Url.Action("delete_comment", "user", new { id = comments[i].id })'">
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="annytab-basic-space"></div>
+
+@* Paging menu *@
+@Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_paging_menu.cshtml" : "/Views/theme/front_paging_menu.cshtml")
+
+@section scripts {
+    <script>$("#txtSearch").focus();</script>
+}

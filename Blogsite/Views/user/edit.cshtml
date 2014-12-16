@@ -1,0 +1,124 @@
+﻿@{
+    // Get the layout type from the cookie
+    ViewBag.LayoutType = "standard";
+    if (Request.Cookies["LayoutType"] != null)
+    {
+        ViewBag.LayoutType = Request.Cookies["LayoutType"].Value;
+    }
+
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    Administrator user = ViewBag.User;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
+
+    // Get translated texts
+    string register_tt = tt.Get("register");
+    string edit_tt = tt.Get("edit");
+    string image_tt = tt.Get("image");
+    string upload_main_image_tt = tt.Get("upload_main_image");
+    string user_details_tt = tt.Get("user_details");
+    string user_name_tt = tt.Get("user_name");
+    string password_tt = tt.Get("password");
+    string email_tt = tt.Get("email");
+    string author_name_tt = tt.Get("author_name");
+    string description_tt = tt.Get("description");
+    string save_tt = tt.Get("save");
+
+    // Set the title for the page
+    if (user.id == 0)
+    {
+        ViewBag.Title = register_tt;
+    }
+    else
+    {
+        ViewBag.Title = edit_tt + " " + user_details_tt.ToLower();
+    }
+
+    // Set meta data
+    ViewBag.MetaTitle = ViewBag.Title;
+    ViewBag.MetaDescription = ViewBag.Title;
+    ViewBag.MetaKeywords = ViewBag.Title;
+    ViewBag.MetaCanonical = domain.web_address + "/user/edit";
+    ViewBag.MetaRobots = "noindex, follow";
+
+    // Set the layout for the page
+    if (ViewBag.LayoutType == "mobile")
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_mobile_layout.cshtml" : "/Views/theme/front_mobile_layout.cshtml";
+    }
+    else
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
+    }
+}
+
+@* Title *@
+<h1>@ViewBag.Title</h1>
+
+@* Menu *@
+@Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
+
+@* Edit form *@
+@using (Html.BeginForm("edit", "user", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @* Error box *@
+    <div class="annytab-form-errorbox" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+
+    @* General information *@
+    <div class="annytab-basic-container">
+        <input name="txtId" type="hidden" tabindex="-1" value="@user.id" />
+        <div style="float:left;margin-right:8px;">
+            <span class="annytab-form-label">@user_name_tt</span><br />
+            <input id="txtUserName" name="txtUserName" type="text" class="annytab-form-textbox" value="@user.admin_user_name" />
+        </div>
+        <div style="float:left;margin-right:8px;">
+            <span class="annytab-form-label">@password_tt</span><br />
+            <input name="txtPassword" type="password" class="annytab-form-textbox" value="" /><br />
+        </div>
+        <div style="float:left;margin-right:8px;">
+            <span class="annytab-form-label">@email_tt</span><br />
+            <input name="txtEmail" type="text" class="annytab-form-textbox" value="@user.email" /><br />
+        </div>
+        <div style="float:left;margin-right:8px;">
+            <span class="annytab-form-label">@author_name_tt</span><br />
+            <input name="txtAuthorName" type="text" class="annytab-form-textbox" value="@user.author_name" /><br />
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+
+    <div class="annytab-basic-space"></div>
+
+    @* Description *@
+    <div class="annytab-basic-container">
+        <div style="display:block;margin-right:8px;">
+            <span class="annytab-form-label">@description_tt</span><br />
+            <textarea name="txtAuthorDescription" class="annytab-form-textarea" style="width:100%;" rows="20">@user.author_description</textarea>
+        </div>
+    </div>
+
+    <div class="annytab-basic-space"></div>
+    
+    @* Author image *@
+    <div class="annytab-basic-container">
+        <div style="margin-right:8px;">
+            <span class="annytab-form-label">@upload_main_image_tt</span><br />
+            <input id="uploadMainImage" type="file" name="uploadMainImage" class="annytab-form-upload" accept="image/jpeg" /><br />
+            <img id="mainImage" src="@Tools.GetAdministratorMainImageUrl(user.id)" alt="@image_tt" style="width:256px;height:256px;margin:6px 2px 0px 2px;" />
+        </div>
+    </div>
+
+    <div class="annytab-basic-space"></div>
+
+    @* Button panel *@
+    <div class="annytab-basic-container">
+        <input id="btnSave" type="submit" value="@save_tt" class="annytab-basic-button" />
+    </div>
+
+    <div class="annytab-basic-space"></div>
+}
+
+@section scripts {
+    <script>$("#txtEmail").focus();</script>
+    @Scripts.Render(domain.custom_theme_id == 0 ? "/Scripts/annytab_front/annytab.user-functions.js" : "/Scripts/theme/annytab.user-functions.js")
+}

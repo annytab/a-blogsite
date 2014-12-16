@@ -1,0 +1,160 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get form data
+    MediaFile mediaFile = ViewBag.MediaFile;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string returnUrl = ViewBag.ReturnUrl;
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
+
+    // Get translated texts
+    string media_file_tt = tt.Get("media_file");
+    string new_tt = tt.Get("new");
+    string edit_tt = tt.Get("edit");
+    string id_tt = tt.Get("id");
+    string title_tt = tt.Get("title");
+    string media_type_tt = tt.Get("media_type");
+    string source_tt = tt.Get("source");
+    string preview_tt = tt.Get("preview");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    if (mediaFile.id == 0)
+    {
+        ViewBag.Title = media_file_tt + " - " + new_tt.ToLower();
+    }
+    else
+    {
+        ViewBag.Title = media_file_tt + " - " + edit_tt.ToLower();
+    }
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("/Views/admin_media_files/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("edit", "admin_media_files", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    
+    @*Input form table*@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row" style="@(mediaFile.id != 0 ? "display:table-row;" : "display:none;")">
+            <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@mediaFile.id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(title_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input id="txtTitle" name="txtTitle" type="text" class="annytab-form-textbox" value="@mediaFile.title" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(media_type_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select id="selectMediaType" name="selectMediaType" class="annytab-form-select">
+                    <option value="image" @(mediaFile.media_type == "image" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Image")</option>
+                    <option value="url" @(mediaFile.media_type == "url" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Url")</option>
+                    <option value="object" @(mediaFile.media_type == "object" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Object")</option>
+                    <option value="iframe" @(mediaFile.media_type == "iframe" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Iframe")</option>
+                    <option value="video_mp4" @(mediaFile.media_type == "video_mp4" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Video/MP4")</option>
+                    <option value="video_webm" @(mediaFile.media_type == "video_webm" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Video/WebM")</option>
+                    <option value="video_ogg" @(mediaFile.media_type == "video_ogg" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Video/Ogg")</option>
+                    <option value="audio_mpeg" @(mediaFile.media_type == "audio_mpeg" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Audio/MP3")</option>
+                    <option value="audio_wav" @(mediaFile.media_type == "audio_wav" ? Html.Raw("selected='selected'") : Html.Raw(""))>@("Audio/Wav")</option>
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(source_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><div id="mediaFileSource" class="annytab-form-label">@(mediaFile.src == "" ? " --- " : mediaFile.src)</div></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(media_file_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input id="uploadMediaFile" name="uploadMediaFile" type="file" class="annytab-form-upload" /></div>
+        </div>
+    </div>
+    
+    @*Button panel*@
+    <div style="display:block;border:1px solid #cccccc;margin: 20px 0px 0px 0px;border-radius: 4px;">
+        <input id="btnPreviewMediaFile" type="button" class="annytab-form-button" value="@preview_tt" />
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $("#txtTitle").focus(); 
+        $("#btnPreviewMediaFile").click(previewMediaFile);
+
+        // Preview the media file
+        function previewMediaFile()
+        {
+            // Get values
+            var file = null;
+            var reader = new FileReader();
+
+            if (document.getElementById("uploadMediaFile").files.length > 0)
+            {
+                var file = document.getElementById("uploadMediaFile").files[0];
+            }
+
+            try
+            {
+                // Load the media file
+                reader.onload = function ()
+                {
+                    printHtmlDocument(reader.result);
+                }
+            
+                // Check if we should change the source
+                if (file != null)
+                {
+                    // Read the source from the file
+                    reader.readAsDataURL(file);
+                }
+                else
+                {
+                    printHtmlDocument($("#mediaFileSource").html());
+                }
+            }
+            catch(err)
+            {
+                alert(err);
+            }
+
+        } // End of the previewMediaFile method
+
+        // Print the html document
+        function printHtmlDocument(src)
+        {
+            // Get values
+            var title = $("#txtTitle").val();
+            var mediaType = $("#selectMediaType").val();
+
+            // Create the string to return
+            var html = "<html><head><title>" + title + "</title></head><body>";
+
+            // Set the media content
+            html += getMediaFileContent(title, mediaType, src);
+            
+            // Add the final touch to the html
+            html += "</body></html>";
+
+            // Calculate offsets
+            var left = (screen.width / 2) - (1280 / 2);
+            var top = (screen.height / 2) - (720 / 2);
+
+            // Create the preview window
+            var printWindow = window.open("", "", "resizable=yes,scrollbars=yes,height=720,width=1280,top=" + top + ",left=" + left, true);
+            printWindow.document.write(html);
+            printWindow.document.close();
+
+        } // End of the printHtmlDocument method
+    
+    </script>
+}

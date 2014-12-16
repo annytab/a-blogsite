@@ -1,0 +1,118 @@
+﻿@using System.Globalization
+@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get form data
+    Domain domain = ViewBag.CurrentDomain;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    Language currentLanguage = Language.GetOneById(domain.back_end_language);
+    CultureInfo cultureInfo = Tools.GetCultureInfo(currentLanguage);
+    QueryParams parameters = ViewBag.QueryParams;
+    string queryString = "/admin_default/comments" + QueryParams.GetQueryString(parameters);
+    Administrator administrator = Administrator.GetSignedInAdministrator();
+
+    // Create a clean string with keywords
+    string cleanKeywords = parameters.keywords.Replace("+", "");
+
+    // Create an array with search words
+    string[] words = cleanKeywords.Split(' ');
+
+    // Count the number of posts
+    Int32 count = PostComment.GetCountByAdministratorId(administrator.id);
+
+    // Get the number of pages
+    Int32 numberOfPages = Convert.ToInt32(Math.Ceiling(((double)count / parameters.page_size)));
+    numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
+
+    // Get post comments by the signed in administrator
+    List<PostComment> comments = PostComment.GetByAdministratorId(administrator.id, parameters.page_size, parameters.current_page,
+        parameters.sort_field, parameters.sort_order);
+
+    // Get translated texts
+    string my_posts_tt = tt.Get("my_posts");
+    string my_comments_tt = tt.Get("my_comments");
+    string my_ratings_tt = tt.Get("my_ratings");
+    string new_tt = tt.Get("new");
+    string id_tt = tt.Get("id");
+    string language_tt = tt.Get("language");
+    string date_tt = tt.Get("date");
+    string post_tt = tt.Get("post");
+    string edit_tt = tt.Get("edit");
+    string delete_tt = tt.Get("delete");
+    string ascending_tt = tt.Get("ascending");
+    string descending_tt = tt.Get("descending");
+    string sort_tt = tt.Get("sort");
+    string on_tt = tt.Get("on");
+
+    // Set paging data
+    ViewBag.CurrentPage = parameters.current_page;
+    ViewBag.NumberOfPages = numberOfPages;
+    ViewBag.NavigateUrl = "/comments?kw=" + Server.UrlEncode(parameters.keywords) + "&sf=" + parameters.sort_field + "&so=" + parameters.sort_order + "&pz=" + parameters.page_size + "&qp={0}";
+
+    // Set the page title
+    ViewBag.Title = my_comments_tt;
+}
+
+@*The title*@
+<h1>@ViewBag.Title</h1>
+
+@*The menu bar*@
+<div class="annytab-form-menubar">
+    @using (Html.BeginForm("sort_comments", "admin_default", FormMethod.Post))
+    {
+        <input type="button" class="annytab-form-button" value="@my_posts_tt" onclick="location.href='@Url.Action("index", "admin_default")'" />
+        <input type="button" class="annytab-form-button" value="@my_ratings_tt" onclick="location.href='@Url.Action("ratings", "admin_default")'" />
+        <select name="selectSortField" class="annytab-form-select" style="width:100px;">
+            <option value="id" @(parameters.sort_field == "" ? Html.Raw("selected='selected'") : Html.Raw(""))>@(sort_tt + " " + on_tt.ToLower())</option>
+            <option value="id" @(parameters.sort_field == "id" ? Html.Raw("selected='selected'") : Html.Raw(""))>@id_tt</option>
+            <option value="language_id" @(parameters.sort_field == "language_id" ? Html.Raw("selected='selected'") : Html.Raw(""))>@language_tt</option>
+            <option value="post_id" @(parameters.sort_field == "post_id" ? Html.Raw("selected='selected'") : Html.Raw(""))>@post_tt</option>
+            <option value="comment_date" @(parameters.sort_field == "comment_date" ? Html.Raw("selected='selected'") : Html.Raw(""))>@date_tt</option>
+        </select>
+        <select name="selectSortOrder" class="annytab-form-select" style="width:80px;">
+            <option value="ASC" @(parameters.sort_order == "ASC" ? Html.Raw("selected='selected'") : Html.Raw(""))>@ascending_tt</option>
+            <option value="DESC" @(parameters.sort_order == "DESC" ? Html.Raw("selected='selected'") : Html.Raw(""))>@descending_tt</option>
+        </select>
+        <select name="selectPageSize" class="annytab-form-select" style="width:50px;">
+            <option value="10" @(parameters.page_size == 10 ? Html.Raw("selected='selected'") : Html.Raw(""))>10</option>
+            <option value="20" @(parameters.page_size == 20 ? Html.Raw("selected='selected'") : Html.Raw(""))>20</option>
+            <option value="40" @(parameters.page_size == 40 ? Html.Raw("selected='selected'") : Html.Raw(""))>40</option>
+            <option value="80" @(parameters.page_size == 80 ? Html.Raw("selected='selected'") : Html.Raw(""))>80</option>
+        </select>
+        <input type="submit" class="annytab-form-button" value="@sort_tt" />
+    }
+</div>
+
+@*List of comments*@
+<div class="annytab-list-container">
+    <div class="annytab-list-table" style="width:600px;">
+        <div class="annytab-list-row">
+            <div class="annytab-list-column-head" style="text-align:center;width:100px;">@id_tt</div>
+            <div class="annytab-list-column-head" style="text-align:center;width:100px;">@language_tt</div>
+            <div class="annytab-list-column-head" style="text-align:center;width:100px;">@post_tt</div>
+            <div class="annytab-list-column-head" style="text-align:center;width:100px;">@date_tt</div>
+            <div class="annytab-list-column-head" style="text-align:center;width:100px;">@edit_tt</div>
+            <div class="annytab-list-column-head" style="text-align:center;width:100px;">@delete_tt</div>
+        </div>
+
+        @for (int i = 0; i < comments.Count; i++)
+        {
+            @:<div class="@(i % 2 != 0 ? "annytab-list-row-main" : "annytab-list-row-alt")">
+            @:<div class="annytab-list-column" style="text-align:center;width:100px;">@comments[i].id.ToString()</div>
+            @:<div class="annytab-list-column" style="text-align:center;width:100px;">@comments[i].language_id</div>
+            @:<div class="annytab-list-column" style="text-align:center;width:100px;">@comments[i].post_id</div>
+            @:<div class="annytab-list-column" style="text-align:center;width:100px;">@comments[i].comment_date.ToString("d", cultureInfo)</div>
+            @:<div class="annytab-list-column" style="text-align:center;width:100px;"><input type="button" class="annytab-form-button" value="@edit_tt" onclick="location.href='@Url.Action("edit", "admin_comments", new { id = comments[i].id, returnUrl = queryString })'" /></div>
+            @:<div class="annytab-list-column" style="text-align:center;width:100px;"><input data-id="deletePost" type="button" class="annytab-form-button" value="@delete_tt" @(Html.Raw("data-url='/admin_comments/delete/" + comments[i].id + "?returnUrl=" + Server.UrlEncode(queryString) + "'")) /></div>
+            @:</div>
+        }
+    </div>
+</div>
+
+@* Paging menu *@
+@Html.Partial("/Views/shared_admin/_paging_menu.cshtml")
+
+@section scripts {
+    <script>$("#txtSearch").focus();</script>
+}

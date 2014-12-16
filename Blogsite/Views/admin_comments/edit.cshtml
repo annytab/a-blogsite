@@ -1,0 +1,71 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get values
+    Domain domain = ViewBag.CurrentDomain;
+    PostComment postComment = ViewBag.PostComment;
+    Post post = Post.GetOneById(postComment.post_id, domain.back_end_language);
+    Administrator administrator = Administrator.GetOneById(postComment.administrator_id, domain.back_end_language);
+    Language language = Language.GetOneById(postComment.language_id, domain.back_end_language);
+    string returnUrl = ViewBag.ReturnUrl;
+
+    // Get translated texts
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string comment_tt = tt.Get("comment");
+    string id_tt = tt.Get("id");
+    string language_tt = tt.Get("language");
+    string post_tt = tt.Get("post");
+    string administrator_tt = tt.Get("administrator");
+    string edit_tt = tt.Get("edit");
+    string text_tt = tt.Get("text");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    ViewBag.Title = comment_tt + " - " + edit_tt.ToLower();  
+}
+
+<h1>@ViewBag.Title</h1>
+@*Menu*@
+@Html.Partial("~/Views/admin_comments/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("edit", "admin_comments", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    
+    @*Input form table*@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@postComment.id.ToString()" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(language_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@language.name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(post_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@post.title" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(administrator_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@administrator.author_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(text_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><textarea id="txtCommentText" name="txtCommentText" class="annytab-form-textarea" rows="10">@postComment.comment_text</textarea></div>
+        </div>
+    </div>
+
+    @*Button panel*@
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script>$("#txtCommentText").focus();</script>
+}

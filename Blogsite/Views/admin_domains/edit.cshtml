@@ -1,0 +1,139 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get form data
+    List<Language> languages = ViewBag.Languages;
+    List<CustomTheme> themes = CustomTheme.GetAll("name", "ASC");
+    Domain domain = ViewBag.Domain;
+    string returnUrl = ViewBag.ReturnUrl;
+
+    // Set the error message
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
+
+    // Get translated texts
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string domain_tt = tt.Get("domain");
+    string new_tt = tt.Get("new");
+    string edit_tt = tt.Get("edit");
+    string no_choice_tt = tt.Get("no_choice");
+    string id_tt = tt.Get("id");
+    string name_tt = tt.Get("name");
+    string domain_name_tt = tt.Get("domain_name");
+    string web_address_tt = tt.Get("web_address");
+    string front_end_language_tt = tt.Get("front_end_language");
+    string back_end_language_tt = tt.Get("back_end_language");
+    string theme_tt = tt.Get("theme");
+    string default_tt = tt.Get("default");
+    string analytics_tracking_id_tt = tt.Get("analytics_tracking_id");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    if (domain.id == 0)
+    {
+        ViewBag.Title = domain_tt + " - " + new_tt.ToLower();
+    }
+    else
+    {
+        ViewBag.Title = domain_tt + " - " + edit_tt.ToLower();
+    }
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("/Views/admin_domains/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("edit", "admin_domains", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    
+    @* Input form table *@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row" style="@(domain.id != 0 ? "display:table-row;" : "display:none;")">
+            <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@domain.id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input id="txtWebsiteName" name="txtWebsiteName" type="text" class="annytab-form-textbox" value="@domain.website_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(domain_name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtDomainName" type="text" class="annytab-form-textbox" value="@domain.domain_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(web_address_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtWebAddress" type="text" class="annytab-form-textbox" value="@domain.web_address" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(front_end_language_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select name="selectFrontEndLanguage" class="annytab-form-select">
+                    <option value="0" @(domain.front_end_language == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
+                    @foreach (Language language in languages)
+                    {
+                        <option value="@language.id" @(language.id == domain.front_end_language ? Html.Raw("selected='selected'") : Html.Raw(""))>@language.name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(back_end_language_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select name="selectBackEndLanguage" class="annytab-form-select">
+                    <option value="0" @(domain.back_end_language == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
+                    @foreach (Language language in languages)
+                    {
+                        <option value="@language.id" @(language.id == domain.back_end_language ? Html.Raw("selected='selected'") : Html.Raw(""))>@language.name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(theme_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select name="selectTemplate" class="annytab-form-select">
+                    <option value="0" @(domain.custom_theme_id == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@default_tt</option>
+                    @foreach (CustomTheme theme in themes)
+                    {
+                        <option value="@theme.id.ToString()" @(domain.custom_theme_id == theme.id ? Html.Raw("selected='selected'") : Html.Raw(""))>@theme.name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(analytics_tracking_id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtAnalyticsTrackingId" type="text" class="annytab-form-textbox" value="@domain.analytics_tracking_id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@("Facebook app id: ")</div>
+            <div class="annytab-input-form-column-input"><input name="txtFacebookAppId" type="text" class="annytab-form-textbox" value="@domain.facebook_app_id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@("Facebook app secret: ")</div>
+            <div class="annytab-input-form-column-input"><input name="txtFacebookAppSecret" type="text" class="annytab-form-textbox" value="@domain.facebook_app_secret" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@("Google app id: ")</div>
+            <div class="annytab-input-form-column-input"><input name="txtGoogleAppId" type="text" class="annytab-form-textbox" value="@domain.google_app_id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@("Google app secret: ")</div>
+            <div class="annytab-input-form-column-input"><input name="txtGoogleAppSecret" type="text" class="annytab-form-textbox" value="@domain.google_app_secret" /></div>
+        </div>
+    </div>
+    
+    // Save form button
+    <div style="display:block;border:1px solid #cccccc;margin: 20px 0px 0px 0px;border-radius: 4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script>$("#txtWebsiteName").focus();</script>
+}

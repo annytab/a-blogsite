@@ -1,0 +1,82 @@
+﻿@charset "UTF-8";
+/* General css */
+body{padding:0px;margin:0px;text-align:left;font-family:Arial, "Helvetica Neue", Helvetica, sans-serif;font-size:12px;background-color:transparent;}
+h1 {font-size:24px;line-height:28px;margin:0px 0px 10px 0px;}
+h2 {font-size:20px;line-height:20px;margin:0px 0px 10px 0px;}
+h3 {font-size:16px;line-height:16px;margin:0px 0px 10px 0px;}
+p {padding:0px;margin:0px;}
+a {color:#207298;text-decoration:none;}
+a img {border:0;padding:0px;margin:0px;}
+a:hover, a:visited:hover{text-decoration:underline;}
+img {vertical-align:middle;}
+ul {list-style:none;padding-left:0px;margin:0px;}
+ul ul {padding-left:5px;}
+li {padding-left:2px;}
+li li {padding-left:2px;}
+
+/* Basic styles */
+.annytab-basic-container{display:block;margin:0px;padding:8px;background-color:#d9d9d9;border-radius:4px;}
+.annytab-basic-inner-container{clear:both;padding:4px;background-color:#ffffff;border:1px solid #d9d9d9;border-radius:4px;}
+.annytab-basic-line{display:block;clear:both;border-bottom:1px solid #cccccc;margin:10px 0px 10px 0px;}
+.annytab-basic-space{display:block;clear:both;margin-bottom:10px;}
+.annytab-basic-text-bold{font-size:12px;font-weight:bold;margin:0px;vertical-align:middle;}
+.annytab-basic-text-normal{font-size:12px;margin:0px;vertical-align:middle;}
+.annytab-basic-bread-text{font-size:12px;line-height:16px;margin:0px;}
+.annytab-basic-button{display:inline;font-size:14px;line-height:14px;background-image:url('/Content/images/annytab_design/blue_button.png');color:#ffffff;font-weight:bold;border-radius:4px;vertical-align:middle;padding:7px 20px 7px 20px;margin:2px 2px 2px 2px;text-decoration:none;cursor:pointer;border:0px;text-shadow:0px -1px 3px #000000;}
+.annytab-basic-button:hover{background-image:url('/Content/images/annytab_design/blue_button_hover.png');text-decoration:none;}
+.annytab-basic-linkbutton{border:0px;background-color:transparent;color:#207298;line-height:22px;text-decoration:none;margin:0px;padding:0px;cursor:pointer;}
+.annytab-basic-linkbutton:hover{text-decoration:underline;outline:none;}
+.annytab-basic-linkbutton:focus{text-decoration:underline;outline:none;}
+.annytab-basic-divider{display:inline-block;width:2px;height:100%;background-color:#003F65;border-right:2px solid #4698BE;}
+.annytab-basic-gradient-down{clear:both;width:100%;height:10px;background-image:url('/Content/images/annytab_design/gradient_down_10.jpg');background-repeat:repeat-x;}
+.annytab-basic-gradient-up{clear:both;width:100%;height:10px;background-image:url('/Content/images/annytab_design/gradient_up_10.jpg');background-repeat:repeat-x;}
+
+/* Master page */ 
+.annytab-background-image{display:none;position:fixed;z-index:-1;top:0;left:0;min-height:100%;min-width:100%;margin:0px;padding:0px;}
+.annytab-search-box{border:1px solid #207298;height:24px;border-radius:4px;padding:1px;}
+.annytab-search-textbox{display:inline;vertical-align:top;border:0px;width:200px;outline:none;margin:0px;padding:5px 0px 0px 0px;background-color:transparent;}
+.annytab-search-button{margin:1px 0px 0px 1px;border-radius:4px;width:22px;height:22px;background-color:transparent;background-image:url('/Content/images/annytab_design/magnifier.png');border-style:none;background-repeat:no-repeat;cursor:pointer;}
+.annytab-menu-box{border:1px solid #207298;border-radius:4px;margin:10px 0px 10px 0px;padding:5px;z-index:2}
+.annytab-menu-title{font-weight:bold;font-size:16px;color:#000000;line-height:20px;}
+.annytab-menu-link{font-size:12px;line-height:12px;margin:0px;vertical-align:middle;}
+.annytab-sub-menu-link{font-size:12px;line-height:12px;margin:0px;vertical-align:middle;}
+.annytab-menu-arrow-left{background-image:url('/Content/images/annytab_design/list_arrow_left.png');background-repeat:no-repeat;padding-left:14px;}
+.annytab-menu-arrow-down{background-image:url('/Content/images/annytab_design/list_arrow_down.png');background-repeat:no-repeat;padding-left:14px;}
+
+/* Display categories and posts */
+.annytab-view-container{position:relative;max-width:100%;padding:8px;margin:7px 0px 7px 0px;background-color:#ffffff;border:1px solid #cccccc;border-radius:4px;}
+.annytab-view-title{font-size:18px;line-height:18px;font-weight:bold;}
+
+/* Code container (google prettify) */
+.annytab-code-container{overflow:auto;border:1px solid #cccccc;border-radius:4px;margin:0px;padding:0px;}
+
+/* Social content */
+.annytab-share-container{margin:6px 0px 6px 0px;}
+.annytab-share-button{display:inline-block;vertical-align:top;margin:0px;padding:0px;z-index:2;}
+.annytab-facebook-button{display:inline;font-size:14px;height:28px;background-image:url('/Content/images/annytab_design/facebook_button.png');color:#ffffff;font-weight:bold;border-radius:4px;vertical-align:middle;padding:0px 10px 0px 5px;margin:2px 2px 2px 2px;text-decoration:none;cursor:pointer;border:0px;background-size:1px 28px;}
+.annytab-google-button{display:inline;font-size:14px;height:28px;background-image:url('/Content/images/annytab_design/google_button.png');color:#ffffff;font-weight:bold;border-radius:4px;vertical-align:middle;padding:0px 10px 0px 5px;margin:2px 2px 2px 2px;text-decoration:none;cursor:pointer;border:0px;background-size:1px 28px;}
+
+/* Loading animation */
+.annytab-loading-outer-container{display:none;top:0;left:0;z-index:1;position:fixed;width:100%;height:100%;background-image:url('/Content/images/annytab_design/transparent_background.png');}
+.annytab-loading-inner-container{z-index:2;position:absolute;top:10px;right:10px;bottom:10px;left:10px;width:200px;height:200px;margin:auto;background-color:#ffffff;border-radius:4px;}
+.annytab-loading-image{width:128px;height:128px;margin:11px;}
+
+/* Form input */
+.annytab-form-errorbox{display:none;background-color:#d39393;color:#000000;padding:4px;margin:0px 0px 10px 0px;border:1px solid #880000;border-radius:4px;}
+.annytab-form-label{font-size:11px;font-weight:bold;padding:1px;margin:2px 2px 2px 2px;line-height:18px;vertical-align:middle;}
+.annytab-form-textbox{width:200px;height:18px;line-height:18px;font-size:12px;padding:1px;margin:2px 2px 2px 2px;font-family:Arial;border:1px solid #207298;border-radius:4px;background-color:#d9d9d9;}
+.annytab-form-select{width:204px;height:22px;line-height:22px;padding:1px;margin:2px 2px 2px 2px;font-family:Arial;border:1px solid #207298;cursor:pointer;background-color:#d9d9d9;border-radius:4px;}
+.annytab-form-heading{font-size:16px;line-height:20px;font-weight:bold;}
+.annytab-form-textarea{width:100%;padding:1px;margin:2px;font-family:Arial;font-size:12px;border:1px solid #207298;background-color:#d9d9d9;border-radius:4px;}
+.annytab-form-radio{height:18px;vertical-align:middle;}
+.annytab-form-checkbox{vertical-align:middle;}
+.annytab-form-upload{width:200px;font-size:12px;padding:1px;margin:2px;font-family:Arial;border:1px solid #207298;border-radius:4px;background-color:#d9d9d9;}
+.annytab-form-button{display:inline;font-size:12px;height:22px;background-image:url('/Content/images/annytab_design/blue_button.png');color:#ffffff;border-radius:4px;vertical-align:top;padding:0px 20px 0px 20px;margin:2px 2px 2px 2px;text-decoration:none;cursor:pointer;border:0px;background-size:1px 22px;text-shadow:0px -1px 3px #000000;}
+.annytab-form-button:hover{background-image:url('/Content/images/annytab_design/blue_button_hover.png');text-decoration:none;}
+.annytab-image-radio{width:28px;height:23px;}
+
+/* Paging */
+.annytab-inactive-navigate-button{margin:0px 0px 0px 0px;padding:0px 10px 0px 10px;font-size:16px;color:#000000;height:24px;line-height:24px;}
+.annytab-navigate-button{margin:0px;padding:0px 10px 0px 10px;color:#ffffff;font-weight:bold;font-size:16px;height:24px;line-height:24px;cursor:pointer;}
+.annytab-navigate-button:hover{color:#808080;text-decoration:none;}
+.annytab-page-information{margin:0px;padding:0px 10px 0px 10px;color:#000000;height:24px;line-height:24px;}

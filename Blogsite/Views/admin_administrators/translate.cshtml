@@ -1,0 +1,86 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get form data
+    Int32 languageId = ViewBag.LanguageId;
+    List<Language> languages = ViewBag.Languages;
+    Administrator standardAdministrator = ViewBag.StandardAdministrator;
+    Administrator translatedAdministrator = ViewBag.TranslatedAdministrator;
+    string returnUrl = ViewBag.ReturnUrl;
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+
+    // Get translated texts
+    string translate_tt = tt.Get("translate");
+    string no_choice_tt = tt.Get("no_choice");
+    string language_tt = tt.Get("language");
+    string administrator_tt = tt.Get("administrator");
+    string author_name_tt = tt.Get("author_name");
+    string description_tt = tt.Get("description");
+    string delete_tt = tt.Get("delete");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    ViewBag.Title = administrator_tt + " - " + translate_tt.ToLower();
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("/Views/admin_administrators/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("translate", "admin_administrators", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <input type="hidden" name="hiddenAdministratorId" class="formTextbox" value="@standardAdministrator.id" />
+    
+    @* Input form table *@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(language_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select id="selectLanguage" name="selectLanguage" class="annytab-form-select">
+                    <option value="0" data-url="@("/admin_administrators/translate/" + standardAdministrator.id.ToString() + "?returnUrl=" + Server.UrlEncode(returnUrl))" @(languageId == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
+                    @foreach (Language language in languages)
+                    {
+                        <option value="@language.id" data-url="@("/admin_administrators/translate/" + standardAdministrator.id.ToString() + "?returnUrl=" + Server.UrlEncode(returnUrl) + "&lang=" + language.id.ToString())" @(language.id == languageId ? Html.Raw("selected='selected'") : Html.Raw(""))>@language.name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="annytab-basic-space"></div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(author_name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtStandardAuthorName" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@standardAdministrator.author_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">&nbsp;</div>
+            <div class="annytab-input-form-column-input"><input name="txtTranslatedAuthorName" type="text" class="annytab-form-textbox" value="@(translatedAdministrator != null ? translatedAdministrator.author_name : "")" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(description_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><textarea name="txtStandardAuthorDescription" class="annytab-form-textarea" tabindex="-1" rows="6" readonly="readonly">@standardAdministrator.author_description</textarea></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">&nbsp;</div>
+            <div class="annytab-input-form-column-input"><textarea name="txtTranslatedAuthorDescription" class="annytab-form-textarea" rows="6" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw(""))>@(translatedAdministrator != null ? translatedAdministrator.author_description : "")</textarea></div>
+        </div>
+    </div>
+
+    // Save form button
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@translate_tt" @(languageId == 0 ? Html.Raw("disabled='disabled'") : Html.Raw("")) />
+        <input data-id="deletePost" type="button" class="annytab-form-button" value="@delete_tt" @(Html.Raw("data-url='/admin_administrators/delete/" + standardAdministrator.id.ToString() + "?returnUrl=" + Server.UrlEncode(returnUrl) + "&lang=" + languageId.ToString() + "'")) @(languageId == 0 ? Html.Raw("disabled='disabled'") : Html.Raw("")) />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $("#selectLanguage").focus();
+        $("#selectLanguage").on("change", function () { $(location).attr("href", $(this).find(":selected").attr("data-url")); });
+    </script>
+}

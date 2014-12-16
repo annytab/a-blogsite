@@ -1,0 +1,102 @@
+﻿@{
+
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get form data
+    Weblink weblink = ViewBag.Weblink;
+    string returnUrl = ViewBag.ReturnUrl;
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
+
+    // Get translated texts
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string weblink_tt = tt.Get("weblink");
+    string new_tt = tt.Get("new");
+    string edit_tt = tt.Get("edit");
+    string id_tt = tt.Get("id");
+    string linkname_tt = tt.Get("linkname");
+    string url_tt = tt.Get("url");
+    string relation_tt = tt.Get("relation");
+    string target_tt = tt.Get("target");
+    string inactive_tt = tt.Get("inactive");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    if (weblink.id == 0)
+    {
+        ViewBag.Title = weblink_tt + " - " + new_tt.ToLower();
+    }
+    else
+    {
+        ViewBag.Title = weblink_tt + " - " + edit_tt.ToLower();
+    }
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("~/Views/admin_weblinks/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("edit", "admin_weblinks", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    
+    @*Input form table*@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row" style="@(weblink.id != 0 ? "display:table-row;" : "display:none;")">
+            <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@weblink.id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(linkname_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input id="txtLinkname" name="txtLinkname" type="text" class="annytab-form-textbox" value="@weblink.link_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(url_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtUrl" type="text" class="annytab-form-textbox" value="@weblink.url" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(relation_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select name="selectRelation" class="annytab-form-select">
+                    <option value="follow" @(weblink.rel == "follow" ? Html.Raw("selected='selected'") : Html.Raw(""))>follow</option>
+                    <option value="nofollow" @(weblink.rel == "nofollow" ? Html.Raw("selected='selected'") : Html.Raw(""))>nofollow</option>
+                    <option value="author" @(weblink.rel == "author" ? Html.Raw("selected='selected'") : Html.Raw(""))>author</option>
+                    <option value="help" @(weblink.rel == "help" ? Html.Raw("selected='selected'") : Html.Raw(""))>help</option>
+                    <option value="license" @(weblink.rel == "license" ? Html.Raw("selected='selected'") : Html.Raw(""))>license</option>
+                    <option value="noreferrer" @(weblink.rel == "noreferrer" ? Html.Raw("selected='selected'") : Html.Raw(""))>noreferrer</option>
+                    <option value="prefetch" @(weblink.rel == "prefetch" ? Html.Raw("selected='selected'") : Html.Raw(""))>prefetch</option>
+                    <option value="search" @(weblink.rel == "search" ? Html.Raw("selected='selected'") : Html.Raw(""))>search</option>
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(target_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select name="selectTarget" class="annytab-form-select">
+                    <option value="_blank" @(weblink.target == "_blank" ? Html.Raw("selected='selected'") : Html.Raw(""))>_blank</option>
+                    <option value="_top" @(weblink.target == "_top" ? Html.Raw("selected='selected'") : Html.Raw(""))>_top</option>
+                    <option value="_self" @(weblink.target == "author" ? Html.Raw("selected='selected'") : Html.Raw(""))>_self</option>
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(inactive_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="cbInactive" type="checkbox" class="annytab-form-checkbox" value="true" @(weblink != null && weblink.inactive == true ? Html.Raw("checked='checked'") : Html.Raw("")) /></div>
+        </div>
+    </div>
+
+    @*Button panel*@
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script>$("#txtLinkname").focus();</script>
+}
+

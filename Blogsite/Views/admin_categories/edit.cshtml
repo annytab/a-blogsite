@@ -1,0 +1,154 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get the current domain
+    Domain domain = ViewBag.CurrentDomain;
+
+    // Get values
+    List<Category> mainCategories = Category.GetChildCategories(0, domain.back_end_language, "title", "ASC");
+    Category category = ViewBag.Category;
+    string returnUrl = ViewBag.ReturnUrl;
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+
+    // Get translated texts
+    string category_tt = tt.Get("category");
+    string new_tt = tt.Get("new");
+    string edit_tt = tt.Get("edit");
+    string main_category_tt = tt.Get("main_category");
+    string no_choice_tt = tt.Get("no_choice");
+    string id_tt = tt.Get("id");
+    string title_tt = tt.Get("title");
+    string description_tt = tt.Get("description");
+    string meta_description_tt = tt.Get("meta_description");
+    string keywords_tt = tt.Get("keywords");
+    string page_name_tt = tt.Get("page_name");
+    string date_tt = tt.Get("date");
+    string added_tt = tt.Get("added");
+    string inactive_tt = tt.Get("inactive");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    if (category.id == 0)
+    {
+        ViewBag.Title = category_tt + " - " + new_tt.ToLower();
+    }
+    else
+    {
+        ViewBag.Title = category_tt + " - " + edit_tt.ToLower();
+    }
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("/Views/admin_categories/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("edit", "admin_categories", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    
+    @*Input form table*@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(main_category_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select id="selectCategory" name="selectCategory" class="annytab-form-select">
+                    <option value="0" @(category.parent_category_id == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
+                    @CreateChildOptions(0, mainCategories, category.parent_category_id, domain.back_end_language)
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row" style="@(category.id != 0 ? "display:table-row;" : "display:none;")">
+            <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@category.id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(title_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtTitle" type="text" class="annytab-form-textbox" value="@category.title" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(description_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><textarea name="txtDescription" class="annytab-form-textarea" rows="6">@category.main_content</textarea></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(meta_description_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><textarea name="txtMetaDescription" class="annytab-form-textarea" rows="3">@category.meta_description</textarea></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(keywords_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtMetaKeywords" type="text" class="annytab-form-textbox" value="@category.meta_keywords" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@("Robots:")</div>
+            <div class="annytab-input-form-column-input">
+                <select name="selectMetaRobots" class="annytab-form-select">
+                    <option value="index, follow" @(category.meta_robots == "index, follow" ? Html.Raw("selected='selected'") : Html.Raw(""))>index, follow</option>
+                    <option value="index, nofollow" @(category.meta_robots == "index, nofollow" ? Html.Raw("selected='selected'") : Html.Raw(""))>index, nofollow</option>
+                    <option value="noindex, follow" @(category.meta_robots == "noindex, follow" ? Html.Raw("selected='selected'") : Html.Raw(""))>noindex, follow</option>
+                    <option value="noindex, nofollow" @(category.meta_robots == "noindex, nofollow" ? Html.Raw("selected='selected'") : Html.Raw(""))>noindex, nofollow</option>
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(page_name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtPageName" type="text" class="annytab-form-textbox" value="@category.page_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(added_tt + ", " + date_tt.ToLower() + " (yyyy-mm-dd):")</div>
+            <div class="annytab-input-form-column-input"><input id="txtDateAdded" name="txtDateAdded" type="text" class="annytab-form-textbox" value="@category.date_added.ToString("yyyy-MM-dd")" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(inactive_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="cbInactive" type="checkbox" class="annytab-form-checkbox" value="true" @(category != null && category.inactive == true ? Html.Raw("checked='checked'") : Html.Raw("")) /></div>
+        </div>
+    </div>
+
+    @*Button panel*@
+    <div style="display:block;border: 1px solid #cccccc;margin: 20px 0px 0px 0px;border-radius: 4px;">
+        <input id="btnSave" class="annytab-form-button" type="submit" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <link href="/Content/jquery_css/jquery-ui.min.css" rel="stylesheet" />
+    <script>$("#selectCategory").focus();$("#txtDateAdded").datepicker({ dateFormat: 'yy-mm-dd' });</script>
+}
+
+@helper CreateChildOptions(Int32 level, List<Category> categories, Int32 categoryId, Int32 languageId)
+{
+    // Create the intendation
+    string intendation = "";
+
+    for (int i = 0; i < level; i++)
+    {
+        intendation += "-&nbsp;";
+    }
+
+    // Loop all the categories
+    for (int i = 0; i < categories.Count; i++)
+    {
+        // Reset the level
+        if (categories[i].parent_category_id == 0)
+        {
+            level = 0;
+        }
+        
+        // Create the option
+        <option style="@(categories[i].parent_category_id == 0 ? Html.Raw("background-color:#cccccc;") : Html.Raw("background-color:#ffffff;"))" value="@categories[i].id.ToString()" @(categoryId == categories[i].id ? Html.Raw("selected='selected'") : Html.Raw(""))>@Html.Raw(intendation + categories[i].title)</option>
+
+        // Get the child categories
+        List<Category> childCategories = Category.GetChildCategories(categories[i].id, languageId, "title", "ASC");
+
+        if (childCategories.Count > 0)
+        {
+            level += 1;
+            @CreateChildOptions(level, childCategories, categoryId, languageId);
+        }
+    }
+}

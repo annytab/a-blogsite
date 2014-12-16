@@ -1,0 +1,34 @@
+﻿@{
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    Post post = ViewBag.Post;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+
+    // Get all the files for the post
+    List<PostFile> postFiles = PostFile.GetByPostId(post.id, domain.front_end_language, "title", "ASC");
+    
+    // Get translated texts
+    string download_tt = tt.Get("download");
+}
+
+@* Files *@
+@if (postFiles.Count > 0)
+{
+    <div class="annytab-basic-container">
+        <span class="annytab-form-heading">@download_tt</span>
+    </div>
+
+    <div class="annytab-basic-space"></div>
+
+    <div class="annytab-basic-container">
+    @for (int i = 0; i < postFiles.Count; i++)
+    {
+        @* The file *@
+        @:<div class="annytab-basic-inner-container">
+        @:<a href="@postFiles[i].src" rel="nofollow" class="annytab-basic-text-bold">@postFiles[i].title</a>
+        @:</div>
+    }
+    </div>
+
+    <div class="annytab-basic-space"></div>
+}

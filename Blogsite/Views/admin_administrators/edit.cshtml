@@ -1,0 +1,108 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get form data
+    Administrator administrator = ViewBag.Administrator;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string returnUrl = ViewBag.ReturnUrl;
+    string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
+
+    // Get translated texts
+    string administrator_tt = tt.Get("administrator");
+    string new_tt = tt.Get("new");
+    string edit_tt = tt.Get("edit");
+    string id_tt = tt.Get("id");
+    string user_name_tt = tt.Get("user_name");
+    string password_tt = tt.Get("password");
+    string admin_role_tt = tt.Get("admin_role");
+    string email_tt = tt.Get("email");
+    string author_name_tt = tt.Get("author_name");
+    string description_tt = tt.Get("description");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    if (administrator.id == 0)
+    {
+        ViewBag.Title = administrator_tt + " - " + new_tt.ToLower();
+    }
+    else
+    {
+        ViewBag.Title = administrator_tt + " - " + edit_tt.ToLower();
+    }
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("/Views/admin_administrators/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("edit", "admin_administrators", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    
+    @* Input form table *@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row" style="@(administrator.id != 0 ? "display:table-row;" : "display:none;")">
+            <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@administrator.id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(user_name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input id="txtUserName" name="txtUserName" type="text" class="annytab-form-textbox" value="@administrator.admin_user_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(password_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtPassword" type="password" class="annytab-form-textbox" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(admin_role_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <select name="selectAdminRole" class="annytab-form-select">
+                    <option value="Administrator" @(administrator.admin_role == "Administrator" ? Html.Raw("selected='selected'") : Html.Raw(""))>Administrator</option>
+                    <option value="Editor" @(administrator.admin_role == "Editor" ? Html.Raw("selected='selected'") : Html.Raw(""))>Editor</option>
+                    <option value="Translator" @(administrator.admin_role == "Translator" ? Html.Raw("selected='selected'") : Html.Raw(""))>Translator</option>
+                    <option value="Author" @(administrator.admin_role == "Author" ? Html.Raw("selected='selected'") : Html.Raw(""))>Author</option>
+                    <option value="Demo" @(administrator.admin_role == "Demo" ? Html.Raw("selected='selected'") : Html.Raw(""))>Demo</option>
+                    <option value="User" @(administrator.admin_role == "User" ? Html.Raw("selected='selected'") : Html.Raw(""))>User</option>
+                    <option value="API_FULL_TRUST" @(administrator.admin_role == "API_FULL_TRUST" ? Html.Raw("selected='selected'") : Html.Raw(""))>API Full Trust</option>
+                    <option value="API_MEDIUM_TRUST" @(administrator.admin_role == "API_MEDIUM_TRUST" ? Html.Raw("selected='selected'") : Html.Raw(""))>API Medium Trust</option>
+                    <option value="API_MINIMAL_TRUST" @(administrator.admin_role == "API_MINIMAL_TRUST" ? Html.Raw("selected='selected'") : Html.Raw(""))>API Minimal Trust</option>
+                </select>
+            </div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(email_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtEmail" type="text" class="annytab-form-textbox" value="@administrator.email" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(author_name_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="txtAuthorName" type="text" class="annytab-form-textbox" value="@administrator.author_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(description_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><textarea name="txtAuthorDescription" class="annytab-form-textarea" rows="6">@administrator.author_description</textarea></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@("Facebook user id:")</div>
+            <div class="annytab-input-form-column-input"><input name="txtFacebookUserId" type="text" class="annytab-form-textbox" value="@administrator.facebook_user_id" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@("Google user id:")</div>
+            <div class="annytab-input-form-column-input"><input name="txtGoogleUserId" type="text" class="annytab-form-textbox" value="@administrator.google_user_id" /></div>
+        </div>
+    </div>
+
+    // Save form button
+    <div style="display:block;border: 1px solid #cccccc;margin: 20px 0px 0px 0px;border-radius: 4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script>$("#txtUserName").focus();</script>
+}

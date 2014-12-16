@@ -1,0 +1,126 @@
+﻿@using System.Globalization
+@{
+    // Paging variables
+    Int32 pageSize = 5;
+    Int32 page = 1;
+
+    // Get the layout type from the cookie
+    ViewBag.LayoutType = "standard";
+    if (Request.Cookies["LayoutType"] != null)
+    {
+        ViewBag.LayoutType = Request.Cookies["LayoutType"].Value;
+    }
+
+    // Get the page number
+    if (Request.Params["qp"] != null)
+    {
+        try
+        {
+            page = Int32.Parse(Request.Params["qp"]);
+        }
+        catch (Exception ex)
+        {
+            string exceptionMessage = ex.Message;
+            page = 1;
+        }
+    }
+
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    Administrator user = ViewBag.User;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    CultureInfo cultureInfo = ViewBag.CultureInfo;
+
+    // Count the number of posts
+    Int32 count = PostRating.GetCountByAdministratorId(user.id);
+
+    // Get the number of pages
+    Int32 numberOfPages = Convert.ToInt32(Math.Ceiling(((double)count / pageSize)));
+    numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
+
+    // Get all the ratings by the customer
+    List<PostRating> postRatings = PostRating.GetByAdministratorId(user.id, pageSize, page, "rating_date", "DESC");
+
+    // Get translated texts
+    string ratings_tt = tt.Get("ratings");
+    string edit_tt = tt.Get("edit");
+    string rating_tt = tt.Get("rating");
+    string delete_tt = tt.Get("delete");
+
+    // Set the title
+    string title = edit_tt + " " + ratings_tt.ToLower();
+
+    // Set meta data
+    ViewBag.Title = title;
+    ViewBag.MetaTitle = title;
+    ViewBag.MetaDescription = title;
+    ViewBag.MetaKeywords = title;
+    ViewBag.MetaCanonical = domain.web_address + "/user/edit_ratings";
+    ViewBag.MetaRobots = "noindex, nofollow";
+
+    // Set paging data
+    ViewBag.CurrentPage = page;
+    ViewBag.NumberOfPages = numberOfPages;
+    ViewBag.NavigateUrl = "/user/edit_ratings?qp={0}";
+
+    // Set the layout for the page
+    if (ViewBag.LayoutType == "mobile")
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_mobile_layout.cshtml" : "/Views/theme/front_mobile_layout.cshtml";
+    }
+    else
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
+    }
+}
+
+@* Title *@
+<h1>@ViewBag.Title</h1>
+
+@* Menu *@
+@Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
+
+@* Ratings *@
+<div class="annytab-basic-container">
+    @for (int i = 0; i < postRatings.Count; i++)
+    {
+        @* Review input form *@
+        using (Html.BeginForm("edit_rating", "user", FormMethod.Post))
+        {
+            @* Get the post *@
+            Post post = Post.GetOneById(postRatings[i].post_id, domain.front_end_language);
+
+            @* Hidden data *@
+            <input name="hiddenPostId" type="hidden" value="@postRatings[i].post_id" />
+
+            @* A rating *@
+            <div class="annytab-basic-inner-container">
+                <div style="margin:0px 0px 0px 2px;">
+                    <span class="annytab-basic-text-bold">@post.title</span><span>@(" | ")</span><span class="annytab-basic-text-normal">@postRatings[i].rating_date.ToString("d", cultureInfo)</span><br />
+                </div>
+                <div style="margin:6px 0px 6px 2px;">
+                    <span class="annytab-basic-text-normal">@(rating_tt + ": ")</span>
+                    <input id="@("user_vote" + i.ToString())" name="userVote" type="range" value="@(postRatings[i].rating.ToString(CultureInfo.InvariantCulture))" step="0.25">
+                    <div class="rateit" data-rateit-backingfld="@("#user_vote" + i.ToString())" data-rateit-resetable="false" data-rateit-ispreset="true"
+                         data-rateit-min="0" data-rateit-max="5">
+                    </div>
+                </div>
+                <div style="clear:both;margin:4px 0px 0px 0px;">
+                    <input type="submit" value="@edit_tt" class="annytab-basic-button" />
+                    <input type="button" class="annytab-basic-button" value="@delete_tt" onclick="location.href='@Url.Action("delete_rating", "user", new { id = postRatings[i].post_id })'">
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="annytab-basic-space"></div>
+
+@* Paging menu *@
+@Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_paging_menu.cshtml" : "/Views/theme/front_paging_menu.cshtml")
+
+@section scripts {
+    <script>$("#txtSearch").focus();</script>
+    @Scripts.Render("/Scripts/jquery.rateit.min.js")
+    @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/rateit.css" : "/Content/theme/rateit.css")
+}

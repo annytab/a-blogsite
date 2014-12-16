@@ -1,0 +1,215 @@
+﻿@using System.Globalization
+@{
+    // Paging variables
+    Int32 page = 1;
+    
+    // Get the layout type from the cookie
+    ViewBag.LayoutType = "standard";
+    if (Request.Cookies["LayoutType"] != null)
+    {
+        ViewBag.LayoutType = Request.Cookies["LayoutType"].Value;
+    }
+
+    // Get the page number
+    if (Request.Params["qp"] != null)
+    {
+        try
+        {
+            page = Int32.Parse(Request.Params["qp"]);
+        }
+        catch (Exception ex)
+        {
+            string exceptionMessage = ex.Message;
+            page = 1;
+        }
+    }
+
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    Language language = Language.GetOneById(domain.front_end_language);
+    Category category = ViewBag.CurrentCategory;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    CultureInfo cultureInfo = ViewBag.CultureInfo;
+    List<Ad> adsTop = Ad.GetByAdSlot("2", domain.front_end_language, "name", "ASC");
+    List<Ad> adsBottom = Ad.GetByAdSlot("3", domain.front_end_language, "name", "ASC");
+    Dictionary<string, string> userSettings = ViewBag.UserSettings;
+    
+    // Make sure that user settings not is null
+    if (userSettings == null)
+    {
+        userSettings = new Dictionary<string, string>(3);
+        userSettings.Add("sort_field", "date_added");
+        userSettings.Add("sort_order", "DESC");
+        userSettings.Add("page_size", "10");
+    }
+
+    // Count the number of posts
+    Int32 count = DisplayItem.GetCount(0, domain.front_end_language);
+
+    // Get the page size
+    Int32 pageSize = Int32.Parse(userSettings["page_size"]);
+
+    // Get the number of pages
+    Int32 numberOfPages = Convert.ToInt32(Math.Ceiling(((double)count / pageSize)));
+    numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
+
+    // Get all display items
+    List<DisplayItem> displayItems = DisplayItem.GetChunk(category.id, domain.front_end_language, pageSize, page, userSettings["sort_field"], userSettings["sort_order"]);
+
+    // Set the meta data
+    ViewBag.Title = category.title;
+    ViewBag.MetaTitle = category.title;
+    ViewBag.MetaDescription = category.meta_description;
+    ViewBag.MetaKeywords = category.meta_keywords;
+    ViewBag.MetaCanonical = domain.web_address + "/home/category/" + category.page_name;
+    ViewBag.MetaRobots = category.meta_robots;
+
+    // Set paging data
+    ViewBag.NavigateUrl = "/home/category/" + category.page_name + "&qp={0}";
+    ViewBag.CurrentPage = page;
+    ViewBag.NumberOfPages = numberOfPages;
+
+    // Get translated texts
+    string title_tt = tt.Get("title");
+    string page_views_tt = tt.Get("page_views");
+    string rating_tt = tt.Get("rating");
+    string added_tt = tt.Get("added");
+    string updated_tt = tt.Get("updated");
+    string ascending_tt = tt.Get("ascending");
+    string descending_tt = tt.Get("descending");
+    string sort_tt = tt.Get("sort");
+    string on_tt = tt.Get("on");
+    string show_tt = tt.Get("show");
+    string post_tt = tt.Get("post");
+    string category_tt = tt.Get("category");
+    string read_more_tt = tt.Get("read_more");
+    string by_tt = tt.Get("by");
+    string votes_tt = tt.Get("votes");
+
+    // Set the layout for the page
+    if (ViewBag.LayoutType == "mobile")
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_mobile_layout.cshtml" : "/Views/theme/front_mobile_layout.cshtml";
+    }
+    else
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
+    }
+}
+
+@* Title *@
+<h1>@category.title</h1>
+
+@* Share content *@
+<div class="annytab-share-container">
+    <div class="annytab-share-button"><div class="fb-like" data-layout="button" data-action="like" data-show-faces="false" data-share="true" data-href="@ViewBag.MetaCanonical"></div></div>
+    <div class="annytab-share-button"><a href="https://twitter.com/share" data-count="none" class="twitter-share-button" data-href="@ViewBag.MetaCanonical" data-lang="@language.language_code.ToLower()">Tweet</a></div>
+    <div class="annytab-share-button"><div class="g-plusone" data-annotation="none" data-size="medium" data-href="@ViewBag.MetaCanonical"></div></div>
+    <div class="annytab-share-button"><a href="//se.pinterest.com/pin/create/button/" data-pin-do="buttonBookmark" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png" /></a></div>
+    <div class="annytab-share-button"><script type="IN/Share" data-url="@ViewBag.MetaCanonical"></script></div>
+</div>
+
+@* Description *@
+<p class="annytab-basic-bread-text">@Html.Raw(category.main_content)</p>
+
+<div class="annytab-basic-space"></div>
+
+@* Top ads *@
+@foreach (Ad ad in adsTop)
+{
+    <div style="margin:10px 0px 10px 0px;">@Html.Raw(ad.ad_code)</div>
+}
+
+@* Sorting *@
+<div class="annytab-basic-container">
+    @using (Html.BeginForm("sort_category", "home", FormMethod.Post))
+    {
+        <input name="hiddenPageName" type="hidden" value="@category.page_name" />
+        <select name="selectSortField" class="annytab-form-select" style="width:100px;">
+            <option value="id" @(userSettings["sort_field"] == "id" ? Html.Raw("selected='selected'") : Html.Raw(""))>@(sort_tt + " " + on_tt.ToLower())</option>
+            <option value="title" @(userSettings["sort_field"] == "title" ? Html.Raw("selected='selected'") : Html.Raw(""))>@title_tt</option>
+            <option value="page_views" @(userSettings["sort_field"] == "page_views" ? Html.Raw("selected='selected'") : Html.Raw(""))>@page_views_tt</option>
+            <option value="rating" @(userSettings["sort_field"] == "rating" ? Html.Raw("selected='selected'") : Html.Raw(""))>@rating_tt</option>
+            <option value="date_added" @(userSettings["sort_field"] == "date_added" ? Html.Raw("selected='selected'") : Html.Raw(""))>@added_tt</option>
+            <option value="date_updated" @(userSettings["sort_field"] == "date_updated" ? Html.Raw("selected='selected'") : Html.Raw(""))>@updated_tt</option>
+        </select>
+        <select name="selectSortOrder" class="annytab-form-select" style="width:90px;">
+            <option value="ASC" @(userSettings["sort_order"] == "ASC" ? Html.Raw("selected='selected'") : Html.Raw(""))>@ascending_tt</option>
+            <option value="DESC" @(userSettings["sort_order"] == "DESC" ? Html.Raw("selected='selected'") : Html.Raw(""))>@descending_tt</option>
+        </select>
+        <select name="selectPageSize" class="annytab-form-select" style="width:50px;">
+            <option value="10" @(userSettings["page_size"] == "10" ? Html.Raw("selected='selected'") : Html.Raw(""))>10</option>
+            <option value="20" @(userSettings["page_size"] == "20" ? Html.Raw("selected='selected'") : Html.Raw(""))>20</option>
+            <option value="40" @(userSettings["page_size"] == "40" ? Html.Raw("selected='selected' ") : Html.Raw(" "))>40</option>
+            <option value="80" @(userSettings["page_size"] == "80" ? Html.Raw("selected='selected'") : Html.Raw(""))>80</option>
+        </select>
+        <input type="submit" value="@sort_tt" class="annytab-form-button" />
+    }
+</div>
+
+<div class="annytab-basic-space"></div>
+
+@* Loop and add all display items *@
+@for (int i = 0; i < displayItems.Count; i++)
+{
+    @* Text variables *@
+    string title = displayItems[i].title;
+    string author_information = "";
+    string description = displayItems[i].description.TruncateHtml(1000, " ...");
+    string url = "";
+    string link_text = "";
+
+    @* Set post data *@
+    if (displayItems[i].type_code == 0)
+    {
+        author_information = "<span class='annytab-basic-text-normal'>" + category_tt + "</span><span> | </span><span class='annytab-basic-text-normal'>"
+            + added_tt + ": " + displayItems[i].date_added.ToString("d MMMM yyyy", cultureInfo) + "</span>";
+        url = "/home/category/" + displayItems[i].page_name;
+        link_text = show_tt + " " + category_tt.ToLower();
+    }
+    else if (displayItems[i].type_code == 1)
+    {
+        // Get the author
+        Administrator author = Administrator.GetOneById(displayItems[i].administrator_id, domain.front_end_language);
+
+        author_information = "<div><span class='annytab-basic-text-normal'>" + by_tt + ": " + "</span><a href='/home/author/" + author.id + "' class='annytab-basic-text-normal' >"
+            + author.author_name + "</a>" + "<span> | </span><span class='annytab-basic-text-normal'>" + added_tt + ": "
+            + displayItems[i].date_added.ToString("d MMMM yyyy", cultureInfo) + "</span><span> | </span><span class='annytab-basic-text-normal'>"
+            + updated_tt + ": " + displayItems[i].date_updated.ToString("d MMMM yyyy", cultureInfo) + "</span></div>";
+
+        author_information += "<div style='margin:6px 0px 6px 0px;'><div class='rateit' title='" + displayItems[i].rating.ToString()
+            + "' data-rateit-value='" + displayItems[i].rating.ToString(CultureInfo.InvariantCulture)
+            + "' data-rateit-ispreset='true' data-rateit-readonly='true'></div><span> | </span><span class='annytab-basic-text-normal'>" + rating_tt + ": "
+            + displayItems[i].rating.ToString("##,0.##", cultureInfo)
+            + "</span><span> | </span><span class='annytab-basic-text-normal'>" + page_views_tt + ": " + displayItems[i].page_views.ToString() + "</span></div>";
+
+        url = "/home/post/" + displayItems[i].page_name;
+        link_text = read_more_tt;
+    }
+
+    @* The item post *@
+    <div class="annytab-view-container">
+        <a href="@url" class="annytab-view-title">@title</a><br />
+        <div style="margin:6px 0px 0px 0px;">@Html.Raw(author_information)</div>
+        <div class="annytab-basic-line"></div>
+        <div class="annytab-basic-bread-text" style="margin-bottom:32px;">@Html.Raw(description)</div>
+        <div style="position:absolute;z-index:1;bottom:0px;right:0px;padding:10px;background-color:#d9d9d9;"><a href="@url">@link_text</a></div>
+    </div>
+}
+<div class="annytab-basic-space"></div>
+
+@* Bottom ads *@
+@foreach (Ad ad in adsBottom)
+{
+    <div style="margin:10px 0px 10px 0px;">@Html.Raw(ad.ad_code)</div>
+}
+
+@* Paging menu *@
+@Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_paging_menu.cshtml" : "/Views/theme/front_paging_menu.cshtml")
+
+@section scripts {
+    <script>$("#txtSearch").focus();</script>
+    @Scripts.Render(domain.custom_theme_id == 0 ? "/Scripts/annytab_front/annytab.category-functions.js" : "/Scripts/theme/annytab.category-functions.js")
+    @Scripts.Render("/Scripts/jquery.rateit.min.js")
+    @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/rateit.css" : "/Content/theme/rateit.css")
+}

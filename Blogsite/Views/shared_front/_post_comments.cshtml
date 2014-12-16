@@ -1,0 +1,162 @@
+﻿@using System.Globalization
+@{
+    
+    // Paging variables
+    Int32 pageSize = 5;
+    Int32 page = 1;
+
+    // Get the page number
+    if (Request.Params["qp"] != null)
+    {
+        try
+        {
+            page = Int32.Parse(Request.Params["qp"]);
+        }
+        catch (Exception ex)
+        {
+            string exceptionMessage = ex.Message;
+            page = 1;
+        }
+    }
+    
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    Post post = ViewBag.Post;
+    Administrator user = ViewBag.User;
+    Int32 count = ViewBag.CommentCount;
+    CultureInfo cultureInfo = ViewBag.CultureInfo;
+
+    // Get the number of pages
+    Int32 numberOfPages = Convert.ToInt32(Math.Ceiling(((double)count / pageSize)));
+    numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
+
+    // Get all the comment for the page
+    List<PostComment> comments = PostComment.GetByPostId(post.id, domain.front_end_language, pageSize, page, "comment_date", "DESC");
+    
+    // Get the user rating
+    PostRating userRating = user != null ? PostRating.GetOneById(post.id, user.id, domain.front_end_language) : null;
+
+    // Set paging data
+    ViewBag.CurrentPage = page;
+    ViewBag.NumberOfPages = numberOfPages;
+    ViewBag.NavigateUrl = "/home/post/" + post.page_name + "?qp={0}#comments";
+    
+    // Get translated texts
+    string comments_tt = tt.Get("comments");
+    string user_name_tt = tt.Get("user_name");
+    string password_tt = tt.Get("password");
+    string log_in_tt = tt.Get("log_in");
+    string name_tt = tt.Get("name");
+    string rating_tt = tt.Get("rating");
+    string send_tt = tt.Get("send");  
+}
+
+@* Comments *@
+<div class="annytab-basic-container">
+    <span id="comments" class="annytab-form-heading">@(comments_tt)</span>
+</div>
+
+<div class="annytab-basic-space"></div>
+
+@if (user != null)
+{
+    // Rating form
+    using (Html.BeginForm("edit_rating", "user", FormMethod.Post))
+    {
+        // Hidden data
+        <input name="hiddenPostId" type="hidden" value="@post.id" />
+
+        // Review input form
+        <div class="annytab-basic-container">
+            <div class="annytab-basic-inner-container">
+                <div style="margin:0px 0px 0px 2px;">
+                    <span class="annytab-basic-text-normal">@(name_tt + ": " + user.author_name)</span><br />
+                </div>
+                <div style="margin:6px 0px 6px 2px;">
+                    <span class="annytab-basic-text-normal">@(rating_tt + ": ")</span>
+                    <input id="userVote" name="userVote" type="range" value="@(userRating != null ? userRating.rating.ToString(CultureInfo.InvariantCulture) : "5")" step="0.25">
+                    <div class="rateit" data-rateit-backingfld="#userVote" data-rateit-resetable="false" data-rateit-ispreset="true"
+                         data-rateit-min="0" data-rateit-max="5">
+                    </div>
+                </div>
+                <div style="clear:both;margin:4px 0px 0px 0px;">
+                    <input id="btnSend" type="submit" value="@send_tt" class="annytab-basic-button" />
+                </div>
+            </div>
+        </div>
+    }
+    
+    <div class="annytab-basic-space"></div>
+    
+    // Comments form
+    using (Html.BeginForm("add_comment", "user", FormMethod.Post))
+    {
+        // Hidden data
+        <input name="hiddenPostId" type="hidden" value="@post.id" />
+    
+        // input form
+        <div class="annytab-basic-container">
+            <div class="annytab-basic-inner-container">
+                <div style="margin:0px 0px 0px 2px;">
+                    <span class="annytab-basic-text-normal">@(name_tt + ": " + user.author_name)</span><br />
+                </div>
+                <div style="margin:6px 6px 6px 2px;">
+                    <textarea name="txtCommentText" class="annytab-form-textarea" rows="5" style="margin:0px;width:100%;"></textarea>
+                </div>
+                <div style="clear:both;margin:4px 0px 0px 0px;">
+                    <input id="btnSend" type="submit" value="@send_tt" class="annytab-basic-button" />
+                </div>
+            </div>
+        </div>
+    }
+}
+@if (user == null)
+{
+    // Customer login form
+    using (Html.BeginForm("login", "user", FormMethod.Post))
+    {
+        // Hidden data
+        <input name="hiddenReturnUrl" type="hidden" value="@("/home/post/" + post.page_name)" />
+    
+        // Login input form
+        <div class="annytab-basic-container">
+            <div style="clear:both;">
+                <span class="annytab-form-label">@user_name_tt</span><br />
+                <input id="txtEmail" name="txtUserName" type="text" class="annytab-form-textbox" value="" />
+            </div>
+            <div style="clear:both;">
+                <span class="annytab-form-label">@password_tt</span><br />
+                <input name="txtPassword" type="password" class="annytab-form-textbox" value="" /><br />
+            </div>
+            <div style="clear:both;margin:4px 0px 0px 0px;">
+                <input id="btnLogin" type="submit" value="@log_in_tt" class="annytab-basic-button" />
+            </div>
+        </div>
+    }
+}
+
+<div class="annytab-basic-space"></div>
+
+@*Comments*@
+<div class="annytab-basic-container" style="@(comments.Count > 0 ? "display:block" : "display:none")">
+    @foreach (PostComment comment in comments)
+    {
+        @* Get the user *@
+        Administrator commentUser = Administrator.GetOneById(comment.administrator_id, domain.front_end_language);
+
+        @* The review post *@
+        @:<div class="annytab-basic-inner-container" >
+            @:<a href=@("/home/author/" + commentUser.id) class="annytab-basic-text-bold">@commentUser.author_name</a><span>@(" | ")</span><span class="annytab-basic-text-normal">@(comment.comment_date.ToString("d", cultureInfo))</span><br />
+            @:<div style="margin-bottom:5px;"></div>
+            @:<span class="annytab-basic-bread-text" itemprop="description">@Html.Raw(comment.comment_text)</span><br />
+        @:</div>
+    }
+</div>
+
+@* Paging menu *@
+@if (comments.Count > 0)
+{
+    <div class="annytab-basic-space"></div>
+    @Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_paging_menu.cshtml" : "/Views/theme/front_paging_menu.cshtml")
+}

@@ -1,0 +1,75 @@
+﻿@using System.Globalization
+@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get values
+    Domain domain = ViewBag.CurrentDomain;
+    PostRating postRating = ViewBag.PostRating;
+    Language language = Language.GetOneById(postRating.language_id, domain.back_end_language);
+    Post post = Post.GetOneById(postRating.post_id, domain.back_end_language);
+    Administrator administrator = Administrator.GetOneById(postRating.administrator_id, domain.back_end_language);
+    KeyStringList tt = ViewBag.TranslatedTexts;
+    string returnUrl = ViewBag.ReturnUrl;
+
+    // Get translated texts
+    string rating_tt = tt.Get("rating");
+    string edit_tt = tt.Get("edit");
+    string post_tt = tt.Get("post");
+    string administrator_tt = tt.Get("administrator");
+    string language_tt = tt.Get("language");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    ViewBag.Title = rating_tt + " - " + edit_tt.ToLower();  
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Menu*@
+@Html.Partial("~/Views/admin_ratings/_form_menu.cshtml")
+
+@*Main form*@
+@using (Html.BeginForm("edit", "admin_ratings", FormMethod.Post))
+{
+    <input name="returnUrl" type="hidden" value="@returnUrl" />
+    <input name="hiddenPostId" type="hidden" value="@postRating.post_id" />
+    <input name="hiddenAdministratorId" type="hidden" value="@postRating.administrator_id" />
+    <input name="hiddenLanguageId" type="hidden" value="@postRating.language_id" />
+
+    @*Input form table*@
+    <div class="annytab-input-form-table">
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(post_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@post.title" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(language_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@language.name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(administrator_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@administrator.author_name" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(rating_tt + ":")</div>
+            <div class="annytab-input-form-column-input">
+                <input id="userVote" name="userVote" type="range" value="@(postRating.rating.ToString(CultureInfo.InvariantCulture))" step="0.25">
+                <div class="rateit" data-rateit-backingfld="#userVote" data-rateit-resetable="false" data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5" style="margin:2px;"></div>
+            </div>
+        </div>
+    </div>
+
+    @*Button panel*@
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
+    </div>
+}
+
+@section scripts {
+    <script>$("#userVote").focus();</script>
+    @Scripts.Render("/Scripts/jquery.rateit.min.js")
+    @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/rateit.css" : "/Content/theme/rateit.css")
+}

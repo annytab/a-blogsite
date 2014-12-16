@@ -1,0 +1,62 @@
+﻿@{
+    // Get the layout type from the cookie
+    ViewBag.LayoutType = "standard";
+    if (Request.Cookies["LayoutType"] != null)
+    {
+        ViewBag.LayoutType = Request.Cookies["LayoutType"].Value;
+    }
+
+    // Get form values
+    Domain domain = ViewBag.CurrentDomain;
+    Administrator user = ViewBag.User;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+
+    // Get translated texts
+    string my_pages_tt = tt.Get("my_pages");
+
+    // Set the title
+    string title = my_pages_tt;
+
+    // Set meta data
+    ViewBag.Title = title;
+    ViewBag.MetaTitle = title;
+    ViewBag.MetaDescription = title;
+    ViewBag.MetaKeywords = title;
+    ViewBag.MetaCanonical = domain.web_address + "/user";
+    ViewBag.MetaRobots = "noindex, nofollow";
+
+    // Set the layout for the page
+    if (ViewBag.LayoutType == "mobile")
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_mobile_layout.cshtml" : "/Views/theme/front_mobile_layout.cshtml";
+    }
+    else
+    {
+        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
+    }
+}
+
+@* Title *@
+<h1>@ViewBag.Title</h1>
+
+@* Menu *@
+@Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
+
+@* Image and description *@
+<div style="display:block;">
+    <p>
+        @* Main image *@
+        <div style="position:relative;float:left;width:256px;height:256px;margin:0px 4px 4px 0px;overflow:hidden;border-radius:4px;">
+            <img src="@Tools.GetAdministratorMainImageUrl(user.id)" alt="@user.author_name" style="position:absolute;top:0;left:0;width:256px;height:256px;" />
+        </div>
+        @* Title and description *@
+        <h1>@user.author_name</h1>
+        <span>@Html.Raw(user.author_description)</span>
+    </p>
+</div>
+
+<div class="annytab-basic-space"></div>
+
+@section scripts {
+    <script>$("#txtSearch").focus();</script>
+}

@@ -1,0 +1,59 @@
+﻿@{
+    // Set the layout for the page
+    Layout = "/Views/shared_admin/_standard_layout.cshtml";
+
+    // Get form data
+    KeyStringList websiteSettings = ViewBag.WebsiteSettings;
+    KeyStringList tt = ViewBag.TranslatedTexts;
+
+    // Get translated texts
+    string settings_tt = tt.Get("settings");
+    string save_tt = tt.Get("save");
+    string cancel_tt = tt.Get("cancel");
+
+    // Set the title for the page
+    ViewBag.Title = settings_tt;
+}
+
+<h1>@ViewBag.Title</h1>
+
+@*Main form*@
+@using (Html.BeginForm("index", "admin_website_settings", FormMethod.Post))
+{
+    @* EMAIL *@
+    <div style="font-size:14px;font-weight:bold;margin:10px 0px 0px 0px;line-height:20px;">EMAIL</div>
+    <div style="padding:2px;border:1px solid #cccccc;background-color:#eae9e9;border-radius:4px;">
+        <div class="annytab-input-form-table">
+            <div class="annytab-input-form-row">
+                <div class="annytab-input-form-column-label">SEND-EMAIL-HOST</div>
+                <div class="annytab-input-form-column-input"><input name="SEND-EMAIL-HOST" type="text" class="annytab-form-textbox" value="@websiteSettings.Get("SEND-EMAIL-HOST")" /></div>
+            </div>
+            <div class="annytab-input-form-row">
+                <div class="annytab-input-form-column-label">SEND-EMAIL-PORT</div>
+                <div class="annytab-input-form-column-input"><input name="SEND-EMAIL-PORT" type="text" class="annytab-form-textbox" value="@websiteSettings.Get("SEND-EMAIL-PORT")" /></div>
+            </div>
+            <div class="annytab-input-form-row">
+                <div class="annytab-input-form-column-label">SEND-EMAIL-ADDRESS</div>
+                <div class="annytab-input-form-column-input"><input name="SEND-EMAIL-ADDRESS" type="text" class="annytab-form-textbox" value="@websiteSettings.Get("SEND-EMAIL-ADDRESS")" /></div>
+            </div>
+            <div class="annytab-input-form-row">
+                <div class="annytab-input-form-column-label">SEND-EMAIL-PASSWORD</div>
+                <div class="annytab-input-form-column-input"><input name="SEND-EMAIL-PASSWORD" type="password" class="annytab-form-textbox" value="@websiteSettings.Get("SEND-EMAIL-PASSWORD")" /></div>
+            </div>
+            <div class="annytab-input-form-row">
+                <div class="annytab-input-form-column-label">CONTACT-US-EMAIL</div>
+                <div class="annytab-input-form-column-input"><input name="CONTACT-US-EMAIL" type="text" class="annytab-form-textbox" value="@websiteSettings.Get("CONTACT-US-EMAIL")" /></div>
+            </div>
+        </div>
+    </div>
+    
+    @* Button panel *@
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
+        <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="location.href='@Url.Action("index", "admin_default")'" />
+    </div>
+}
+
+@section scripts {
+    <script>$("#txtApiUserName").focus();</script>
+}
