@@ -667,17 +667,16 @@ public class Administrator
     /// Get one administrator based on facebook user id
     /// </summary>
     /// <param name="facebookUserId">A facebook user id</param>
-    /// <param name="languageId">The language id</param>
     /// <returns>A reference to a administrator post</returns>
-    public static Administrator GetOneByFacebookUserId(string facebookUserId, Int32 languageId)
+    public static Administrator GetOneByFacebookUserId(string facebookUserId)
     {
         // Create the post to return
         Administrator post = null;
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT * FROM dbo.administrators_detail AS D INNER JOIN dbo.administrators AS A ON D.administrator_id = A.id "
-            + "WHERE A.facebook_user_id = @facebook_user_id AND D.language_id = @language_id;";
+        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, admin_user_name AS author_name, admin_role AS author_description, "
+            + "facebook_user_id, google_user_id FROM dbo.administrators WHERE facebook_user_id = @facebook_user_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -687,7 +686,6 @@ public class Administrator
             {
                 // Add parameters
                 cmd.Parameters.AddWithValue("@facebook_user_id", facebookUserId);
-                cmd.Parameters.AddWithValue("@language_id", languageId);
 
                 // Create a reader
                 SqlDataReader reader = null;
@@ -730,17 +728,16 @@ public class Administrator
     /// Get one administrator based on google user id
     /// </summary>
     /// <param name="googleUserId">A google user id</param>
-    /// <param name="languageId">The language id</param>
     /// <returns>A reference to a administrator post</returns>
-    public static Administrator GetOneByGoogleUserId(string googleUserId, Int32 languageId)
+    public static Administrator GetOneByGoogleUserId(string googleUserId)
     {
         // Create the post to return
         Administrator post = null;
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT * FROM dbo.administrators_detail AS D INNER JOIN dbo.administrators AS A ON D.administrator_id = A.id "
-            + "WHERE A.google_user_id = @google_user_id AND D.language_id = @language_id;";
+        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, admin_user_name AS author_name, admin_role AS author_description, "
+            + "facebook_user_id, google_user_id FROM dbo.administrators WHERE google_user_id = @google_user_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -750,7 +747,6 @@ public class Administrator
             {
                 // Add parameters
                 cmd.Parameters.AddWithValue("@google_user_id", googleUserId);
-                cmd.Parameters.AddWithValue("@language_id", languageId);
 
                 // Create a reader
                 SqlDataReader reader = null;

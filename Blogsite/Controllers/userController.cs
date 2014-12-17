@@ -32,10 +32,14 @@ namespace Annytab.Blogsite.Controllers
             // Get the signed-in administrator
             Administrator user = Administrator.GetSignedInAdministrator(currentDomain.front_end_language);
 
-            // Check if the customer is signed in
+            // Check if the user is signed in
             if (user == null)
             {
-                return RedirectToAction("index", "home");
+                user = Administrator.GetSignedInAdministrator();
+                if(user == null)
+                {
+                    return RedirectToAction("index", "home");
+                } 
             }
 
             // Get the translated texts
@@ -174,7 +178,7 @@ namespace Annytab.Blogsite.Controllers
             else if (facebookId != "" && user == null)
             {
                 // Check if we can find a user with the facebook id
-                user = Administrator.GetOneByFacebookUserId(facebookId, domain.front_end_language);
+                user = Administrator.GetOneByFacebookUserId(facebookId);
 
                 // Check if the user exists
                 if (user == null)
@@ -306,7 +310,7 @@ namespace Annytab.Blogsite.Controllers
             else if (googleId != "" && user == null)
             {
                 // Check if we can find a user with the google id
-                user = Administrator.GetOneByGoogleUserId(googleId, domain.front_end_language);
+                user = Administrator.GetOneByGoogleUserId(googleId);
 
                 // Check if the user exists
                 if (user == null)
@@ -395,6 +399,12 @@ namespace Annytab.Blogsite.Controllers
 
             // Create the user
             Administrator user = Administrator.GetSignedInAdministrator(currentDomain.front_end_language);
+
+            // Check if the user exists but not are translated
+            if(user == null)
+            {
+                user = Administrator.GetSignedInAdministrator();
+            }
 
             // Get the translated texts
             KeyStringList tt = StaticText.GetAll(currentDomain.front_end_language, "id", "ASC");
@@ -537,8 +547,13 @@ namespace Annytab.Blogsite.Controllers
             // Check if the user exists
             if (user == null)
             {
-                // Create an empty user
-                user = new Administrator();
+                // Check if the user exists but not are translated
+                user = Administrator.GetOneById(id);
+                if(user == null)
+                {
+                    // Create an empty user
+                    user = new Administrator();
+                }
             }
 
             // Update values
@@ -591,7 +606,7 @@ namespace Annytab.Blogsite.Controllers
                     user.admin_role = "User";
                     Int64 insertId = Administrator.AddMasterPost(user);
                     user.id = Convert.ToInt32(insertId);
-                    Administrator.UpdateLanguagePost(user, domain.front_end_language);
+                    Administrator.AddLanguagePost(user, domain.front_end_language);
                     Administrator.UpdatePassword(user.id, PasswordHash.CreateHash(password));
 
                     // Create the administrator cookie
@@ -604,7 +619,17 @@ namespace Annytab.Blogsite.Controllers
                 {
                     // Update the user
                     Administrator.UpdateMasterPost(user);
-                    Administrator.UpdateLanguagePost(user, domain.front_end_language);
+
+                    // Update or add the language post
+                    if (Administrator.GetOneById(id, domain.front_end_language) != null)
+                    {
+                        Administrator.UpdateLanguagePost(user, domain.front_end_language);
+                    }
+                    else
+                    {
+                        Administrator.AddLanguagePost(user, domain.front_end_language);
+                    }
+                    
 
                     // Only update the password if it has changed
                     if (password != "")

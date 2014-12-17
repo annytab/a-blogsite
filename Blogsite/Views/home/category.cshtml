@@ -171,7 +171,11 @@
     {
         // Get the author
         Administrator author = Administrator.GetOneById(displayItems[i].administrator_id, domain.front_end_language);
-        author = author != null ? author : new Administrator();
+        if(author == null)
+        {
+            author = new Administrator();
+            author.author_name = " - ";
+        }
 
         author_information = "<div><span class='annytab-basic-text-normal'>" + by_tt + ": " + "</span><a href='/home/author/" + author.id + "' class='annytab-basic-text-normal' >"
             + author.author_name + "</a>" + "<span> | </span><span class='annytab-basic-text-normal'>" + added_tt + ": "
