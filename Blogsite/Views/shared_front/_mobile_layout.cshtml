@@ -51,7 +51,7 @@
     <meta property="og:description" content="@ViewBag.MetaDescription" />
     <meta property="og:type" content="website">
     <meta property="og:url" content="@ViewBag.MetaCanonical" />
-    <meta property="og:image" content="@imageUrls.Get("big_icon")" />
+    <meta property="og:image" content="@(domain.web_address + imageUrls.Get("big_icon"))" />
     <meta property="og:site_name" content="@domain.domain_name" />
 
     @* Resources *@
