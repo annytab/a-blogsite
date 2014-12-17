@@ -170,7 +170,7 @@ namespace Annytab.Blogsite.Controllers
             ViewBag.CurrentLanguage = Language.GetOneById(currentDomain.front_end_language);
             ViewBag.CurrentCategory = currentCategory;
             ViewBag.Post = post;
-            ViewBag.Author = author;
+            ViewBag.Author = author != null ? author : new Administrator();
             ViewBag.User = user;
             ViewBag.UserSettings = (Dictionary<string, string>)Session["UserSettings"];
             ViewBag.CultureInfo = Tools.GetCultureInfo(ViewBag.CurrentLanguage);
