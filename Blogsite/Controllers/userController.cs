@@ -535,6 +535,9 @@ namespace Annytab.Blogsite.Controllers
             string author_description = collection["txtAuthorDescription"];
             HttpPostedFileBase authorImage = Request.Files["uploadMainImage"];
 
+            // Modify the author description
+            author_description = author_description.Replace(Environment.NewLine, "<br />");
+
             // Get the current domain
             Domain domain = Tools.GetCurrentDomain();
 

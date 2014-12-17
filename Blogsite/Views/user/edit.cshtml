@@ -93,7 +93,7 @@
     <div class="annytab-basic-container">
         <div style="display:block;margin-right:8px;">
             <span class="annytab-form-label">@description_tt</span><br />
-            <textarea name="txtAuthorDescription" class="annytab-form-textarea" style="width:100%;" rows="20">@user.author_description</textarea>
+            <textarea name="txtAuthorDescription" class="annytab-form-textarea" style="width:100%;" rows="20">@user.author_description.Replace("<br />", Environment.NewLine)</textarea>
         </div>
     </div>
 

@@ -774,7 +774,7 @@ namespace Annytab.Blogsite.Controllers
             }
 
             // Redirect the user to the list
-            return Redirect("/admin_custom_design" + returnUrl);
+            return Redirect(returnUrl);
 
         } // End of the delete_theme method
 
