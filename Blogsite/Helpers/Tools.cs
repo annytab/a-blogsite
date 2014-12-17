@@ -391,7 +391,7 @@ public static class Tools
         Domain currentDomain = Tools.GetCurrentDomain();
 
         // Get the error page
-        StaticPage staticPage = StaticPage.GetOneByConnectionId(5, currentDomain.front_end_language);
+        StaticPage staticPage = StaticPage.GetOneByConnectionId(4, currentDomain.front_end_language);
         staticPage = staticPage != null ? staticPage : new StaticPage();
 
         // Get the translated texts
