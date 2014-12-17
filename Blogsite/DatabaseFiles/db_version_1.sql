@@ -15,10 +15,11 @@ SET IDENTITY_INSERT dbo.administrators ON;
 INSERT INTO dbo.administrators (id, admin_user_name, admin_password, admin_role, email, facebook_user_id, google_user_id) VALUES (1,'Master','1000:BS3ZEKeB3ZOuI1LL:dSYvveOPOyJgAtKb','Administrator','','','');
 SET IDENTITY_INSERT dbo.administrators OFF;
 INSERT INTO dbo.administrators_detail (administrator_id, language_id, author_name, author_description) VALUES (1,1,'Administrator', '');
+INSERT INTO dbo.administrators_detail (administrator_id, language_id, author_name, author_description) VALUES (1,2,'Administrator', '');
 
 /* WEB DOMAINS */
 SET IDENTITY_INSERT dbo.web_domains ON;
-INSERT INTO dbo.web_domains (id, website_name, domain_name, web_address, front_end_language, back_end_language, custom_theme_id, analytics_tracking_id, facebook_app_id, facebook_app_secret, google_app_id, google_app_secret) VALUES (1,'Blog demo','localhost','http://localhost:54257',1,1,0,'','','','','');
+INSERT INTO dbo.web_domains (id, website_name, domain_name, web_address, front_end_language, back_end_language, custom_theme_id, analytics_tracking_id, facebook_app_id, facebook_app_secret, google_app_id, google_app_secret) VALUES (1,'a-blogsite','localhost','http://localhost:54257',2,2,0,'','','','','');
 SET IDENTITY_INSERT dbo.web_domains OFF;
 
 /* WEBSHOP SETTINGS */

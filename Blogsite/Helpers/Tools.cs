@@ -50,9 +50,9 @@ public static class Tools
             domain = new Domain();
             domain.id = 0;
             domain.domain_name = "localhost";
-            domain.web_address = "https://localhost:443";
-            domain.front_end_language = 1;
-            domain.back_end_language = 1;
+            domain.web_address = "https://localhost:80";
+            domain.front_end_language = 2;
+            domain.back_end_language = 2;
             domain.custom_theme_id = 0;
             domain.analytics_tracking_id = "";
             domain.facebook_app_id = "";
