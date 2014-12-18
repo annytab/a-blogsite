@@ -7,6 +7,8 @@ The documentation for this tool is under development and you should be able to r
 
 You can see a demo of the blogsite at <a href="http://a-blogsite-demo.azurewebsites.net/">a-blogsite (demo)</a>
 
+This project has three branches, the master branch is used for development. The staging branch is used for testing on a live website and the production branch is used for live production sites.
+
 <b>A quick start guide</b><br />
 Set up a website and a MS SQL database on your server. The connection string to the database should be a "appSetting" and the key should be called "ConnectionString". If you use Windows Azure like we do, you can add the appSetting under the CONFIGURE tab in the settings for the website. You can also add a app.config file to the solution with contents like this:
 
