@@ -860,7 +860,7 @@ namespace Annytab.Blogsite.Controllers
             }
 
             // Send a email to the administrator of the website
-            string subject = tt.Get("comment") + " " + postRating.post_id.ToString() + " - " + user.author_name;
+            string subject = tt.Get("rating") + " " + postRating.post_id.ToString() + " - " + user.author_name;
             string message = tt.Get("rating") + ": " + postRating.rating.ToString();
             Tools.SendEmailToHost("", subject, message);
 
