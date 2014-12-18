@@ -7,13 +7,13 @@ The documentation for this tool is under development and should be able to read 
 
 You can see a demo of the blogsite at <a href="http://a-blogsite-demo.azurewebsites.net/">a-blogsite (demo)</a>
 
-<b>A quick start guide</a>
+<b>A quick start guide</b>
 Set up a website and a MS SQL database on your server. The connection string to the database should be a "appSetting" and the key should be called "ConnectionString". If you use Windows Azure like we do, you can add the appSetting under the CONFIGURE tab in the settings for the website. You can also add a app.config file to the solution with contents like this:
 
-<?xml version="1.0" encoding="utf-8" ?>
-<appSettings>
-<add key="ConnectionString" value="Server=XXXXXXXXXXXXXXXXXXX" />
-</appSettings>
+<pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;appSettings&gt;
+&lt;add key=&quot;ConnectionString&quot; value=&quot;Server=XXXXXXXXXXXXXXXXXXX&quot; /&gt;
+&lt;/appSettings&gt;</pre>
 
 You can also add the connection string directly in the Web.Config file if you want.
 
