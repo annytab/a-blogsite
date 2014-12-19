@@ -38,7 +38,7 @@ namespace Annytab.Blogsite.Controllers
                 user = Administrator.GetSignedInAdministrator();
                 if(user == null)
                 {
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("login", "user");
                 } 
             }
 
@@ -450,7 +450,7 @@ namespace Annytab.Blogsite.Controllers
             // Check if there is a signed in user
             if (user == null)
             {
-                return RedirectToAction("index", "home");
+                return RedirectToAction("login", "user");
             }
 
             // Get the translated texts
@@ -490,7 +490,7 @@ namespace Annytab.Blogsite.Controllers
             // Check if there is a signed in user
             if (user == null)
             {
-                return RedirectToAction("index", "home");
+                return RedirectToAction("login", "user");
             }
 
             // Get the translated texts
@@ -685,7 +685,7 @@ namespace Annytab.Blogsite.Controllers
             // Check if the post request is valid
             if (user == null || collection == null)
             {
-                return RedirectToAction("index", "home");
+                return RedirectToAction("login", "user");
             }
 
             // Get the form data
@@ -730,7 +730,7 @@ namespace Annytab.Blogsite.Controllers
             // Check if the user is signed in
             if (user == null)
             {
-                return RedirectToAction("index", "home");
+                return RedirectToAction("login", "user");
             }
 
             // Get the current domain
@@ -781,7 +781,7 @@ namespace Annytab.Blogsite.Controllers
             // Check if the request is valid
             if (user == null)
             {
-                return RedirectToAction("index", "home");
+                return RedirectToAction("login", "user");
             }
 
             // Get the current domain
@@ -819,7 +819,7 @@ namespace Annytab.Blogsite.Controllers
             // Check if the post request is valid
             if (user == null || collection == null)
             {
-                return RedirectToAction("index", "home");
+                return RedirectToAction("login", "user");
             }
 
             // Get the form data
@@ -883,7 +883,7 @@ namespace Annytab.Blogsite.Controllers
             // Check if the post request is valid
             if (user == null)
             {
-                return RedirectToAction("index", "home");
+                return RedirectToAction("login", "user");
             }
 
             // Get the current domain
