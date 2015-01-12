@@ -153,16 +153,17 @@ public static class Tools
         // Create the boolean to return
         bool successful = true;
 
-        // Get the company settings
-        KeyStringList webshopSettings = WebsiteSetting.GetAllFromCache();
+        // Get website settings
+        KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
 
         // Create variables
-        string host = webshopSettings.Get("SEND-EMAIL-HOST");
+        string host = websiteSettings.Get("SEND-EMAIL-HOST");
         Int32 port = 0;
-        Int32.TryParse(webshopSettings.Get("SEND-EMAIL-PORT"), out port);
-        string emailAddress = webshopSettings.Get("SEND-EMAIL-ADDRESS");
-        string password = webshopSettings.Get("SEND-EMAIL-PASSWORD");
-        string toAddress = webshopSettings.Get("CONTACT-US-EMAIL");
+        Int32.TryParse(websiteSettings.Get("SEND-EMAIL-PORT"), out port);
+        string emailAddress = websiteSettings.Get("SEND-EMAIL-ADDRESS");
+        string password = websiteSettings.Get("SEND-EMAIL-PASSWORD");
+        string toAddress = websiteSettings.Get("CONTACT-US-EMAIL");
+        string useSSL = websiteSettings.Get("SEND-EMAIL-USE-SSL");
 
         // Get the customer email
         MailAddress copyAddress = AnnytabDataValidation.IsEmailAddressValid(customerAddress);
@@ -171,6 +172,12 @@ public static class Tools
         SmtpClient smtp = new SmtpClient(host, port);
         smtp.Credentials = new NetworkCredential(emailAddress, password);
 
+        // Check if SSL should be used
+        if(useSSL.ToLower() == "true")
+        {
+            smtp.EnableSsl = true;
+        }
+        
         // Try to send the mail message
         try
         {
@@ -223,10 +230,17 @@ public static class Tools
         Int32.TryParse(webshopSettings.Get("SEND-EMAIL-PORT"), out port);
         string emailAddress = webshopSettings.Get("SEND-EMAIL-ADDRESS");
         string password = webshopSettings.Get("SEND-EMAIL-PASSWORD");
+        string useSSL = webshopSettings.Get("SEND-EMAIL-USE-SSL");
 
         // Create the SmtpClient instance
         SmtpClient smtp = new SmtpClient(host, port);
         smtp.Credentials = new NetworkCredential(emailAddress, password);
+
+        // Check if SSL should be used
+        if (useSSL.ToLower() == "true")
+        {
+            smtp.EnableSsl = true;
+        }
 
         // Try to send the mail message
         try

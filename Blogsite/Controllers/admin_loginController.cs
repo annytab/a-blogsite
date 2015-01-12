@@ -61,11 +61,16 @@ namespace Annytab.Blogsite.Controllers
             if (administrator != null && Administrator.ValidatePassword(user_name, password) == true 
                 && Administrator.IsAuthorized(Administrator.GetAllAdminRoles(), administrator.admin_role) == true)
             {
+                // Get website settings
+                KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
+                string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
+
                 // Create the administrator cookie
                 HttpCookie adminCookie = new HttpCookie("Administrator");
                 adminCookie.Value = Tools.ProtectCookieValue(administrator.id.ToString(), "Administration");
                 adminCookie.Expires = DateTime.Now.AddDays(1);
                 adminCookie.HttpOnly = true;
+                adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                 Response.Cookies.Add(adminCookie);
 
                 // Redirect the user to the default admin page

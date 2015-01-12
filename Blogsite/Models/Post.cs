@@ -336,8 +336,8 @@ public class Post
     {
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "UPDATE dbo.posts_detail SET rating = (SELECT (SUM(rating) / COUNT(post_id)) AS rating "
-            + "FROM dbo.posts_ratings WHERE post_id = @post_id AND language_id = @language_id) "
+        string sql = "UPDATE dbo.posts_detail SET rating = ISNULL((SELECT (SUM(rating) / COUNT(post_id)) AS rating "
+            + "FROM dbo.posts_ratings WHERE post_id = @post_id AND language_id = @language_id),0) "
             + "WHERE post_id = @post_id AND language_id = @language_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.

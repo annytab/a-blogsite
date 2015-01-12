@@ -99,7 +99,7 @@
         <div class="annytab-list-row">
             <div class="annytab-list-column-head" style="text-align:center;width:100px;">@id_tt</div>
             <div class="annytab-list-column-head" style="text-align:left;width:200px;">@title_tt</div>
-            <div class="annytab-list-column-head" style="text-align:left;width:100px;">@page_views_tt</div>
+            <div class="annytab-list-column-head" style="text-align:center;width:100px;">@page_views_tt</div>
             <div class="annytab-list-column-head" style="text-align:center;width:100px;">@rating_tt</div>
             <div class="annytab-list-column-head" style="text-align:center;width:100px;">@edit_tt</div>
             <div class="annytab-list-column-head" style="text-align:center;width:100px;">@translate_tt</div>
@@ -112,7 +112,7 @@
             @:<div class="@(i % 2 != 0 ? "annytab-list-row-main" : "annytab-list-row-alt")">
             @:<div class="annytab-list-column" style="text-align:center;width:100px;">@posts[i].id.ToString()</div>
             @:<div class="annytab-list-column" style="text-align:left;width:200px;">@posts[i].title.ToString()</div>
-            @:<div class="annytab-list-column" style="text-align:left;width:100px;">@posts[i].page_views.ToString("##,0.##", cultureInfo)</div>
+            @:<div class="annytab-list-column" style="text-align:center;width:100px;">@posts[i].page_views.ToString("##,0.##", cultureInfo)</div>
             @:<div class="annytab-list-column" style="text-align:center;width:100px;">@posts[i].rating.ToString("##,0.##", cultureInfo)</div>
             @:<div class="annytab-list-column" style="text-align:center;width:100px;"><input type="button" class="annytab-form-button" value="@edit_tt" onclick="location.href='@Url.Action("edit", "admin_posts", new { id = posts[i].id, returnUrl = queryString })'" /></div>
             @:<div class="annytab-list-column" style="text-align:center;width:100px;"><input type="button" class="annytab-form-button" value="@translate_tt" onclick="location.href='@Url.Action("translate", "admin_posts", new { id = posts[i].id, returnUrl = queryString })'" /></div>

@@ -22,7 +22,7 @@ SET IDENTITY_INSERT dbo.web_domains ON;
 INSERT INTO dbo.web_domains (id, website_name, domain_name, web_address, front_end_language, back_end_language, custom_theme_id, analytics_tracking_id, facebook_app_id, facebook_app_secret, google_app_id, google_app_secret) VALUES (1,'a-blogsite','localhost','http://localhost:54257',2,2,0,'','','','','');
 SET IDENTITY_INSERT dbo.web_domains OFF;
 
-/* WEBSHOP SETTINGS */
+/* WEBSITE SETTINGS */
 INSERT INTO dbo.website_settings (id, value) VALUES ('CONTACT-US-EMAIL','');
 INSERT INTO dbo.website_settings (id, value) VALUES ('SEND-EMAIL-ADDRESS','');
 INSERT INTO dbo.website_settings (id, value) VALUES ('SEND-EMAIL-HOST','');

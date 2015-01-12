@@ -148,6 +148,13 @@ namespace Annytab.Blogsite.Controllers
             Administrator author = Administrator.GetOneById(post.administrator_id, currentDomain.front_end_language);
             Administrator user = Administrator.GetSignedInAdministrator(currentDomain.front_end_language);
 
+            // Make sure that the author not is null
+            if (author == null)
+            {
+                author = new Administrator();
+                author.author_name = " - ";
+            }
+
             // Create the bread crumb list
             List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
@@ -170,7 +177,7 @@ namespace Annytab.Blogsite.Controllers
             ViewBag.CurrentLanguage = Language.GetOneById(currentDomain.front_end_language);
             ViewBag.CurrentCategory = currentCategory;
             ViewBag.Post = post;
-            ViewBag.Author = author != null ? author : new Administrator();
+            ViewBag.Author = author;
             ViewBag.User = user;
             ViewBag.UserSettings = (Dictionary<string, string>)Session["UserSettings"];
             ViewBag.CultureInfo = Tools.GetCultureInfo(ViewBag.CurrentLanguage);
@@ -471,6 +478,10 @@ namespace Annytab.Blogsite.Controllers
         [HttpGet]
         public ActionResult layout(string id = "")
         {
+            // Get website settings
+            KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
+            string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
+
             // Create a new cookie
             HttpCookie aCookie = new HttpCookie("LayoutType");
             aCookie.Value = id;
@@ -478,6 +489,7 @@ namespace Annytab.Blogsite.Controllers
             // Set the expiration and add the cookie
             aCookie.Expires = DateTime.Now.AddDays(1);
             aCookie.HttpOnly = true;
+            aCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
             Response.Cookies.Add(aCookie);
 
             // Redirect the user to the new url
