@@ -151,6 +151,10 @@ namespace Annytab.Blogsite.Controllers
                 return Redirect("/");
             }
 
+            // Get website settings
+            KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
+            string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
+
             // Get the access token
             string access_token = await AnnytabExternalLogin.GetFacebookAccessToken(domain, code);
 
@@ -200,6 +204,8 @@ namespace Annytab.Blogsite.Controllers
                     // Create the administrator cookie
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
+                    adminCookie.HttpOnly = true;
+                    adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     adminCookie.Expires = DateTime.Now.AddDays(1);
                     Response.Cookies.Add(adminCookie);
 
@@ -212,6 +218,8 @@ namespace Annytab.Blogsite.Controllers
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
                     adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.HttpOnly = true;
+                    adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     Response.Cookies.Add(adminCookie);
 
                     // Redirect the user to the start page
@@ -284,6 +292,10 @@ namespace Annytab.Blogsite.Controllers
                 return Redirect("/");
             }
 
+            // Get website settings
+            KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
+            string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
+
             // Get the access token
             string access_token = await AnnytabExternalLogin.GetGoogleAccessToken(domain, code);
 
@@ -333,6 +345,8 @@ namespace Annytab.Blogsite.Controllers
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
                     adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.HttpOnly = true;
+                    adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     Response.Cookies.Add(adminCookie);
 
                     // Redirect the user to the edit user page
@@ -344,6 +358,8 @@ namespace Annytab.Blogsite.Controllers
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
                     adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.HttpOnly = true;
+                    adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     Response.Cookies.Add(adminCookie);
 
                     // Redirect the user to the start page
@@ -612,10 +628,16 @@ namespace Annytab.Blogsite.Controllers
                     Administrator.AddLanguagePost(user, domain.front_end_language);
                     Administrator.UpdatePassword(user.id, PasswordHash.CreateHash(password));
 
+                    // Get website settings
+                    KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
+                    string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
+
                     // Create the administrator cookie
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
                     adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.HttpOnly = true;
+                    adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     Response.Cookies.Add(adminCookie);
                 }
                 else
@@ -690,19 +712,17 @@ namespace Annytab.Blogsite.Controllers
 
             // Get the form data
             Int32 postId = Convert.ToInt32(collection["hiddenPostId"]);
+            Int32 languageId = Convert.ToInt32(collection["hiddenLanguageId"]);
             string commentText = collection["txtCommentText"];
 
             // Modify the comment text
             commentText = commentText.Replace(Environment.NewLine, "<br />");
 
-            // Get the post
-            Post post = Post.GetOneById(postId, domain.front_end_language);
-
             // Create a new post comment
             PostComment comment = new PostComment();
             comment.post_id = postId;
             comment.administrator_id = user.id;
-            comment.language_id = domain.front_end_language;
+            comment.language_id = languageId;
             comment.comment_date = DateTime.Now;
             comment.comment_text = commentText;
 
@@ -710,12 +730,12 @@ namespace Annytab.Blogsite.Controllers
             Int64 insertId = PostComment.Add(comment);
 
             // Send a email to the administrator of the website
-            string subject = tt.Get("comment") + " " + insertId.ToString() + " - " + user.author_name;
+            string subject = tt.Get("comment") + ",  " + tt.Get("post") + " " + insertId.ToString() + " - " + user.admin_user_name;
             string message = comment.comment_text;
             Tools.SendEmailToHost("", subject, message);
 
-            // Redirect the user to the same post
-            return RedirectToAction("post", "home", new { id = post.page_name });
+            // Redirect the user to the edit comments page
+            return RedirectToAction("edit_comments");
 
         } // End of the add_comment method
 
@@ -741,6 +761,7 @@ namespace Annytab.Blogsite.Controllers
 
             // Get form values
             Int32 commentId = Convert.ToInt32(collection["hiddenId"]);
+            Int32 languageId = Convert.ToInt32(collection["hiddenLanguageId"]);
             string commentText = collection["txtCommentText"];
 
             // Modify the comment text
@@ -760,7 +781,7 @@ namespace Annytab.Blogsite.Controllers
                 PostComment.Update(comment);
 
                 // Send a email to the administrator of the website
-                string subject = tt.Get("comment") + " " + comment.id.ToString() + " - " + user.author_name;
+                string subject = tt.Get("comment") + ",  " + tt.Get("post") + " " + comment.id.ToString() + " - " + user.admin_user_name;
                 string message = comment.comment_text;
                 Tools.SendEmailToHost("", subject, message);
             }
@@ -824,14 +845,12 @@ namespace Annytab.Blogsite.Controllers
 
             // Get the form data
             Int32 post_id = Convert.ToInt32(collection["hiddenPostId"]);
+            Int32 language_id = Convert.ToInt32(collection["hiddenLanguageId"]);
             decimal userVote = 0;
             decimal.TryParse(collection["userVote"], NumberStyles.Any, CultureInfo.InvariantCulture, out userVote);
 
-            // Get the post
-            Post post = Post.GetOneById(post_id, domain.front_end_language);
-
             // Try to get a saved rating
-            PostRating postRating = PostRating.GetOneById(post_id, user.id, domain.front_end_language);
+            PostRating postRating = PostRating.GetOneById(post_id, user.id, language_id);
 
             // Add or update the rating
             if (postRating != null && postRating.administrator_id == user.id)
@@ -851,7 +870,7 @@ namespace Annytab.Blogsite.Controllers
                 // Update values
                 postRating.post_id = post_id;
                 postRating.administrator_id = user.id;
-                postRating.language_id = domain.front_end_language;
+                postRating.language_id = language_id;
                 postRating.rating_date = DateTime.Now;
                 postRating.rating = userVote;
 
@@ -860,7 +879,7 @@ namespace Annytab.Blogsite.Controllers
             }
 
             // Send a email to the administrator of the website
-            string subject = tt.Get("rating") + " " + postRating.post_id.ToString() + " - " + user.author_name;
+            string subject = tt.Get("rating") + ",  " + tt.Get("post") + " " + postRating.post_id.ToString() + " - " + user.admin_user_name;
             string message = tt.Get("rating") + ": " + postRating.rating.ToString();
             Tools.SendEmailToHost("", subject, message);
 
@@ -868,14 +887,14 @@ namespace Annytab.Blogsite.Controllers
             Post.UpdateRating(postRating.post_id, postRating.language_id);
 
             // Redirect the user to the post page
-            return RedirectToAction("post", "home", new { id = post.page_name });
+            return RedirectToAction("edit_ratings");
 
         } // End of the edit_rating method
 
         // Delete a rating
-        // POST: /customer/delete_rating
+        // POST: /customer/delete_rating/1?languageId=1
         [HttpGet]
-        public ActionResult delete_rating(Int32 id = 0)
+        public ActionResult delete_rating(Int32 id = 0, Int32 languageId = 0)
         {
             // Get the signed in user
             Administrator user = Administrator.GetSignedInAdministrator();
@@ -890,13 +909,13 @@ namespace Annytab.Blogsite.Controllers
             Domain domain = Tools.GetCurrentDomain();
 
             // Get the rating
-            PostRating postRating = PostRating.GetOneById(id, user.id, domain.front_end_language);
+            PostRating postRating = PostRating.GetOneById(id, user.id, languageId);
 
             // Delete the rating
             if (postRating != null && postRating.administrator_id == user.id)
             {
                 // Delete the rating
-                PostRating.DeleteOnId(id, user.id, domain.front_end_language);
+                PostRating.DeleteOnId(id, user.id, languageId);
 
                 // Update the rating for the post
                 Post.UpdateRating(postRating.post_id, postRating.language_id);
@@ -929,10 +948,16 @@ namespace Annytab.Blogsite.Controllers
             // Check if the user exists and if the password is correct
             if (user != null && Administrator.ValidatePassword(user_name, password) == true)
             {
+                // Get website settings
+                KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
+                string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
+
                 // Create the administrator cookie
                 HttpCookie adminCookie = new HttpCookie("Administrator");
                 adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
                 adminCookie.Expires = DateTime.Now.AddDays(1);
+                adminCookie.HttpOnly = true;
+                adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                 Response.Cookies.Add(adminCookie);
 
                 // Redirect the user to the checkout page

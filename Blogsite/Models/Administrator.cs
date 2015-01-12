@@ -551,7 +551,7 @@ public class Administrator
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, admin_user_name AS author_name, admin_role AS author_description, "
+        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, '-' AS author_name, '-' AS author_description, "
             + "facebook_user_id, google_user_id FROM dbo.administrators WHERE id = @id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
@@ -675,7 +675,7 @@ public class Administrator
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, admin_user_name AS author_name, admin_role AS author_description, "
+        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, '-' AS author_name, '-' AS author_description, "
             + "facebook_user_id, google_user_id FROM dbo.administrators WHERE facebook_user_id = @facebook_user_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
@@ -736,7 +736,7 @@ public class Administrator
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, admin_user_name AS author_name, admin_role AS author_description, "
+        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, '-' AS author_name, '-' AS author_description, "
             + "facebook_user_id, google_user_id FROM dbo.administrators WHERE google_user_id = @google_user_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
@@ -797,7 +797,7 @@ public class Administrator
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, admin_user_name AS author_name, admin_role AS author_description, " 
+        string sql = "SELECT id, admin_user_name, admin_password, admin_role, email, '-' AS author_name, '-' AS author_description, " 
             + "facebook_user_id, google_user_id FROM dbo.administrators WHERE admin_user_name = @admin_user_name;";
 
         // The using block is used to call dispose automatically even if there are an exception.

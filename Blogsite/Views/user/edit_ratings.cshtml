@@ -92,6 +92,7 @@
 
             @* Hidden data *@
             <input name="hiddenPostId" type="hidden" value="@postRatings[i].post_id" />
+            <input name="hiddenLanguageId" type="hidden" value="@postRatings[i].language_id" />
 
             @* A rating *@
             <div class="annytab-basic-inner-container">
@@ -107,7 +108,7 @@
                 </div>
                 <div style="clear:both;margin:4px 0px 0px 0px;">
                     <input type="submit" value="@edit_tt" class="annytab-basic-button" />
-                    <input type="button" class="annytab-basic-button" value="@delete_tt" onclick="location.href='@Url.Action("delete_rating", "user", new { id = postRatings[i].post_id })'">
+                    <input type="button" class="annytab-basic-button" value="@delete_tt" onclick="location.href='@Url.Action("delete_rating", "user", new { id = postRatings[i].post_id, languageId = postRatings[i].language_id })'">
                 </div>
             </div>
         }

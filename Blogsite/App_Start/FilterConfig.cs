@@ -15,6 +15,7 @@ namespace Annytab.Blogsite
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new AnnytabRequireHttpsAttribute());
 
         } // End of the RegisterGlobalFilters method
 

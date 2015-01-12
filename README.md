@@ -14,7 +14,7 @@ Set up a website and a MS SQL database on your server. The connection string to 
 
 <pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
 &lt;appSettings&gt;
-&lt;add key=&quot;ConnectionString&quot; value=&quot;Server=XXXXXXXXXXXXXXXXXXX&quot; /&gt;
+&lt;add key=&quot;ConnectionString&quot; value=&quot;XXXXXXXXXXXXXXXXXXX&quot; /&gt;
 &lt;/appSettings&gt;</pre>
 
 You can also add the connection string directly in the Web.Config file if you want.

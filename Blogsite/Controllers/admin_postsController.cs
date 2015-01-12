@@ -166,6 +166,8 @@ namespace Annytab.Blogsite.Controllers
             }
 
             // Add data to the form
+            ViewBag.Keywords = "";
+            ViewBag.CurrentPage = 1;
             ViewBag.LanguageId = languageId;
             ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
             ViewBag.StandardPost = standardPost;
@@ -477,6 +479,8 @@ namespace Annytab.Blogsite.Controllers
             DateTime.TryParse(collection["txtTranslatedDateAdded"], out date_added);
             bool inactive = Convert.ToBoolean(collection["cbInactive"]);
             string returnUrl = collection["returnUrl"];
+            string keywords = collection["txtSearch"];
+            Int32 currentPage = Convert.ToInt32(collection["hiddenPage"]);
 
             // Get query parameters
             ViewBag.QueryParams = new QueryParams(returnUrl);
@@ -524,6 +528,54 @@ namespace Annytab.Blogsite.Controllers
             translatedPost.date_added = AnnytabDataValidation.TruncateDateTime(date_added);
             translatedPost.date_updated = DateTime.Now;
             translatedPost.inactive = inactive;
+
+            // Check if the user wants to do a search
+            if (collection["btnSearch"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
+                ViewBag.StandardPost = standardPost;
+                ViewBag.TranslatedPost = translatedPost;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the edit view
+                return View("edit");
+            }
+
+            // Check if the user wants to do a search
+            if (collection["btnPreviousPage"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage - 1;
+                ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
+                ViewBag.StandardPost = standardPost;
+                ViewBag.TranslatedPost = translatedPost;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the edit view
+                return View("edit");
+            }
+
+            // Check if the user wants to do a search
+            if (collection["btnNextPage"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage + 1;
+                ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
+                ViewBag.StandardPost = standardPost;
+                ViewBag.TranslatedPost = translatedPost;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the edit view
+                return View("edit");
+            }
 
             // Create a error message
             string errorMessage = string.Empty;
@@ -594,6 +646,8 @@ namespace Annytab.Blogsite.Controllers
             else
             {
                 // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage;
                 ViewBag.LanguageId = translationLanguageId;
                 ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
                 ViewBag.StandardPost = standardPost;

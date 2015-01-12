@@ -64,9 +64,14 @@ namespace Annytab.Blogsite
                     aCookie.Value = "standard"; // Standard device
                 }
 
+                // Get website settings
+                KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
+                string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
+
                 // Set the expiration and add the cookie
                 aCookie.Expires = DateTime.Now.AddDays(1);
                 aCookie.HttpOnly = true;
+                aCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                 Response.Cookies.Add(aCookie);
             }
 
