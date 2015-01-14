@@ -65,6 +65,7 @@
                     <option value="follow" @(weblink.rel == "follow" ? Html.Raw("selected='selected'") : Html.Raw(""))>follow</option>
                     <option value="nofollow" @(weblink.rel == "nofollow" ? Html.Raw("selected='selected'") : Html.Raw(""))>nofollow</option>
                     <option value="author" @(weblink.rel == "author" ? Html.Raw("selected='selected'") : Html.Raw(""))>author</option>
+                    <option value="publisher" @(weblink.rel == "publisher" ? Html.Raw("selected='selected'") : Html.Raw(""))>publisher</option>
                     <option value="help" @(weblink.rel == "help" ? Html.Raw("selected='selected'") : Html.Raw(""))>help</option>
                     <option value="license" @(weblink.rel == "license" ? Html.Raw("selected='selected'") : Html.Raw(""))>license</option>
                     <option value="noreferrer" @(weblink.rel == "noreferrer" ? Html.Raw("selected='selected'") : Html.Raw(""))>noreferrer</option>
@@ -79,7 +80,7 @@
                 <select name="selectTarget" class="annytab-form-select">
                     <option value="_blank" @(weblink.target == "_blank" ? Html.Raw("selected='selected'") : Html.Raw(""))>_blank</option>
                     <option value="_top" @(weblink.target == "_top" ? Html.Raw("selected='selected'") : Html.Raw(""))>_top</option>
-                    <option value="_self" @(weblink.target == "author" ? Html.Raw("selected='selected'") : Html.Raw(""))>_self</option>
+                    <option value="_self" @(weblink.target == "_self" ? Html.Raw("selected='selected'") : Html.Raw(""))>_self</option>
                 </select>
             </div>
         </div>
