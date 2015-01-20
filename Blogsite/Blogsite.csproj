@@ -208,6 +208,7 @@
     <Content Include="Content\images\annytab_design\blue_button.png" />
     <Content Include="Content\images\annytab_design\blue_button_hover.png" />
     <Content Include="Content\images\annytab_design\cross.png" />
+    <Content Include="Content\images\annytab_design\delete.gif" />
     <Content Include="Content\images\annytab_design\facebook_button.png" />
     <Content Include="Content\images\annytab_design\facebook_logo.png" />
     <Content Include="Content\images\annytab_design\google_button.png" />
@@ -403,7 +404,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54257</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44301/</IISUrl>
+          <IISUrl>https://localhost:44302/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
