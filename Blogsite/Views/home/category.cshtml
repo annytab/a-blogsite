@@ -44,7 +44,7 @@
     }
 
     // Count the number of posts
-    Int32 count = DisplayItem.GetCount(0, domain.front_end_language);
+    Int32 count = DisplayItem.GetCount(category.id, domain.front_end_language);
 
     // Get the page size
     Int32 pageSize = Int32.Parse(userSettings["page_size"]);
@@ -65,7 +65,7 @@
     ViewBag.MetaRobots = category.meta_robots;
 
     // Set paging data
-    ViewBag.NavigateUrl = "/home/category/" + category.page_name + "&qp={0}";
+    ViewBag.NavigateUrl = "/home/category/" + category.page_name + "?qp={0}";
     ViewBag.CurrentPage = page;
     ViewBag.NumberOfPages = numberOfPages;
 
