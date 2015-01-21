@@ -23,6 +23,7 @@ public class Domain
     public string facebook_app_secret;
     public string google_app_id;
     public string google_app_secret;
+    public bool noindex;
 
     #endregion
 
@@ -46,6 +47,7 @@ public class Domain
         this.facebook_app_secret = "";
         this.google_app_id = "";
         this.google_app_secret = "";
+        this.noindex = false;
 
     } // End of the constructor
 
@@ -68,6 +70,7 @@ public class Domain
         this.facebook_app_secret = reader["facebook_app_secret"].ToString();
         this.google_app_id = reader["google_app_id"].ToString();
         this.google_app_secret = reader["google_app_secret"].ToString();
+        this.noindex = Convert.ToBoolean(reader["noindex"]);
 
     } // End of the constructor
 
@@ -87,9 +90,9 @@ public class Domain
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "INSERT INTO dbo.web_domains (website_name, domain_name, web_address, front_end_language, back_end_language, "
-            + "custom_theme_id, analytics_tracking_id, facebook_app_id, facebook_app_secret, google_app_id, google_app_secret) "
+            + "custom_theme_id, analytics_tracking_id, facebook_app_id, facebook_app_secret, google_app_id, google_app_secret, noindex) "
             + "VALUES (@website_name, @domain_name, @web_address, @front_end_language, @back_end_language, @custom_theme_id, "
-            + "@analytics_tracking_id, @facebook_app_id, @facebook_app_secret, @google_app_id, @google_app_secret);SELECT SCOPE_IDENTITY();";
+            + "@analytics_tracking_id, @facebook_app_id, @facebook_app_secret, @google_app_id, @google_app_secret, @noindex);SELECT SCOPE_IDENTITY();";
 
         // The using block is used to call dispose automatically even if there is a exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -109,6 +112,7 @@ public class Domain
                 cmd.Parameters.AddWithValue("@facebook_app_secret", post.facebook_app_secret);
                 cmd.Parameters.AddWithValue("@google_app_id", post.google_app_id);
                 cmd.Parameters.AddWithValue("@google_app_secret", post.google_app_secret);
+                cmd.Parameters.AddWithValue("@noindex", post.noindex);
 
                 // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
                 // avoid having our application crash in such cases
@@ -148,7 +152,7 @@ public class Domain
         string sql = "UPDATE dbo.web_domains SET website_name = @website_name, domain_name = @domain_name, web_address = @web_address, "
             + "front_end_language = @front_end_language, back_end_language = @back_end_language, custom_theme_id = @custom_theme_id, "
             + "analytics_tracking_id = @analytics_tracking_id, facebook_app_id = @facebook_app_id, facebook_app_secret = @facebook_app_secret, "
-            + "google_app_id = @google_app_id, google_app_secret = @google_app_secret WHERE id = @id;";
+            + "google_app_id = @google_app_id, google_app_secret = @google_app_secret, noindex = @noindex WHERE id = @id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -169,6 +173,7 @@ public class Domain
                 cmd.Parameters.AddWithValue("@facebook_app_secret", post.facebook_app_secret);
                 cmd.Parameters.AddWithValue("@google_app_id", post.google_app_id);
                 cmd.Parameters.AddWithValue("@google_app_secret", post.google_app_secret);
+                cmd.Parameters.AddWithValue("@noindex", post.noindex);
 
                 // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
                 // avoid having our application crash in such cases.

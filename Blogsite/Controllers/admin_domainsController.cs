@@ -256,6 +256,7 @@ namespace Annytab.Blogsite.Controllers
             string facebook_app_secret = collection["txtFacebookAppSecret"];
             string google_app_id = collection["txtGoogleAppId"];
             string google_app_secret = collection["txtGoogleAppSecret"];
+            bool noindex = Convert.ToBoolean(collection["cbNoindex"]);
 
             // Get the default admin language id
             Int32 adminLanguageId = currentDomain.back_end_language;
@@ -293,6 +294,7 @@ namespace Annytab.Blogsite.Controllers
             domain.facebook_app_secret = facebook_app_secret;
             domain.google_app_id = google_app_id;
             domain.google_app_secret = google_app_secret;
+            domain.noindex = noindex;
 
             // Get the domain on domain name
             Domain domainOnName = Domain.GetOneByDomainName(domain.domain_name);

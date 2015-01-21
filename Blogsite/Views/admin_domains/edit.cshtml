@@ -26,6 +26,7 @@
     string theme_tt = tt.Get("theme");
     string default_tt = tt.Get("default");
     string analytics_tracking_id_tt = tt.Get("analytics_tracking_id");
+    string do_not_index_tt = tt.Get("do_not_index");
     string save_tt = tt.Get("save");
     string cancel_tt = tt.Get("cancel");
 
@@ -124,6 +125,10 @@
         <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">@("Google app secret: ")</div>
             <div class="annytab-input-form-column-input"><input name="txtGoogleAppSecret" type="text" class="annytab-form-textbox" value="@domain.google_app_secret" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(do_not_index_tt + ":")</div>
+            <div class="annytab-input-form-column-input"><input name="cbNoindex" type="checkbox" class="annytab-form-checkbox" value="true" @(domain != null && domain.noindex == true ? Html.Raw("checked='checked'") : Html.Raw("")) /></div>
         </div>
     </div>
     

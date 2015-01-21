@@ -249,6 +249,7 @@
     <None Include="DeveloperFiles\db_testdata.sql" />
     <None Include="DeveloperFiles\db_update_settings.sql" />
     <None Include="DeveloperFiles\db_drop_statements.sql" />
+    <Content Include="DatabaseFiles\db_version_3.sql" />
     <Content Include="DatabaseFiles\db_version_2.sql" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
