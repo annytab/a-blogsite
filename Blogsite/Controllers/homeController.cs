@@ -277,7 +277,7 @@ namespace Annytab.Blogsite.Controllers
 
             // Set the connection id
             byte connectionId = 3;
-            if (id == "invalid_input")
+            if (id == "invalid-input")
             {
                 connectionId = 4;
             }

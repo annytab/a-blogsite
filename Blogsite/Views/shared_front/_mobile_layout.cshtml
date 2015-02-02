@@ -33,14 +33,13 @@
 }
 
 <!DOCTYPE html>
-<html lang="@(language.language_code.ToLower() + "-" + language.country_code.ToUpper())" xmlns:og="http://ogp.me/ns#">
+<html lang="@(language.language_code.ToLower() + "-" + language.country_code.ToUpper())" prefix="og: http://ogp.me/ns#">
 <head>
     @* Title and meta tags *@
     <title>@ViewBag.Title</title>
-    <meta name="title" content="@ViewBag.MetaTitle" />
     <meta name="description" content="@ViewBag.MetaDescription" />
     <meta name="keywords" content="@ViewBag.MetaKeywords" />
-    <meta name="canonical" content="@ViewBag.MetaCanonical" />
+    <link rel="canonical" href="@ViewBag.MetaCanonical" />
     <meta name="robots" content="@(domain.noindex == true ? "noindex, nofollow" : ViewBag.MetaRobots)" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=yes" />
@@ -178,6 +177,6 @@
     @Scripts.Render(domain.custom_theme_id == 0 ? "/Scripts/annytab_front/annytab.default-functions.js" : "/Scripts/theme/annytab.default-functions.js")
     @Scripts.Render(domain.custom_theme_id == 0 ? "/Scripts/annytab_front/annytab.mobile-layout-functions.js" : "/Scripts/theme/annytab.mobile-layout-functions.js")
     @RenderSection("scripts", required: false)
-    
+
 </body>
 </html>

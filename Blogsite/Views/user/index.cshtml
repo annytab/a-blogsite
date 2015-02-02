@@ -40,19 +40,20 @@
 <h1>@ViewBag.Title</h1>
 
 @* Menu *@
-@Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
+@if (user.id != 0)
+{
+    @Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
+}
 
 @* Image and description *@
-<div style="display:block;">
-    <p>
-        @* Main image *@
-        <div style="position:relative;float:left;width:256px;height:256px;margin:0px 4px 4px 0px;overflow:hidden;border-radius:4px;">
-            <img src="@Tools.GetAdministratorMainImageUrl(user.id)" alt="@user.author_name" style="position:absolute;top:0;left:0;width:256px;height:256px;" />
-        </div>
-        @* Title and description *@
+<div class="annytab-author-container">
+    <div class="annytab-author-left">
+        <img src="@Tools.GetAdministratorMainImageUrl(user.id)" alt="@user.author_name" style="width:100%;border-radius:4px;" />
+    </div>
+    <div class="annytab-author-right">
         <h1>@user.author_name</h1>
         <span>@Html.Raw(user.author_description)</span>
-    </p>
+    </div>
 </div>
 
 <div class="annytab-basic-space"></div>

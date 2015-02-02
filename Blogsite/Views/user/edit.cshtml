@@ -57,7 +57,10 @@
 <h1>@ViewBag.Title</h1>
 
 @* Menu *@
-@Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
+@if(user.id != 0)
+{
+    @Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
+}
 
 @* Edit form *@
 @using (Html.BeginForm("edit", "user", FormMethod.Post, new { enctype = "multipart/form-data" }))
