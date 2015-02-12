@@ -276,14 +276,14 @@ namespace Annytab.Blogsite.Controllers
             Domain currentDomain = Tools.GetCurrentDomain();
 
             // Set the connection id
-            byte connectionId = 3;
+            byte connectionId = 2;
             if (id == "invalid-input")
             {
-                connectionId = 4;
+                connectionId = 3;
             }
             else if (id == "404")
             {
-                connectionId = 5;
+                connectionId = 4;
             }            
             else
             {
