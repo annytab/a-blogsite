@@ -84,7 +84,9 @@ namespace Annytab.Blogsite
         {
             // Just return if debugging is enabled
             if (HttpContext.Current.IsDebuggingEnabled == true)
+            {
                 return;
+            }
 
             // Get the last exception
             Exception error = Server.GetLastError();

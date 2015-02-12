@@ -358,6 +358,8 @@ namespace Annytab.Blogsite.Controllers
             string metadescription = collection["txtTranslatedMetadescription"];
             string metakeywords = collection["txtTranslatedMetakeywords"];
             string pagename = collection["txtTranslatedPagename"];
+            DateTime date_added = DateTime.MinValue;
+            DateTime.TryParse(collection["txtTranslatedDateAdded"], out date_added);
             bool inactive = Convert.ToBoolean(collection["cbInactive"]);
 
             // Create the translated category
@@ -368,6 +370,7 @@ namespace Annytab.Blogsite.Controllers
             translatedCategory.meta_description = metadescription;
             translatedCategory.meta_keywords = metakeywords;
             translatedCategory.page_name = pagename;
+            translatedCategory.date_added = AnnytabDataValidation.TruncateDateTime(date_added);
             translatedCategory.inactive = inactive;
 
             // Create a error message
@@ -425,6 +428,7 @@ namespace Annytab.Blogsite.Controllers
                     category.meta_description = translatedCategory.meta_description;
                     category.meta_keywords = translatedCategory.meta_keywords;
                     category.page_name = translatedCategory.page_name;
+                    category.date_added = translatedCategory.date_added;
                     category.inactive = translatedCategory.inactive;
 
                     // Update the category translation

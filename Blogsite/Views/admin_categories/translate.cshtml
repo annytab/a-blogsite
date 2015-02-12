@@ -21,6 +21,8 @@
     string meta_description_tt = tt.Get("meta_description");
     string keywords_tt = tt.Get("keywords");
     string page_name_tt = tt.Get("page_name");
+    string date_tt = tt.Get("date");
+    string added_tt = tt.Get("added");
     string inactive_tt = tt.Get("inactive");
     string delete_tt = tt.Get("delete");
     string cancel_tt = tt.Get("cancel");
@@ -97,6 +99,14 @@
             <div class="annytab-input-form-column-input"><input name="txtTranslatedPagename" type="text" class="annytab-form-textbox" value="@(translatedCategory != null ? translatedCategory.page_name : "")" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) /></div>
         </div>
         <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">@(added_tt + ", " + date_tt.ToLower() + " (yyyy-mm-dd):")</div>
+            <div class="annytab-input-form-column-input"><input name="txtStandardDateAdded" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@standardCategory.date_added.ToString("yyyy-MM-dd")" /></div>
+        </div>
+        <div class="annytab-input-form-row">
+            <div class="annytab-input-form-column-label">&nbsp;</div>
+            <div class="annytab-input-form-column-input"><input id="txtTranslatedDateAdded" name="txtTranslatedDateAdded" type="text" class="annytab-form-textbox" value="@(translatedCategory != null ? translatedCategory.date_added.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) /></div>
+        </div>
+        <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">@(inactive_tt + ":")</div>
             <div class="annytab-input-form-column-input"><input name="cbInactive" type="checkbox" class="annytab-form-checkbox" value="true" @(translatedCategory != null && translatedCategory.inactive == true ? Html.Raw("checked='checked'") : Html.Raw("")) @(languageId == 0 ? Html.Raw("disabled='disabled'") : Html.Raw("")) /></div>
         </div>
@@ -111,8 +121,10 @@
 }
 
 @section scripts {
+    <link href="~/Content/jquery_css/jquery-ui.min.css" rel="stylesheet" />
     <script type="text/javascript">
         $("#selectLanguage").focus();
+        $("#txtTranslatedDateAdded").datepicker({ dateFormat: 'yy-mm-dd' });
         $("#selectLanguage").on("change", function () { $(location).attr("href", $(this).find(":selected").attr("data-url")); });
     </script>
 }
