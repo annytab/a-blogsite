@@ -54,11 +54,11 @@
 
 @*List of languages*@
 <div class="annytab-list-container">
-    <div class="annytab-list-table" style="width:800px;">
+    <div class="annytab-list-table" style="width:896px;">
         <div class="annytab-list-row">
             <div class="annytab-list-column-head" style="text-align:center;width:100px;">@id_tt</div>
-            <div class="annytab-list-column-head" style="text-align:left;width:100px;">@language_code_tt</div>
-            <div class="annytab-list-column-head" style="text-align:left;width:100px;">@country_code_tt</div>
+            <div class="annytab-list-column-head" style="text-align:left;width:120px;">@language_code_tt</div>
+            <div class="annytab-list-column-head" style="text-align:left;width:120px;">@country_code_tt</div>
             <div class="annytab-list-column-head" style="text-align:left;width:200px;">@name_tt</div>
             <div class="annytab-list-column-head" style="text-align:center;width:100px;">@edit_tt</div>
             <div class="annytab-list-column-head" style="text-align:center;width:100px;">@translate_tt</div>
@@ -69,8 +69,8 @@
         {
             @:<div class="@(i % 2 != 0 ? "annytab-list-row-main" : "annytab-list-row-alt")">
             @:<div class="annytab-list-column" style="text-align:center;width:100px;">@languages[i].id.ToString()</div>
-            @:<div class="annytab-list-column" style="text-align:left;width:100px;">@languages[i].language_code.ToString()</div>
-            @:<div class="annytab-list-column" style="text-align:left;width:100px;">@languages[i].country_code.ToString()</div>
+            @:<div class="annytab-list-column" style="text-align:left;width:120px;">@languages[i].language_code.ToString()</div>
+            @:<div class="annytab-list-column" style="text-align:left;width:120px;">@languages[i].country_code.ToString()</div>
             @:<div class="annytab-list-column" style="text-align:left;width:200px;">@languages[i].name.ToString()</div>
             @:<div class="annytab-list-column" style="text-align:center;width:100px;"><input type="button" class="annytab-form-button" value="@edit_tt" onclick="location.href='@Url.Action("edit", "admin_languages", new { id = languages[i].id, returnUrl = queryString })'" /></div>
             @:<div class="annytab-list-column" style="text-align:center;width:100px;"><input type="button" class="annytab-form-button" value="@translate_tt" onclick="location.href='@Url.Action("translate", "admin_languages", new { id = languages[i].id, returnUrl = queryString })'" /></div>
