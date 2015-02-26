@@ -344,7 +344,7 @@ namespace Annytab.Blogsite.Controllers
             {
                 // Set form values
                 ViewBag.Keywords = keywords;
-                ViewBag.CurrentPage = currentPage;
+                ViewBag.CurrentPage = 1;
                 ViewBag.Post = post;
                 ViewBag.TranslatedTexts = tt;
                 ViewBag.ReturnUrl = returnUrl;
@@ -534,15 +534,16 @@ namespace Annytab.Blogsite.Controllers
             {
                 // Set form values
                 ViewBag.Keywords = keywords;
-                ViewBag.CurrentPage = currentPage;
+                ViewBag.CurrentPage = 1;
+                ViewBag.LanguageId = translationLanguageId;
                 ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
                 ViewBag.StandardPost = standardPost;
                 ViewBag.TranslatedPost = translatedPost;
                 ViewBag.TranslatedTexts = tt;
                 ViewBag.ReturnUrl = returnUrl;
 
-                // Return the edit view
-                return View("edit");
+                // Return the translate view
+                return View("translate");
             }
 
             // Check if the user wants to do a search
@@ -551,14 +552,15 @@ namespace Annytab.Blogsite.Controllers
                 // Set form values
                 ViewBag.Keywords = keywords;
                 ViewBag.CurrentPage = currentPage - 1;
+                ViewBag.LanguageId = translationLanguageId;
                 ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
                 ViewBag.StandardPost = standardPost;
                 ViewBag.TranslatedPost = translatedPost;
                 ViewBag.TranslatedTexts = tt;
                 ViewBag.ReturnUrl = returnUrl;
 
-                // Return the edit view
-                return View("edit");
+                // Return the translate view
+                return View("translate");
             }
 
             // Check if the user wants to do a search
@@ -567,14 +569,15 @@ namespace Annytab.Blogsite.Controllers
                 // Set form values
                 ViewBag.Keywords = keywords;
                 ViewBag.CurrentPage = currentPage + 1;
+                ViewBag.LanguageId = translationLanguageId;
                 ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
                 ViewBag.StandardPost = standardPost;
                 ViewBag.TranslatedPost = translatedPost;
                 ViewBag.TranslatedTexts = tt;
                 ViewBag.ReturnUrl = returnUrl;
 
-                // Return the edit view
-                return View("edit");
+                // Return the translate view
+                return View("translate");
             }
 
             // Create a error message

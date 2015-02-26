@@ -117,7 +117,7 @@
         @*Search box*@
         <div style="padding:5px;margin:0px 0px 5px 0px;">
             <span>@(media_files_tt + ": ")</span>
-            <input name="txtSearch" type="text" class="annytab-form-textbox" style="width:150px;" />
+            <input name="txtSearch" type="text" class="annytab-form-textbox" value="@keywords" style="width:150px;" />
             <input name="btnSearch" type="submit" class="annytab-form-button" value="@search_tt" />
         </div>
 
@@ -227,7 +227,7 @@
     
     @*Button panel*@
     <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
-        <input id="btnPreviewPost" type="button" class="annytab-form-button" value="@preview_tt" />
+        <input id="btnPreviewPost" data-theme="@domain.custom_theme_id" type="button" class="annytab-form-button" value="@preview_tt" />
         <input name="btnSave" class="annytab-form-button" type="submit" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
     </div>
@@ -239,37 +239,6 @@
     <script type="text/javascript">
         $("#txtTitle").focus();
         $("#txtDateAdded").datepicker({ dateFormat: 'yy-mm-dd' });
-        $("#btnPreviewPost").click(previewPost);
-
-        // Preview a post
-        function previewPost()
-        {
-            // Get data
-            var title = $("#txtTitle").val();
-            var text_area = $("#txtDescription");
-
-            // Create the string to print
-            var html = '<!DOCTYPE html><html><head><title>' + title + '</title>';
-            html += '<link type="text/css" rel="stylesheet" href="@(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_default_style.css" : "/Content/theme/front_default_style.css")" />';
-            html += '<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"><\/script>';
-            html += '</head><body>';
-
-            // Set the media content
-            html += text_area.val();
-
-            // Add the final touch to the html
-            html += '</body></html>';
-
-            // Calculate offsets
-            var left = (screen.width / 2) - (1280 / 2);
-            var top = (screen.height / 2) - (720 / 2);
-
-            // Create the preview window
-            var printWindow = window.open("", "", "resizable=yes,scrollbars=yes,height=720,width=1280,top=" + top + ",left=" + left, true);
-            printWindow.document.write(html);
-            printWindow.document.close();
-
-        } // End of the previewPost method
     </script>
 }
 

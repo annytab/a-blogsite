@@ -96,7 +96,7 @@
         </div>
         <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">@(name_tt + ":")</div>
-            <div class="annytab-input-form-column-input"><input id="txtName" name="txtName" type="text" class="annytab-form-textbox" value="@ad.name" /></div>
+            <div class="annytab-input-form-column-input"><input id="txtTitle" name="txtName" type="text" class="annytab-form-textbox" value="@ad.name" /></div>
         </div>
         <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">@(ad_code_tt + ":")</div>
@@ -135,7 +135,7 @@
         @*Search box*@
         <div style="padding:5px;margin:0px 0px 5px 0px;">
             <span>@(media_files_tt + ": ")</span>
-            <input name="txtSearch" type="text" class="annytab-form-textbox" style="width:150px;" />
+            <input name="txtSearch" type="text" class="annytab-form-textbox" value="@keywords" style="width:150px;" />
             <input name="btnSearch" type="submit" class="annytab-form-button" value="@search_tt" />
         </div>
 
@@ -192,8 +192,8 @@
     <div class="annytab-basic-line"></div>
 
     @*Button panel*@
-    <div style="display:block;border:1px solid #cccccc;margin: 20px 0px 0px 0px;border-radius: 4px;">
-        <input id="btnPreviewAd" type="button" class="annytab-form-button" value="@preview_tt" />
+    <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
+        <input id="btnPreviewPost" data-theme="@domain.custom_theme_id" type="button" class="annytab-form-button" value="@preview_tt" />
         <input name="btnSave" class="annytab-form-button" type="submit" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
     </div>
@@ -203,35 +203,5 @@
     <script src="/Scripts/rangyinputs-jquery.js"></script>
     <script type="text/javascript">
         $("#selectLanguage").focus();
-        $("#btnPreviewAd").click(previewAd);
-
-        // Preview an ad
-        function previewAd()
-        {
-            // Get data
-            var title = $("#txtName").val();
-            var text_area = $("#txtDescription");
-
-            // Create the string to print
-            var html = '<!DOCTYPE html><html><head><title>' + title + '</title>';
-            html += '<link type="text/css" rel="stylesheet" href="@(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_default_style.css" : "/Content/theme/front_default_style.css")" />';
-            html += '</head><body>';
-
-            // Set the media content
-            html += text_area.val();
-
-            // Add the final touch to the html
-            html += '</body></html>';
-
-            // Calculate offsets
-            var left = (screen.width / 2) - (1280 / 2);
-            var top = (screen.height / 2) - (720 / 2);
-
-            // Create the preview window
-            var printWindow = window.open("", "", "resizable=yes,scrollbars=yes,height=720,width=1280,top=" + top + ",left=" + left, true);
-            printWindow.document.write(html);
-            printWindow.document.close();
-
-        } // End of the previewAd method
     </script>
 }

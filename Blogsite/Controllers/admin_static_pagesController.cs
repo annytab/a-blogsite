@@ -91,6 +91,8 @@ namespace Annytab.Blogsite.Controllers
             Int32 adminLanguageId = currentDomain.back_end_language;
 
             // Add data to the view
+            ViewBag.Keywords = "";
+            ViewBag.CurrentPage = 1;
             ViewBag.TranslatedTexts = StaticText.GetAll(adminLanguageId, "id", "ASC");
             ViewBag.StaticPage = StaticPage.GetOneById(id, adminLanguageId);
             ViewBag.ReturnUrl = returnUrl;
@@ -148,6 +150,8 @@ namespace Annytab.Blogsite.Controllers
             }
 
             // Add data to the form
+            ViewBag.Keywords = "";
+            ViewBag.CurrentPage = 1;
             ViewBag.LanguageId = languageId;
             ViewBag.Languages = Language.GetAll(adminLanguageId, "name", "ASC");
             ViewBag.StandardStaticPage = StaticPage.GetOneById(id, adminLanguageId);
@@ -180,8 +184,22 @@ namespace Annytab.Blogsite.Controllers
             Domain currentDomain = Tools.GetCurrentDomain();
             ViewBag.CurrentDomain = currentDomain;
 
-            // Get query parameters
+            // Get all the form values
+            Int32 id = Convert.ToInt32(collection["txtId"]);
+            string title = collection["txtTitle"];
+            string linkname = collection["txtLinkname"];
+            string description = collection["txtDescription"];
+            string metaDescription = collection["txtMetaDescription"];
+            string metaKeywords = collection["txtMetaKeywords"];
+            string pageName = collection["txtPageName"];
+            string metaRobots = collection["selectMetaRobots"];
+            byte connectionId = Convert.ToByte(collection["selectConnectionId"]);
+            bool inactive = Convert.ToBoolean(collection["cbInactive"]);
+            string keywords = collection["txtSearch"];
+            Int32 currentPage = Convert.ToInt32(collection["hiddenPage"]);
             string returnUrl = collection["returnUrl"];
+
+            // Get query parameters
             ViewBag.QueryParams = new QueryParams(returnUrl);
 
             // Check if the administrator is authorized
@@ -201,18 +219,6 @@ namespace Annytab.Blogsite.Controllers
                 // Redirect the user to the start page
                 return RedirectToAction("index", "admin_login");
             }
-
-            // Get all the form values
-            Int32 id = Convert.ToInt32(collection["txtId"]);
-            string title = collection["txtTitle"];
-            string linkname = collection["txtLinkname"];
-            string description = collection["txtDescription"];
-            string metaDescription = collection["txtMetaDescription"];
-            string metaKeywords = collection["txtMetaKeywords"];
-            string pageName = collection["txtPageName"];
-            string metaRobots = collection["selectMetaRobots"];
-            byte connectionId = Convert.ToByte(collection["selectConnectionId"]);
-            bool inactive = Convert.ToBoolean(collection["cbInactive"]);
 
             // Get the default admin language id
             Int32 adminLanguageId = currentDomain.back_end_language;
@@ -240,6 +246,48 @@ namespace Annytab.Blogsite.Controllers
             staticPage.meta_robots = metaRobots;
             staticPage.connected_to_page = connectionId;
             staticPage.inactive = inactive;
+
+            // Check if the user wants to do a search
+            if (collection["btnSearch"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = 1;
+                ViewBag.StaticPage = staticPage;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the edit view
+                return View("edit");
+            }
+
+            // Check if the user wants to do a search
+            if (collection["btnPreviousPage"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage - 1;
+                ViewBag.StaticPage = staticPage;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the edit view
+                return View("edit");
+            }
+
+            // Check if the user wants to do a search
+            if (collection["btnNextPage"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage + 1;
+                ViewBag.StaticPage = staticPage;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the edit view
+                return View("edit");
+            }
 
             // Create a error message
             string errorMessage = string.Empty;
@@ -305,6 +353,8 @@ namespace Annytab.Blogsite.Controllers
             else
             {
                 // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage;
                 ViewBag.ErrorMessage = errorMessage;
                 ViewBag.StaticPage = staticPage;
                 ViewBag.TranslatedTexts = tt;
@@ -325,8 +375,21 @@ namespace Annytab.Blogsite.Controllers
             Domain currentDomain = Tools.GetCurrentDomain();
             ViewBag.CurrentDomain = currentDomain;
 
-            // Get query parameters
+            // Get all the form values
+            Int32 translationLanguageId = Convert.ToInt32(collection["selectLanguage"]);
+            Int32 id = Convert.ToInt32(collection["hiddenStaticPageId"]);
+            string title = collection["txtTranslatedTitle"];
+            string linkname = collection["txtTranslatedLinkname"];
+            string description = collection["txtTranslatedDescription"];
+            string metadescription = collection["txtTranslatedMetadescription"];
+            string metakeywords = collection["txtTranslatedMetakeywords"];
+            string pagename = collection["txtTranslatedPagename"];
+            bool inactive = Convert.ToBoolean(collection["cbInactive"]);
             string returnUrl = collection["returnUrl"];
+            string keywords = collection["txtSearch"];
+            Int32 currentPage = Convert.ToInt32(collection["hiddenPage"]);
+
+            // Get query parameters
             ViewBag.QueryParams = new QueryParams(returnUrl);
 
             // Check if the administrator is authorized
@@ -347,22 +410,11 @@ namespace Annytab.Blogsite.Controllers
                 return RedirectToAction("index", "admin_login");
             }
 
-            // Get the admin default language
-            Int32 adminLanguageId = currentDomain.back_end_language;
+            // Get the standard static page
+            StaticPage standardStaticPage = StaticPage.GetOneById(id, currentDomain.back_end_language);
 
             // Get translated texts
-            KeyStringList tt = StaticText.GetAll(adminLanguageId, "id", "ASC");
-
-            // Get all the form values
-            Int32 translationLanguageId = Convert.ToInt32(collection["selectLanguage"]);
-            Int32 id = Convert.ToInt32(collection["hiddenStaticPageId"]);
-            string title = collection["txtTranslatedTitle"];
-            string linkname = collection["txtTranslatedLinkname"];
-            string description = collection["txtTranslatedDescription"];
-            string metadescription = collection["txtTranslatedMetadescription"];
-            string metakeywords = collection["txtTranslatedMetakeywords"];
-            string pagename = collection["txtTranslatedPagename"];
-            bool inactive = Convert.ToBoolean(collection["cbInactive"]);
+            KeyStringList tt = StaticText.GetAll(currentDomain.back_end_language, "id", "ASC");
 
             // Create the translated static page
             StaticPage translatedStaticPage = new StaticPage();
@@ -375,11 +427,62 @@ namespace Annytab.Blogsite.Controllers
             translatedStaticPage.page_name = pagename;
             translatedStaticPage.inactive = inactive;
 
+            // Check if the user wants to do a search
+            if (collection["btnSearch"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = 1;
+                ViewBag.LanguageId = translationLanguageId;
+                ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
+                ViewBag.StandardStaticPage = standardStaticPage;
+                ViewBag.TranslatedStaticPage = translatedStaticPage;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the translate view
+                return View("translate");
+            }
+
+            // Check if the user wants to do a search
+            if (collection["btnPreviousPage"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage - 1;
+                ViewBag.LanguageId = translationLanguageId;
+                ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
+                ViewBag.StandardStaticPage = standardStaticPage;
+                ViewBag.TranslatedStaticPage = translatedStaticPage;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the translate view
+                return View("translate");
+            }
+
+            // Check if the user wants to do a search
+            if (collection["btnNextPage"] != null)
+            {
+                // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage + 1;
+                ViewBag.LanguageId = translationLanguageId;
+                ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
+                ViewBag.StandardStaticPage = standardStaticPage;
+                ViewBag.TranslatedStaticPage = translatedStaticPage;
+                ViewBag.TranslatedTexts = tt;
+                ViewBag.ReturnUrl = returnUrl;
+
+                // Return the translate view
+                return View("translate");
+            }
+
             // Create a error message
             string errorMessage = string.Empty;
 
             // Get a static page on page name
-            StaticPage pageOnPageName = StaticPage.GetOneByPageName(translatedStaticPage.page_name, adminLanguageId);
+            StaticPage pageOnPageName = StaticPage.GetOneByPageName(translatedStaticPage.page_name, currentDomain.back_end_language);
 
             // Check the page name
             if (pageOnPageName != null && translatedStaticPage.id != pageOnPageName.id)
@@ -447,9 +550,11 @@ namespace Annytab.Blogsite.Controllers
             else
             {
                 // Set form values
+                ViewBag.Keywords = keywords;
+                ViewBag.CurrentPage = currentPage;
                 ViewBag.LanguageId = translationLanguageId;
-                ViewBag.Languages = Language.GetAll(adminLanguageId, "name", "ASC");
-                ViewBag.StandardStaticPage = StaticPage.GetOneById(id, adminLanguageId);
+                ViewBag.Languages = Language.GetAll(currentDomain.back_end_language, "name", "ASC");
+                ViewBag.StandardStaticPage = standardStaticPage;
                 ViewBag.TranslatedStaticPage = translatedStaticPage;
                 ViewBag.ErrorMessage = errorMessage;
                 ViewBag.TranslatedTexts = tt;

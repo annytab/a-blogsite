@@ -222,7 +222,6 @@
     <Content Include="Content\images\annytab_design\list_arrow_left.png" />
     <Content Include="Content\images\annytab_design\magnifier.png" />
     <Content Include="Content\images\annytab_design\menu_icon.png" />
-    <Content Include="Content\images\annytab_design\message_box_header.png" />
     <Content Include="Content\images\annytab_design\my_pages_icon.png" />
     <Content Include="Content\images\annytab_design\no_image_square.jpg" />
     <Content Include="Content\images\annytab_design\no_image_wide.jpg" />
@@ -251,6 +250,7 @@
     <None Include="DeveloperFiles\db_drop_statements.sql" />
     <Content Include="DatabaseFiles\db_version_3.sql" />
     <Content Include="DatabaseFiles\db_version_2.sql" />
+    <None Include="DeveloperFiles\Manifest.xml" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\annytab_admin\annytab.default.js" />

@@ -18,6 +18,7 @@ function start()
     $("input[data-id='btnAddTag']").click(addTag);
     $("input[data-id='btnPreviewMediaFile']").click(previewMediaFile);
     $("input[data-id='btnAddMediaFile']").click(addMediaFile);
+    $("#btnPreviewPost").click(previewPost);
     
     // Images in container
     $("#uploadImages").change(previewImages);
@@ -484,3 +485,34 @@ function addMediaFile()
     text_area.insertText(html, selection.end, 'collapseToEnd');
 
 } // End of the addMediaFile method
+
+// Preview a post
+function previewPost()
+{
+    // Get data
+    var title = $("#txtTitle").val();
+    var content = $("#txtDescription").val();
+    var theme = $(this).attr("data-theme");
+
+    // Create the string to print
+    var html = '<!DOCTYPE html><html><head><title>' + title + '</title>';
+    html += theme == "0" ? '<link type="text/css" rel="stylesheet" href="/Content/annytab_css/front_default_style.css" />' : '<link type="text/css" rel="stylesheet" href="/Content/theme/front_default_style.css" />';
+    html += '<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"><\/script>';
+    html += '</head><body>';
+
+    // Set the content for the body
+    html += content;
+
+    // Add the final touch to the html
+    html += '</body></html>';
+
+    // Calculate offsets
+    var left = (screen.width / 2) - (1280 / 2);
+    var top = (screen.height / 2) - (720 / 2);
+
+    // Create the preview window
+    var printWindow = window.open("", "", "resizable=yes,scrollbars=yes,height=720,width=1280,top=" + top + ",left=" + left, true);
+    printWindow.document.write(html);
+    printWindow.document.close();
+
+} // End of the previewPost method
