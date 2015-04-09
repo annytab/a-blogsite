@@ -770,7 +770,7 @@ public class Weblink
     public static string GetValidSortField(string sortField)
     {
         // Make sure that the sort field is valid
-        if (sortField != "id" && sortField != "link_name" && sortField != "url")
+        if (sortField != "id" && sortField != "link_name" && sortField != "url" && sortField != "inactive")
         {
             sortField = "id";
         }

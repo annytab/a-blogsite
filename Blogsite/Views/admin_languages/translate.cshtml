@@ -24,18 +24,21 @@
     ViewBag.Title = language_tt + " - " + translate_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
+
 @*Menu*@
 @Html.Partial("~/Views/admin_languages/_form_menu.cshtml")
 
 @*Main form*@
 @using (Html.BeginForm("translate", "admin_languages", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
-    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
     <input type="hidden" name="hiddenLanguageId" value="@standardLanguage.id" />
     
-    @* Input form table *@
+    @*Input form table*@
     <div class="annytab-input-form-table">
         <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">@(language_tt + ":")</div>
@@ -60,7 +63,7 @@
         </div>
     </div>
 
-    // Save form button
+    @*Button panel*@
     <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
         <input id="btnSave" type="submit" class="annytab-form-button" value="@translate_tt" @(languageId == 0 ? Html.Raw("disabled='disabled'") : Html.Raw("")) />
         <input data-id="deletePost" type="button" class="annytab-form-button" value="@delete_tt" @(Html.Raw("data-url='/admin_languages/delete/" + standardLanguage.id.ToString() + "?returnUrl=" + Server.UrlEncode(returnUrl) + "&lang=" + languageId.ToString() + "'")) @(languageId == 0 ? Html.Raw("disabled='disabled'") : Html.Raw("")) />
@@ -74,4 +77,3 @@
         $("#selectLanguage").on("change", function () { $(location).attr("href", $(this).find(":selected").attr("data-url")); });
     </script>
 }
-

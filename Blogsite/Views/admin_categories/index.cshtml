@@ -10,6 +10,7 @@
     CultureInfo cultureInfo = Tools.GetCultureInfo(currentLanguage);
     QueryParams parameters = ViewBag.QueryParams;
     string queryString = "/admin_categories" + QueryParams.GetQueryString(parameters);
+    KeyStringList tt = ViewBag.TranslatedTexts;
 
     // Create a clean string with keywords
     string cleanKeywords = parameters.keywords.Replace("+", "");
@@ -30,7 +31,6 @@
     List<Category> categories = Category.GetBySearch(steamWords, domain.back_end_language, parameters.page_size, parameters.current_page, parameters.sort_field, parameters.sort_order);
 
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string category_tt = tt.Get("category");
     string list_tt = tt.Get("list");
     string id_tt = tt.Get("id");
@@ -50,7 +50,10 @@
     ViewBag.Title = category_tt + " - " + list_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
+
+@*Menu*@
 @Html.Partial("~/Views/admin_categories/_form_menu.cshtml")
 
 @*List of categories*@
@@ -81,10 +84,9 @@
     </div>
 </div>
 
-@* Paging menu *@
+@*Paging menu*@
 @Html.Partial("/Views/shared_admin/_paging_menu.cshtml")
 
 @section scripts {
-    <script>$("#txtSearch").focus();</script>
+    <script type="text/javascript">$("#txtSearch").focus();</script>
 }
-

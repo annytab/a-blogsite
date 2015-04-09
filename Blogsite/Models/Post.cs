@@ -1626,8 +1626,8 @@ public class Post
     public static string GetValidSortField(string sortField)
     {
         // Make sure that the sort field is valid
-        if (sortField != "id" && sortField != "title" && sortField != "page_views"
-            && sortField != "rating" && sortField != "date_added" && sortField != "date_updated")
+        if (sortField != "id" && sortField != "title" && sortField != "page_views" && sortField != "rating" 
+            && sortField != "date_added" && sortField != "date_updated" && sortField != "inactive")
         {
             sortField = "id";
         }

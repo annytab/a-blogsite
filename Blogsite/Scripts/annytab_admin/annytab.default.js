@@ -15,7 +15,6 @@ function start()
         var deleteButton = $(this);
         deleteButton.click({ url: deleteButton.attr("data-url") }, deletePostConfirmation);
     });
-    $("input[data-id='btnAddTag']").click(addTag);
     $("input[data-id='btnPreviewMediaFile']").click(previewMediaFile);
     $("input[data-id='btnAddMediaFile']").click(addMediaFile);
     $("#btnPreviewPost").click(previewPost);
@@ -371,72 +370,6 @@ function getMediaFileContent(title, mediaType, src)
     return html;
 
 } // End of the getMediaFileContent method
-
-// Add tags to the selection
-function addTag()
-{
-    // Get data
-    var text_area = $("#txtDescription");
-    var tag_value = $(this).val();
-    var selection = text_area.getSelection();
-
-    // Insert the tag
-    if (tag_value == "b") {
-        text_area.surroundSelectedText('<b>', '</b>');
-    }
-    else if (tag_value == "i") {
-        text_area.surroundSelectedText('<i>', '</i>');
-    }
-    else if (tag_value == "br") {
-        text_area.insertText('<br />', selection.end, 'collapseToEnd');
-    }
-    else if (tag_value == "h1") {
-        text_area.surroundSelectedText('<h1>', '</h1>');
-    }
-    else if (tag_value == "h2") {
-        text_area.surroundSelectedText('<h2>', '</h2>');
-    }
-    else if (tag_value == "h3") {
-        text_area.surroundSelectedText('<h3>', '</h3>');
-    }
-    else if (tag_value == "h4") {
-        text_area.surroundSelectedText('<h4>', '</h4>');
-    }
-    else if (tag_value == "p") {
-        text_area.surroundSelectedText('<p>', '</p>');
-    }
-    else if (tag_value == "code") {
-        text_area.surroundSelectedText('<pre class="prettyprint annytab-code-container">', '</pre>');
-    }
-    else if (tag_value == "span") {
-        text_area.surroundSelectedText('<span>', '</span>');
-    }
-    else if (tag_value == "div") {
-        text_area.surroundSelectedText('<div>', '</div>');
-    }
-    else if (tag_value == "line") {
-        text_area.surroundSelectedText('<div class="annytab-basic-line">', '</div>');
-    }
-    else if (tag_value == "space") {
-        text_area.surroundSelectedText('<div class="annytab-basic-space">', '</div>');
-    }
-    else if (tag_value == "url") {
-        text_area.surroundSelectedText('<a href="http://www.annytab.se" rel="nofollow" target="_blank">', '</a>');
-    }
-    else if (tag_value == "img") {
-        text_area.surroundSelectedText('<img src="/source.jpg" style="max-width:100%;" />', '');
-    }
-    else if (tag_value == "font") {
-        text_area.surroundSelectedText('<span style="font-family:Arial;font-size:12px;color:#ff0000;">', '</span>');
-    }
-    else if (tag_value == "list") {
-        text_area.insertText('<ul><li>r1</li><li>r2</li></ul>', selection.end, 'select');
-    }
-    else if (tag_value == "table") {
-        text_area.insertText('<table style="width:400px;text-align:center;"><tr><th>r1:c1</th><th>r1:c2</th></tr><tr><td>r2:c1</td><td>r2:c2</td></tr></table>', selection.end, 'select');
-    }
-
-} // End of the addTag method
 
 // Preview the media file
 function previewMediaFile()

@@ -2,9 +2,9 @@
     // Get the form data
     QueryParams parameters = ViewBag.QueryParams;
     string queryString = "/admin_domains" + QueryParams.GetQueryString(parameters);
+    KeyStringList tt = ViewBag.TranslatedTexts;
     
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string show_tt = tt.Get("show");
     string list_tt = tt.Get("list");
     string new_tt = tt.Get("new");

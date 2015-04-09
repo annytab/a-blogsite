@@ -68,6 +68,7 @@
     }
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -76,37 +77,20 @@
 @*Main form*@
 @using (Html.BeginForm("edit", "admin_posts", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
     <input name="hiddenAdministratorId" type="hidden" value="@administrator.id" />
     <input name="hiddenPage" type="hidden" value="@page" />
     <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
     
     @*Title and content*@
-    <div style="display:block;padding:0px 10px 0px 0px;">
-        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;">@(title_tt)</div>
-        <div><input id="txtTitle" name="txtTitle" type="text" class="annytab-form-textbox" style="max-width:100%;margin-right:5px;" value="@post.title" /></div>
-        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;margin-top:5px;">@(description_tt)</div>
-        <div>
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" style="font-weight:bold;" value="b" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" style="font-style:italic" value="i" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="br" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h1" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h2" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h3" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h4" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="p" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="code" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="span" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="div" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="line" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="space" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="url" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="img" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="font" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="list" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="table" />
-        </div>
-        <div><textarea id="txtDescription" name="txtDescription" class="annytab-form-textarea" contenteditable="true" spellcheck="false" style="max-width:100%;margin-right:5px;" rows="40">@post.main_content</textarea></div>
+    <div class="annytab-form-input-container">
+        <div class="annytab-form-title">@(title_tt)</div>
+        <div><input id="txtTitle" name="txtTitle" type="text" class="annytab-form-textbox" style="max-width:100%;" value="@post.title" /></div>
+        <div class="annytab-basic-space-half"></div>
+        <div class="annytab-form-title">@(description_tt)</div>
+        <div class="annytab-form-html-button-panel" data-textarea="txtDescription"></div>
+        <div><textarea id="txtDescription" name="txtDescription" class="annytab-form-textarea" contenteditable="true" spellcheck="false" style="max-width:100%;" rows="20">@post.main_content</textarea></div>
     </div>
     
     <div class="annytab-basic-line"></div>
@@ -114,7 +98,7 @@
     @*Media files*@
     <div class="annytab-list-container">
 
-        @*Search box*@
+        @*Searchbox*@
         <div style="padding:5px;margin:0px 0px 5px 0px;">
             <span>@(media_files_tt + ": ")</span>
             <input name="txtSearch" type="text" class="annytab-form-textbox" value="@keywords" style="width:150px;" />
@@ -148,7 +132,7 @@
     
     <div class="annytab-basic-space"></div>
 
-    @* Paging menu *@
+    @*Paging menu*@
     <div class="annytab-basic-container" style="text-align:center;">
         @if (page > 1)
         {
@@ -236,15 +220,16 @@
 @section scripts {
     <link href="/Content/jquery_css/jquery-ui.min.css" rel="stylesheet" />
     <script src="/Scripts/rangyinputs-jquery.js"></script>
+    <script src="/Scripts/annytab_admin/annytab.html-button-panel.js"></script>
     <script type="text/javascript">
         $("#txtTitle").focus();
         $("#txtDateAdded").datepicker({ dateFormat: 'yy-mm-dd' });
+        $(".annytab-form-html-button-panel").htmlButtonPanel({ buttonClass: "annytab-form-button" });
     </script>
 }
 
 @helper CreateChildOptions(Int32 level, List<Category> categories, Int32 productCategoryId, Int32 languageId)
 {
-
     // Create the intendation
     string intendation = "";
     for (int i = 0; i < level; i++)

@@ -41,10 +41,13 @@
     ViewBag.Title = theme_tt + " - " + list_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
+
+@*Menu*@
 @Html.Partial("~/Views/admin_custom_design/_form_menu.cshtml")
 
-@* List of custom themes *@
+@*List of custom themes*@
 <div class="annytab-list-container">
     <div class="annytab-list-table" style="width:532px;">
         <div class="annytab-list-row">
@@ -66,9 +69,9 @@
     </div>
 </div>
 
-@* Paging menu *@
+@*Paging menu*@
 @Html.Partial("/Views/shared_admin/_paging_menu.cshtml")
 
 @section scripts {
-    <script>$("#txtSearch").focus();</script>
+    <script type="text/javascript">$("#txtSearch").focus();</script>
 }

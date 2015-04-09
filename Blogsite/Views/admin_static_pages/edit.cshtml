@@ -1,5 +1,4 @@
 ﻿@{
-
     // Set the layout for the page
     Layout = "/Views/shared_admin/_standard_layout.cshtml";
 
@@ -9,6 +8,7 @@
     // Get form data
     Domain domain = ViewBag.CurrentDomain;
     StaticPage staticPage = ViewBag.StaticPage;
+    KeyStringList tt = ViewBag.TranslatedTexts;
     string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
     string returnUrl = ViewBag.ReturnUrl;
     string keywords = ViewBag.Keywords;
@@ -31,7 +31,6 @@
     List<MediaFile> mediaFiles = MediaFile.GetBySearch(words, pageSize, page, "title", "ASC");
 
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string static_page_tt = tt.Get("static_page");
     string new_tt = tt.Get("new");
     string edit_tt = tt.Get("edit");
@@ -69,6 +68,7 @@
     }
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -77,44 +77,27 @@
 @*Main form*@
 @using (Html.BeginForm("edit", "admin_static_pages", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
     <input name="hiddenPage" type="hidden" value="@page" />
     <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
     
     @*Title and content*@
-    <div style="display:block;padding:0px 10px 0px 0px;">
-        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;">@(title_tt)</div>
-        <div><input id="txtTitle" name="txtTitle" type="text" class="annytab-form-textbox" style="max-width:100%;margin-right:5px;" value="@staticPage.title" /></div>
-        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;margin-top:5px;">@(description_tt)</div>
-        <div>
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" style="font-weight:bold;" value="b" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" style="font-style:italic" value="i" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="br" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h1" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h2" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h3" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h4" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="p" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="code" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="span" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="div" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="line" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="space" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="url" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="img" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="font" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="list" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="table" />
-        </div>
-        <div><textarea id="txtDescription" name="txtDescription" class="annytab-form-textarea" contenteditable="true" spellcheck="false" style="max-width:100%;margin-right:5px;" rows="40">@staticPage.main_content</textarea></div>
+    <div class="annytab-form-input-container">
+        <div class="annytab-form-title">@(title_tt)</div>
+        <div><input id="txtTitle" name="txtTitle" type="text" class="annytab-form-textbox" style="max-width:100%;" value="@staticPage.title" /></div>
+        <div class="annytab-basic-space-half"></div>
+        <div class="annytab-form-title">@(description_tt)</div>
+        <div class="annytab-form-html-button-panel" data-textarea="txtDescription"></div>
+        <div><textarea id="txtDescription" name="txtDescription" class="annytab-form-textarea" contenteditable="true" spellcheck="false" style="max-width:100%;" rows="10">@staticPage.main_content</textarea></div>
     </div>
-
-    <div class="annytab-basic-line"></div>
     
+    <div class="annytab-basic-line"></div>
+
     @*Media files*@
     <div class="annytab-list-container">
 
-        @*Search box*@
+        @*Searchbox*@
         <div style="padding:5px;margin:0px 0px 5px 0px;">
             <span>@(media_files_tt + ": ")</span>
             <input name="txtSearch" type="text" class="annytab-form-textbox" value="@keywords" style="width:150px;" />
@@ -148,7 +131,7 @@
 
     <div class="annytab-basic-space"></div>
 
-    @* Paging menu *@
+    @*Paging menu*@
     <div class="annytab-basic-container" style="text-align:center;">
         @if (page > 1)
         {
@@ -234,6 +217,9 @@
 
 @section scripts {
     <script src="/Scripts/rangyinputs-jquery.js"></script>
-    <script type="text/javascript">$("#txtTitle").focus();</script>
+    <script src="/Scripts/annytab_admin/annytab.html-button-panel.js"></script>
+    <script type="text/javascript">
+        $("#txtTitle").focus();
+        $(".annytab-form-html-button-panel").htmlButtonPanel({ buttonClass: "annytab-form-button" });
+    </script>
 }
-

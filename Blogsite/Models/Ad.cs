@@ -686,7 +686,7 @@ public class Ad
     public static string GetValidSortField(string sortField)
     {
         // Make sure that the sort field is valid
-        if (sortField != "id" && sortField != "name" && sortField != "ad_slot")
+        if (sortField != "id" && sortField != "name" && sortField != "ad_slot" && sortField != "inactive")
         {
             sortField = "id";
         }

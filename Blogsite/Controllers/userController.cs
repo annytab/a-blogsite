@@ -715,6 +715,9 @@ namespace Annytab.Blogsite.Controllers
             Int32 languageId = Convert.ToInt32(collection["hiddenLanguageId"]);
             string commentText = collection["txtCommentText"];
 
+            // Get the post
+            Post post = Post.GetOneById(postId, languageId);
+
             // Modify the comment text
             commentText = commentText.Replace(Environment.NewLine, "<br />");
 
@@ -734,8 +737,8 @@ namespace Annytab.Blogsite.Controllers
             string message = comment.comment_text;
             Tools.SendEmailToHost("", subject, message);
 
-            // Redirect the user to the edit comments page
-            return RedirectToAction("edit_comments");
+            // Redirect the user to the post
+            return Redirect("/home/post/" + post.page_name + "#comments");
 
         } // End of the add_comment method
 
@@ -770,6 +773,9 @@ namespace Annytab.Blogsite.Controllers
             // Get the comment
             PostComment comment = PostComment.GetOneById(commentId);
 
+            // Get the post
+            Post post = Post.GetOneById(comment.post_id, languageId);
+
             // Update the comment
             if(comment != null && comment.administrator_id == user.id)
             {
@@ -786,8 +792,8 @@ namespace Annytab.Blogsite.Controllers
                 Tools.SendEmailToHost("", subject, message);
             }
 
-            // Return the edit comments view
-            return RedirectToAction("edit_comments");
+            // Redirect the user to the post
+            return Redirect("/home/post/" + post.page_name + "#comments");
 
         } // End of the edit_comment method
 
@@ -849,6 +855,9 @@ namespace Annytab.Blogsite.Controllers
             decimal userVote = 0;
             decimal.TryParse(collection["userVote"], NumberStyles.Any, CultureInfo.InvariantCulture, out userVote);
 
+            // Get the post
+            Post post = Post.GetOneById(post_id, language_id);
+
             // Try to get a saved rating
             PostRating postRating = PostRating.GetOneById(post_id, user.id, language_id);
 
@@ -886,8 +895,8 @@ namespace Annytab.Blogsite.Controllers
             // Update the rating for the post
             Post.UpdateRating(postRating.post_id, postRating.language_id);
 
-            // Redirect the user to the post page
-            return RedirectToAction("edit_ratings");
+            // Redirect the user to the post
+            return Redirect("/home/post/" + post.page_name + "#comments");
 
         } // End of the edit_rating method
 

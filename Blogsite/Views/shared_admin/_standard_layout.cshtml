@@ -49,17 +49,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @* Title and meta tags *@
+    @*Title and meta tags*@
     <title>@ViewBag.Title</title>
     <meta name="robots" content="@ViewBag.Robots" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="google" content="notranslate">
 
-    @* Resources *@
+    @*Resources*@
     <link href="@imageUrls.Get("small_icon")" rel="shortcut icon" type="image/x-icon" />
-    @Styles.Render("/Content/admin_css")
-    
+    @Styles.Render("/Content/admin_css") 
 </head>
 <body>
     <div class="container">
@@ -98,10 +97,10 @@
         </div>
     </div>
 
-    @* Used to check for errors *@
+    @*Used to check for errors*@
     <div id="errorCode" data-error="@errorCode" style="display:none;"></div>
 
-    @*Message box*@
+    @*Messagebox*@
     <div id="messageBoxContainer" style="display:none;top:0;left:0;z-index:1;position:fixed;width:100%;height:100%;background-image:url('/Content/images/annytab_design/transparent_background.png');">
         <div id="messageBox" style="z-index:2;position:absolute;top:10px;right:10px;bottom:10px;left:10px;width:420px;height:183px;margin:auto auto auto auto;background-color:#808080;border-radius:4px;border:4px solid #808080;">
             <img id="messageBoxClose" src="@Url.Content("/Content/images/annytab_design/black_circle_cross.png")" alt="Close" style="position:absolute;width:20px;height:20px;top:3px;right:3px;cursor:pointer;" />
@@ -126,7 +125,7 @@
         </div>
     </div>
 
-    @* Scripts *@
+    @*Scripts*@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/annytab_admin")
     @RenderSection("scripts", required: false)

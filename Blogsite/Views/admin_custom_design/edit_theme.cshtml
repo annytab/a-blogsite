@@ -37,17 +37,19 @@
     }
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*The menu bar*@
 @Html.Partial("~/Views/admin_custom_design/_form_menu.cshtml")
 
-@* Edit the theme *@
+@*Edit the theme*@
 @using (Html.BeginForm("edit_theme", "admin_custom_design", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
     
-    @* Input form table *@
+    @*Input form table*@
     <div class="annytab-input-form-table">
         <div class="annytab-input-form-row" style="@(theme.id != 0 ? "display:table-row;" : "display:none;")">
             <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
@@ -59,7 +61,7 @@
         </div>
     </div>
 
-    @* Button panel *@
+    @*Button panel*@
     <div style="display:block;border:1px solid #cccccc;margin:20px 0px 20px 0px;border-radius:4px;">
         <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />

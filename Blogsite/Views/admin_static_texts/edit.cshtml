@@ -5,10 +5,10 @@
     // Get form data
     StaticText staticText = ViewBag.StaticText;
     string returnUrl = ViewBag.ReturnUrl;
+    KeyStringList tt = ViewBag.TranslatedTexts;
     string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
 
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string static_text_tt = tt.Get("static_text");
     string new_tt = tt.Get("new");
     string edit_tt = tt.Get("edit");
@@ -28,17 +28,20 @@
     }
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
+
 @*Menu*@
 @Html.Partial("~/Views/admin_static_texts/_form_menu.cshtml")
 
 @*Main form*@
 @using (Html.BeginForm("edit", "admin_static_texts", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
-    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
 
-    @* Input form table *@
+    @*Input form table*@
     <div class="annytab-input-form-table">
         <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
@@ -50,7 +53,7 @@
         </div>
     </div>
 
-    @* Button panel *@
+    @*Button panel*@
     <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
         <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
@@ -58,6 +61,5 @@
 }
 
 @section scripts {
-    <script>$("#txtId").val() == "" ? $("#txtId").focus() : $("#txtText").focus();</script>
+    <script type="text/javascript">$("#txtId").val() == "" ? $("#txtId").focus() : $("#txtText").focus();</script>
 }
-

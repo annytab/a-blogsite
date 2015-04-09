@@ -1,15 +1,14 @@
 ﻿@{
-
     // Set the layout for the page
     Layout = "/Views/shared_admin/_standard_layout.cshtml";
 
     // Get form data
     Weblink weblink = ViewBag.Weblink;
+    KeyStringList tt = ViewBag.TranslatedTexts;
     string returnUrl = ViewBag.ReturnUrl;
     string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
 
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string weblink_tt = tt.Get("weblink");
     string new_tt = tt.Get("new");
     string edit_tt = tt.Get("edit");
@@ -33,6 +32,7 @@
     }
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -41,8 +41,9 @@
 @*Main form*@
 @using (Html.BeginForm("edit", "admin_weblinks", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
-    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
     
     @*Input form table*@
     <div class="annytab-input-form-table">
@@ -98,6 +99,5 @@
 }
 
 @section scripts {
-    <script>$("#txtLinkname").focus();</script>
+    <script type="text/javascript">$("#txtLinkname").focus();</script>
 }
-

@@ -5,6 +5,7 @@
     // Get the form data
     QueryParams parameters = ViewBag.QueryParams;
     string queryString = "/admin_domains" + QueryParams.GetQueryString(parameters);
+    KeyStringList tt = ViewBag.TranslatedTexts;
     
     // Create a clean string with keywords
     string cleanKeywords = parameters.keywords.Replace("+", "");
@@ -23,7 +24,6 @@
     List<Domain> domains = Domain.GetBySearch(words, parameters.page_size, parameters.current_page, parameters.sort_field, parameters.sort_order);
 
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string domain_tt = tt.Get("domain");
     string list_tt = tt.Get("list");
     string id_tt = tt.Get("id");
@@ -42,7 +42,10 @@
     ViewBag.Title = domain_tt + " - " + list_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
+
+@*Menu*@
 @Html.Partial("~/Views/admin_domains/_form_menu.cshtml")
 
 @*List of domains*@
@@ -71,9 +74,9 @@
     </div>
 </div>
 
-@* Paging menu *@
+@*Paging menu*@
 @Html.Partial("/Views/shared_admin/_paging_menu.cshtml")
 
 @section scripts {
-    <script>$("#txtSearch").focus();</script>
+    <script type="text/javascript">$("#txtSearch").focus();</script>
 }

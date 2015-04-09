@@ -25,6 +25,7 @@
     ViewBag.Title = custom_images_tt;
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*The menu bar*@
@@ -46,8 +47,9 @@
             <input type="submit" class="annytab-form-button" value="@import_from_zip_tt" />
         </div>
     }
-    </div>
+</div>
 
+@*Edit images*@
 @using (Html.BeginForm("images", "admin_custom_design", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <input name="returnUrl" type="hidden" value="@returnUrl" />
@@ -66,7 +68,7 @@
         </div>
     </div>
 
-    // Save form button
+    @*Button panel*@
     <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
         <input id="btnSave" class="annytab-form-button" type="submit" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
@@ -74,5 +76,5 @@
 }
 
 @section scripts {
-    <script>$("#uploadImages").focus();</script>
+    <script type="text/javascript">$("#uploadImages").focus();</script>
 }

@@ -257,6 +257,54 @@ public class PostRating
     } // End of the GetCountByAdministratorId method
 
     /// <summary>
+    /// Count the number of ratings by administrator id
+    /// </summary>
+    /// <param name="administratorId">The administrator id</param>
+    /// <param name="languageId">The language id</param>
+    /// <returns>The number of posts as an int</returns>
+    public static Int32 GetCountByAdministratorId(Int32 administratorId, Int32 languageId)
+    {
+        // Create the variable to return
+        Int32 count = 0;
+
+        // Create the connection string and the select statement
+        string connection = Tools.GetConnectionString();
+        string sql = "SELECT COUNT(post_id) AS count FROM dbo.posts_ratings WHERE administrator_id = @administrator_id AND language_id = @language_id;";
+
+        // The using block is used to call dispose automatically even if there are an exception.
+        using (SqlConnection cn = new SqlConnection(connection))
+        {
+            // The using block is used to call dispose automatically even if there are an exception.
+            using (SqlCommand cmd = new SqlCommand(sql, cn))
+            {
+                // Add parameters
+                cmd.Parameters.AddWithValue("@administrator_id", administratorId);
+                cmd.Parameters.AddWithValue("@language_id", languageId);
+
+                // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
+                // avoid having our application crash in such cases.
+                try
+                {
+                    // Open the connection
+                    cn.Open();
+
+                    // Execute the select statment
+                    count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+        }
+
+        // Return the count
+        return count;
+
+    } // End of the GetCountByAdministratorId method
+
+    /// <summary>
     /// Count the number of ratings by post id
     /// </summary>
     /// <param name="postId">The post id</param>
@@ -555,6 +603,80 @@ public class PostRating
             {
                 // Add parameters
                 cmd.Parameters.AddWithValue("@administrator_id", administratorId);
+                cmd.Parameters.AddWithValue("@pageNumber", (pageNumber - 1) * pageSize);
+                cmd.Parameters.AddWithValue("@pageSize", pageSize);
+
+                // Create a reader
+                SqlDataReader reader = null;
+
+                // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
+                // avoid having our application crash in such cases.
+                try
+                {
+                    // Open the connection.
+                    cn.Open();
+
+                    // Fill the reader with data from the select command.
+                    reader = cmd.ExecuteReader();
+
+                    // Loop through the reader as long as there is something to read.
+                    while (reader.Read())
+                    {
+                        posts.Add(new PostRating(reader));
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    // Call Close when done reading to avoid memory leakage.
+                    if (reader != null)
+                        reader.Close();
+                }
+            }
+        }
+
+        // Return the list of posts
+        return posts;
+
+    } // End of the GetByAdministratorId method
+
+    /// <summary>
+    /// Get ratings by administrator id
+    /// </summary>
+    /// <param name="administratorId">The administrator id</param>
+    /// <param name="languageId">The language id</param>
+    /// <param name="pageSize">The number of posts on one page</param>
+    /// <param name="pageNumber">The page number of a page from 1 and above</param>
+    /// <param name="sortField">The field to sort on</param>
+    /// <param name="sortOrder">The sort order</param>
+    /// <returns>A list of ratings</returns>
+    public static List<PostRating> GetByAdministratorId(Int32 administratorId, Int32 languageId, Int32 pageSize, Int32 pageNumber, string sortField, string sortOrder)
+    {
+        // Make sure that sort variables are valid
+        sortField = GetValidSortField(sortField);
+        sortOrder = GetValidSortOrder(sortOrder);
+
+        // Create the list to return
+        List<PostRating> posts = new List<PostRating>(pageSize);
+
+        // Create the connection string and the select statement
+        string connection = Tools.GetConnectionString();
+        string sql = "SELECT * FROM dbo.posts_ratings WHERE administrator_id = @administrator_id AND language_id = @language_id "
+            + "ORDER BY " + sortField + " " + sortOrder + " OFFSET @pageNumber ROWS FETCH NEXT @pageSize ROWS ONLY;";
+
+        // The using block is used to call dispose automatically even if there are an exception.
+        using (SqlConnection cn = new SqlConnection(connection))
+        {
+            // The using block is used to call dispose automatically even if there are an exception.
+            using (SqlCommand cmd = new SqlCommand(sql, cn))
+            {
+                // Add parameters
+                cmd.Parameters.AddWithValue("@administrator_id", administratorId);
+                cmd.Parameters.AddWithValue("@language_id", languageId);
                 cmd.Parameters.AddWithValue("@pageNumber", (pageNumber - 1) * pageSize);
                 cmd.Parameters.AddWithValue("@pageSize", pageSize);
 

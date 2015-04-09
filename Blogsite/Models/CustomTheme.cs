@@ -140,7 +140,7 @@ public class CustomTheme
         if (templates.ContainsKey("author.cshtml") == false) // 8
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "author.cshtml", "/Views/home/author.cshtml",
-                CustomThemeTemplate.GetMasterFileContent("/Views/home/author.cshtml"), "A information page about a author."));
+                CustomThemeTemplate.GetMasterFileContent("/Views/home/author.cshtml"), "An information page about a author."));
         }
         if (templates.ContainsKey("category.cshtml") == false) // 9
         {
@@ -155,7 +155,7 @@ public class CustomTheme
         if (templates.ContainsKey("home.cshtml") == false) // 11
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "home.cshtml", "/Views/home/index.cshtml",
-                CustomThemeTemplate.GetMasterFileContent("/Views/home/index.cshtml"), "The entry page for the webshop."));
+                CustomThemeTemplate.GetMasterFileContent("/Views/home/index.cshtml"), "The entry page for the website."));
         }
         if (templates.ContainsKey("information.cshtml") == false) // 12
         {

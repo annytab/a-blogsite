@@ -33,6 +33,7 @@
     }
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -41,10 +42,11 @@
 @*Main form*@
 @using (Html.BeginForm("edit", "admin_administrators", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
-    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
     
-    @* Input form table *@
+    @*Input form table*@
     <div class="annytab-input-form-table">
         <div class="annytab-input-form-row" style="@(administrator.id != 0 ? "display:table-row;" : "display:none;")">
             <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
@@ -96,7 +98,7 @@
         </div>
     </div>
 
-    // Save form button
+    @*Button panel*@
     <div style="display:block;border: 1px solid #cccccc;margin: 20px 0px 0px 0px;border-radius: 4px;">
         <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
@@ -104,5 +106,5 @@
 }
 
 @section scripts {
-    <script>$("#txtUserName").focus();</script>
+    <script type="text/javascript">$("#txtUserName").focus();</script>
 }

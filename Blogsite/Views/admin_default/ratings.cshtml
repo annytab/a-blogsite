@@ -55,7 +55,7 @@
     ViewBag.Title = my_ratings_tt;
 }
 
-@*The title*@
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*The menu bar*@
@@ -110,9 +110,9 @@
     </div>
 </div>
 
-@* Paging menu *@
+@*Paging menu*@
 @Html.Partial("/Views/shared_admin/_paging_menu.cshtml")
 
 @section scripts {
-    <script>$("#txtSearch").focus();</script>
+    <script type="text/javascript">$("#txtSearch").focus();</script>
 }

@@ -9,9 +9,9 @@
     Administrator administrator = Administrator.GetOneById(postComment.administrator_id, domain.back_end_language);
     Language language = Language.GetOneById(postComment.language_id, domain.back_end_language);
     string returnUrl = ViewBag.ReturnUrl;
+    KeyStringList tt = ViewBag.TranslatedTexts;
 
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string comment_tt = tt.Get("comment");
     string id_tt = tt.Get("id");
     string language_tt = tt.Get("language");
@@ -26,13 +26,16 @@
     ViewBag.Title = comment_tt + " - " + edit_tt.ToLower();  
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
+
 @*Menu*@
 @Html.Partial("~/Views/admin_comments/_form_menu.cshtml")
 
 @*Main form*@
 @using (Html.BeginForm("edit", "admin_comments", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
     
     @*Input form table*@
@@ -67,5 +70,5 @@
 }
 
 @section scripts {
-    <script>$("#txtCommentText").focus();</script>
+    <script type="text/javascript">$("#txtCommentText").focus();</script>
 }

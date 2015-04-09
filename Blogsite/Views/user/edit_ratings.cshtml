@@ -32,14 +32,14 @@
     CultureInfo cultureInfo = ViewBag.CultureInfo;
 
     // Count the number of posts
-    Int32 count = PostRating.GetCountByAdministratorId(user.id);
+    Int32 count = PostRating.GetCountByAdministratorId(user.id, domain.front_end_language);
 
     // Get the number of pages
     Int32 numberOfPages = Convert.ToInt32(Math.Ceiling(((double)count / pageSize)));
     numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
 
     // Get all the ratings by the customer
-    List<PostRating> postRatings = PostRating.GetByAdministratorId(user.id, pageSize, page, "rating_date", "DESC");
+    List<PostRating> postRatings = PostRating.GetByAdministratorId(user.id, domain.front_end_language, pageSize, page, "rating_date", "DESC");
 
     // Get translated texts
     string ratings_tt = tt.Get("ratings");
@@ -74,33 +74,33 @@
     }
 }
 
-@* Title *@
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
-@* Menu *@
+@*Menu*@
 @if (user.id != 0)
 {
     @Html.Partial(domain.custom_theme_id == 0 ? "/Views/user/_user_menu.cshtml" : "/Views/theme/user_menu.cshtml")
 }
 
-@* Ratings *@
+@*Ratings*@
 <div class="annytab-basic-container">
     @for (int i = 0; i < postRatings.Count; i++)
     {
-        @* Review input form *@
+        @*Input form*@
         using (Html.BeginForm("edit_rating", "user", FormMethod.Post))
         {
-            @* Get the post *@
+            @*Get the post*@
             Post post = Post.GetOneById(postRatings[i].post_id, domain.front_end_language);
 
-            @* Hidden data *@
+            @*Hidden data*@
             <input name="hiddenPostId" type="hidden" value="@postRatings[i].post_id" />
             <input name="hiddenLanguageId" type="hidden" value="@postRatings[i].language_id" />
 
-            @* A rating *@
+            @*A rating*@
             <div class="annytab-basic-inner-container">
                 <div style="margin:0px 0px 0px 2px;">
-                    <span class="annytab-basic-text-bold">@post.title</span><span>@(" | ")</span><span class="annytab-basic-text-normal">@postRatings[i].rating_date.ToString("d", cultureInfo)</span><br />
+                    <a href="@("/home/post/" + post.page_name + "#comments")"><span class="annytab-basic-text-bold">@post.title</span></a><span>@(" | ")</span><span class="annytab-basic-text-normal">@postRatings[i].rating_date.ToString("d", cultureInfo)</span><br />
                 </div>
                 <div style="margin:6px 0px 6px 2px;">
                     <span class="annytab-basic-text-normal">@(rating_tt + ": ")</span>
@@ -120,7 +120,7 @@
 
 <div class="annytab-basic-space"></div>
 
-@* Paging menu *@
+@*Paging menu*@
 @Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_paging_menu.cshtml" : "/Views/theme/front_paging_menu.cshtml")
 
 @section scripts {

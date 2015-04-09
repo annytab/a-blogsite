@@ -64,6 +64,7 @@
     }
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -72,35 +73,42 @@
 @*Main form*@
 @using (Html.BeginForm("edit", "admin_ads", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
     <input name="hiddenPage" type="hidden" value="@page" />
     <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    
+     @*Select language*@
+    <div class="annytab-form-input-container">
+        <div class="annytab-form-title">@(language_tt)</div>
+        <select id="selectLanguage" name="selectLanguage" class="annytab-form-select" style="max-width:100%;">
+            <option value="0" @(ad.language_id == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
+            @foreach (Language language in languages)
+            {
+                <option value="@language.id" @(language.id == ad.language_id ? Html.Raw("selected='selected'") : Html.Raw(""))>@language.name</option>
+            }
+        </select>
+    </div>
+    
+    <div class="annytab-basic-line"></div>
+    
+    @*Name and content*@
+    <div class="annytab-form-input-container">
+        <div class="annytab-form-title">@(name_tt)</div>
+        <div><input id="txtTitle" name="txtName" type="text" class="annytab-form-textbox" style="max-width:100%;" value="@ad.name" /></div>
+        <div class="annytab-basic-space-half"></div>
+        <div class="annytab-form-title">@(ad_code_tt)</div>
+        <div class="annytab-form-html-button-panel" data-textarea="txtDescription"></div>
+        <div><textarea id="txtDescription" name="txtDescription" class="annytab-form-textarea" contenteditable="true" spellcheck="false" style="max-width:100%;" rows="10">@ad.ad_code</textarea></div>
+    </div>
+    
+    <div class="annytab-basic-line"></div>
 
     @*Input form table*@
     <div class="annytab-input-form-table">
         <div class="annytab-input-form-row" style="@(ad.id != 0 ? "display:table-row;" : "display:none;")">
             <div class="annytab-input-form-column-label">@(id_tt + ":")</div>
             <div class="annytab-input-form-column-input"><input name="txtId" type="text" class="annytab-form-textbox" tabindex="-1" readonly="readonly" value="@ad.id" /></div>
-        </div>
-        <div class="annytab-input-form-row">
-            <div class="annytab-input-form-column-label">@(language_tt + ":")</div>
-            <div class="annytab-input-form-column-input">
-                <select id="selectLanguage" name="selectLanguage" class="annytab-form-select">
-                    <option value="0" @(ad.language_id == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
-                    @foreach (Language language in languages)
-                    {
-                        <option value="@language.id" @(language.id == ad.language_id ? Html.Raw("selected='selected'") : Html.Raw(""))>@language.name</option>
-                    }
-                </select>
-            </div>
-        </div>
-        <div class="annytab-input-form-row">
-            <div class="annytab-input-form-column-label">@(name_tt + ":")</div>
-            <div class="annytab-input-form-column-input"><input id="txtTitle" name="txtName" type="text" class="annytab-form-textbox" value="@ad.name" /></div>
-        </div>
-        <div class="annytab-input-form-row">
-            <div class="annytab-input-form-column-label">@(ad_code_tt + ":")</div>
-            <div class="annytab-input-form-column-input"><textarea id="txtDescription" name="txtDescription" class="annytab-form-textarea" rows="10">@ad.ad_code</textarea></div>
         </div>
         <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">@(ad_slot_tt + ":")</div>
@@ -132,7 +140,7 @@
     @*Media files*@
     <div class="annytab-list-container">
 
-        @*Search box*@
+        @*Searchbox*@
         <div style="padding:5px;margin:0px 0px 5px 0px;">
             <span>@(media_files_tt + ": ")</span>
             <input name="txtSearch" type="text" class="annytab-form-textbox" value="@keywords" style="width:150px;" />
@@ -166,7 +174,7 @@
 
     <div class="annytab-basic-space"></div>
 
-    @* Paging menu *@
+    @*Paging menu*@
     <div class="annytab-basic-container" style="text-align:center;">
         @if (page > 1)
         {
@@ -201,7 +209,9 @@
 
 @section scripts {
     <script src="/Scripts/rangyinputs-jquery.js"></script>
+    <script src="/Scripts/annytab_admin/annytab.html-button-panel.js"></script>
     <script type="text/javascript">
         $("#selectLanguage").focus();
+        $(".annytab-form-html-button-panel").htmlButtonPanel({ buttonClass: "annytab-form-button" });
     </script>
 }

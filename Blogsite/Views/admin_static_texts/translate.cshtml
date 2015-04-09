@@ -7,11 +7,11 @@
     List<Language> languages = ViewBag.Languages;
     StaticText standardStaticText = ViewBag.StandardStaticText;
     StaticText translatedStaticText = ViewBag.TranslatedStaticText;
+    KeyStringList tt = ViewBag.TranslatedTexts;
     string returnUrl = ViewBag.ReturnUrl;
     string error_message = ViewBag.ErrorMessage != null ? ViewBag.ErrorMessage : string.Empty;
 
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string static_text_tt = tt.Get("static_text");
     string translate_tt = tt.Get("translate");
     string language_tt = tt.Get("language");
@@ -25,15 +25,18 @@
     ViewBag.Title = static_text_tt + " - " + translate_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
+
 @*Menu*@
 @Html.Partial("~/Views/admin_static_texts/_form_menu.cshtml")
 
 @*Main form*@
 @using (Html.BeginForm("translate", "admin_static_texts", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
-    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
     <input type="hidden" name="hiddenStaticTextId" value="@standardStaticText.id" />
     
     @*Input form table*@
@@ -75,4 +78,3 @@
         $("#selectLanguage").on("change", function () { $(location).attr("href", $(this).find(":selected").attr("data-url")); });
     </script>
 }
-

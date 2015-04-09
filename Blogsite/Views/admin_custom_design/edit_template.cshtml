@@ -22,11 +22,13 @@
     ViewBag.Title = edit_tt + " " + template_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*The menu bar*@
 @Html.Partial("~/Views/admin_custom_design/_form_menu.cshtml")
 
+@*Edit the template*@
 @using (Html.BeginForm("edit_template", "admin_custom_design", FormMethod.Post))
 {
     <input name="returnUrl" type="hidden" value="@returnUrl" />
@@ -46,7 +48,7 @@
     <textarea id="txtContent" name="txtContent" style="display:none;">@template.user_file_content</textarea>
     <textarea id="txtMasterDesign" style="display:none;">@masterDesign</textarea>
     
-    // Save form button
+    @*Button panel*@
     <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
         <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="location.href='@Url.Action("edit_theme", "admin_custom_design", new { id = template.custom_theme_id, returnUrl = returnUrl })'" />
@@ -54,7 +56,6 @@
 }
 
 @section scripts {
-
     <link rel="stylesheet" href="/Scripts/codemirror/codemirror.css">
     <link rel="stylesheet" href="/Scripts/codemirror/merge.css">
     <script src="/Scripts/codemirror/codemirror.js"></script>
@@ -119,6 +120,5 @@
             input.val(dv.editor().getValue());
 
         } // End of the saveChanges method
-
     </script>
 }

@@ -6,6 +6,7 @@
     Domain domain = ViewBag.CurrentDomain;
     QueryParams parameters = ViewBag.QueryParams;
     string queryString = "/admin_administrators" + QueryParams.GetQueryString(parameters);
+    KeyStringList tt = ViewBag.TranslatedTexts;
 
     // Create a clean string with keywords
     string cleanKeywords = parameters.keywords.Replace("+", "");
@@ -25,7 +26,6 @@
         parameters.sort_field, parameters.sort_order);
 
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string administrator_tt = tt.Get("administrator");
     string list_tt = tt.Get("list");
     string id_tt = tt.Get("id");
@@ -46,10 +46,13 @@
     ViewBag.Title = administrator_tt + " - " + list_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
+
+@*Menu*@
 @Html.Partial("~/Views/admin_administrators/_form_menu.cshtml")
 
-@*List of domains*@
+@*List of administrators*@
 <div class="annytab-list-container">
     <div class="annytab-list-table" style="width:1064px;">
         <div class="anntyab-list-row">
@@ -79,9 +82,9 @@
     </div>
 </div>
 
-@* Paging menu *@
+@*Paging menu*@
 @Html.Partial("/Views/shared_admin/_paging_menu.cshtml")
 
 @section scripts {
-    <script>$("#txtSearch").focus();</script>
+    <script type="text/javascript">$("#txtSearch").focus();</script>
 }

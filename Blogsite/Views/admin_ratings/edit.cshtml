@@ -25,6 +25,7 @@
     ViewBag.Title = rating_tt + " - " + edit_tt.ToLower();  
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -33,6 +34,7 @@
 @*Main form*@
 @using (Html.BeginForm("edit", "admin_ratings", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
     <input name="hiddenPostId" type="hidden" value="@postRating.post_id" />
     <input name="hiddenAdministratorId" type="hidden" value="@postRating.administrator_id" />

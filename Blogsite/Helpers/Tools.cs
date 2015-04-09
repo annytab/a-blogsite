@@ -10,7 +10,7 @@ using System.Net.Mail;
 using System.Data.SqlTypes;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.WindowsAzure;
+using Microsoft.Azure;
 using Annytab;
 
 /// <summary>

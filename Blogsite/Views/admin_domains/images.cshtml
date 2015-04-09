@@ -25,6 +25,7 @@
     ViewBag.Title = domain_tt + " - " + images_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -33,8 +34,11 @@
 @*Main form*@
 @using (Html.BeginForm("images", "admin_domains", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
     <input type="hidden" name="hiddenDomainId" value="@domain.id" />
+    
+    @*Input form*@
     <div style="padding:2px;margin:2px;">
         <div style="font-size:16px;font-weight:bold;line-height:18px;">@(background_image_tt + " [jpg, 1 MB]")</div>
         <div style="margin:10px 0px 0px 0px;"><input id="uploadBackgroundImage" name="background_image" data-id="previewDomainImage" data-img="0" type="file" class="annytab-form-upload" accept="image/jpeg" /></div>
@@ -65,14 +69,13 @@
         <div style="margin:10px 0px 0px 2px;"><img id="4" src="@imageUrls.Get("small_icon")" alt="@(small_tt + " " + icon_tt.ToLower())" style="max-width:100%;border:1px solid #cccccc;" /></div>
     </div>
     
-    // Save form button
+    @*Button panel*@
     <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
         <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="@Html.Raw("location.href='" + returnUrl + "'")" />
     </div>
-
 }
 
 @section scripts {
-    <script>$("#uploadBackgroundImage").focus();</script>
+    <script type="text/javascript">$("#uploadBackgroundImage").focus();</script>
 }

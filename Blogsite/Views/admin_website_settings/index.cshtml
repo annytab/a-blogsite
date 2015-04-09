@@ -15,12 +15,13 @@
     ViewBag.Title = settings_tt;
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Main form*@
 @using (Html.BeginForm("index", "admin_website_settings", FormMethod.Post))
 {
-    @* EMAIL *@
+    @*EMAIL*@
     <div style="font-size:14px;font-weight:bold;margin:10px 0px 0px 0px;line-height:20px;">EMAIL</div>
     <div style="padding:2px;border:1px solid #cccccc;background-color:#eae9e9;border-radius:4px;">
         <div class="annytab-input-form-table">
@@ -51,7 +52,7 @@
         </div>
     </div>
     
-    @* OTHER SETTINGS *@
+    @*OTHER SETTINGS*@
     <div style="font-size:14px;font-weight:bold;margin:10px 0px 0px 0px;line-height:20px;">OTHER SETTINGS</div>
     <div style="padding:2px;border:1px solid #cccccc;background-color:#eae9e9;border-radius:4px;">
         <div class="annytab-input-form-table">
@@ -62,7 +63,7 @@
         </div>
     </div>
 
-    @* Button panel *@
+    @*Button panel*@
     <div style="display:block;border:1px solid #cccccc;margin:20px 0px 0px 0px;border-radius:4px;">
         <input id="btnSave" type="submit" class="annytab-form-button" value="@save_tt" />
         <input type="button" class="annytab-form-button" value="@cancel_tt" onclick="location.href='@Url.Action("index", "admin_default")'" />
@@ -70,5 +71,5 @@
 }
 
 @section scripts {
-    <script>$("#txtApiUserName").focus();</script>
+    <script type="text/javascript">$("#txtApiUserName").focus();</script>
 }

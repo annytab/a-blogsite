@@ -30,6 +30,7 @@
     ViewBag.Title = post_tt + " - " + files_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -38,6 +39,7 @@
 @*Add files input form*@
 @using (Html.BeginForm("add_file", "admin_posts", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
     
     @*Input form table*@

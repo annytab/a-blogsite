@@ -26,6 +26,7 @@
     ViewBag.Title = weblink_tt + " - " + translate_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -34,8 +35,9 @@
 @*Main form*@
 @using (Html.BeginForm("translate", "admin_weblinks", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
-    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
     <input type="hidden" name="hiddenWeblinkId" value="@standardWeblink.id" />
     
     @*Input form table*@
@@ -89,4 +91,3 @@
         $("#selectLanguage").on("change", function () { $(location).attr("href", $(this).find(":selected").attr("data-url")); });
     </script>
 }
-

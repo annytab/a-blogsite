@@ -59,6 +59,7 @@
     ViewBag.Title = static_page_tt + " - " + translate_tt.ToLower();
 }
 
+@*Title*@
 <h1>@ViewBag.Title</h1>
 
 @*Menu*@
@@ -67,15 +68,16 @@
 @*Main form*@
 @using (Html.BeginForm("translate", "admin_static_pages", FormMethod.Post))
 {
+    @*Hidden data*@
     <input name="returnUrl" type="hidden" value="@returnUrl" />
-    <div id="divErrors" class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
+    <div class="annytab-form-error-message" style="@(error_message != "" ? "display:block;" : "display:none;")">@Html.Raw(error_message)</div>
     <input type="hidden" name="hiddenStaticPageId" value="@standardStaticPage.id" />
     <input name="hiddenPage" type="hidden" value="@page" />
     
-    @* Select language *@
-    <div style="display:block;padding:0px 10px 0px 0px;">
-        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;">@(language_tt)</div>
-        <select id="selectLanguage" name="selectLanguage" class="annytab-form-select">
+    @*Select language*@
+    <div class="annytab-form-input-container">
+        <div class="annytab-form-title">@(language_tt)</div>
+        <select id="selectLanguage" name="selectLanguage" class="annytab-form-select" style="max-width:100%;">
             <option value="0" data-url="@("/admin_static_pages/translate/" + standardStaticPage.id.ToString() + "?returnUrl=" + Server.UrlEncode(returnUrl))" @(languageId == 0 ? Html.Raw("selected='selected'") : Html.Raw(""))>@("-- " + no_choice_tt + " --")</option>
             @foreach (Language language in languages)
             {
@@ -87,33 +89,15 @@
     <div class="annytab-basic-line"></div>
 
     @*Title and content*@
-    <div style="display:block;padding:0px 10px 0px 0px;">
-        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;">@(title_tt)</div>
-        <div><input name="txtStandardTitle" type="text" class="annytab-form-textbox" style="max-width:100%;margin-right:5px;" tabindex="-1" readonly="readonly" value="@standardStaticPage.title" /></div>
-        <div><input id="txtTitle" name="txtTranslatedTitle" type="text" class="annytab-form-textbox" style="max-width:100%;margin-right:5px;" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) value="@(translatedStaticPage != null ? translatedStaticPage.title : "")" /></div>
-        <div style="font-weight:bold;font-size:16px;padding:0px 0px 0px 2px;margin-top:5px;">@(description_tt)</div>
-        <textarea name="txtStandardDescription" class="annytab-form-textarea" style="max-width:100%;margin-right:5px;" tabindex="-1" rows="20" readonly="readonly">@standardStaticPage.main_content</textarea>
-        <div>
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" style="font-weight:bold;" value="b" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" style="font-style:italic" value="i" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="br" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h1" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h2" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h3" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="h4" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="p" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="code" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="span" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="div" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="line" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="space" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="url" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="img" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="font" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="list" />
-            <input data-id="btnAddTag" type="button" class="annytab-form-button" value="table" />
-        </div>
-        <div><textarea id="txtDescription" name="txtTranslatedDescription" class="annytab-form-textarea" contenteditable="true" spellcheck="false" style="max-width:100%;margin-right:5px;" rows="40" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw(""))>@(translatedStaticPage != null ? translatedStaticPage.main_content : "")</textarea></div>
+    <div class="annytab-form-input-container">
+        <div class="annytab-form-title">@(title_tt)</div>
+        <div><input name="txtStandardTitle" type="text" class="annytab-form-textbox" style="max-width:100%;" tabindex="-1" readonly="readonly" value="@standardStaticPage.title" /></div>
+        <div><input id="txtTitle" name="txtTranslatedTitle" type="text" class="annytab-form-textbox" style="max-width:100%" value="@(translatedStaticPage != null ? translatedStaticPage.title : "")" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) /></div>
+        <div class="annytab-basic-space-half"></div>
+        <div class="annytab-form-title">@(description_tt)</div>
+        <textarea name="txtStandardDescription" class="annytab-form-textarea" style="max-width:100%;" tabindex="-1" rows="10" readonly="readonly">@standardStaticPage.main_content</textarea>
+        <div class="annytab-form-html-button-panel" data-textarea="txtDescription"></div>
+        <div><textarea id="txtDescription" name="txtTranslatedDescription" class="annytab-form-textarea" style="max-width:100%;" rows="10" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw(""))>@(translatedStaticPage != null ? translatedStaticPage.main_content : "")</textarea></div>
     </div>
 
     <div class="annytab-basic-line"></div>
@@ -121,7 +105,7 @@
     @*Media files*@
     <div class="annytab-list-container">
 
-        @*Search box*@
+        @*Searchbox*@
         <div style="padding:5px;margin:0px 0px 5px 0px;">
             <span>@(media_files_tt + ": ")</span>
             <input name="txtSearch" type="text" class="annytab-form-textbox" value="@keywords" style="width:150px;" />
@@ -155,7 +139,7 @@
 
     <div class="annytab-basic-space"></div>
 
-    @* Paging menu *@
+    @*Paging menu*@
     <div class="annytab-basic-container" style="text-align:center;">
         @if (page > 1)
         {
@@ -231,9 +215,10 @@
 
 @section scripts {
     <script src="/Scripts/rangyinputs-jquery.js"></script>
+    <script src="/Scripts/annytab_admin/annytab.html-button-panel.js"></script>
     <script type="text/javascript">
         $("#selectLanguage").focus();
         $("#selectLanguage").on("change", function () { $(location).attr("href", $(this).find(":selected").attr("data-url")); });
+        $(".annytab-form-html-button-panel").htmlButtonPanel({ buttonClass: "annytab-form-button" });
     </script>
 }
-

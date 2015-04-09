@@ -2,9 +2,9 @@
     // Get the form data
     QueryParams parameters = ViewBag.QueryParams;
     string queryString = "/admin_static_pages" + QueryParams.GetQueryString(parameters);
+    KeyStringList tt = ViewBag.TranslatedTexts;
     
     // Get translated texts
-    KeyStringList tt = ViewBag.TranslatedTexts;
     string show_tt = tt.Get("show");
     string list_tt = tt.Get("list");
     string new_tt = tt.Get("new");
@@ -12,6 +12,7 @@
     string id_tt = tt.Get("id");
     string linkname_tt = tt.Get("linkname");
     string title_tt = tt.Get("title");
+    string inactive_tt = tt.Get("inactive");
     string ascending_tt = tt.Get("ascending");
     string descending_tt = tt.Get("descending");
     string sort_tt = tt.Get("sort");
@@ -29,6 +30,7 @@
             <option value="id" @(parameters.sort_field == "id" ? Html.Raw("selected='selected'") : Html.Raw(""))>@id_tt</option>
             <option value="link_name" @(parameters.sort_field == "link_name" ? Html.Raw("selected='selected'") : Html.Raw(""))>@linkname_tt</option>
             <option value="title" @(parameters.sort_field == "title" ? Html.Raw("selected='selected'") : Html.Raw(""))>@title_tt</option>
+            <option value="inactive" @(parameters.sort_field == "inactive" ? Html.Raw("selected='selected'") : Html.Raw(""))>@inactive_tt</option>
         </select>
         <select name="selectSortOrder" class="annytab-form-select" style="width:80px;">
             <option value="ASC" @(parameters.sort_order == "ASC" ? Html.Raw("selected='selected'") : Html.Raw(""))>@ascending_tt</option>
