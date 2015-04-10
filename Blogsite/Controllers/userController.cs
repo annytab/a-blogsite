@@ -733,8 +733,11 @@ namespace Annytab.Blogsite.Controllers
             Int64 insertId = PostComment.Add(comment);
 
             // Send a email to the administrator of the website
-            string subject = tt.Get("comment") + ",  " + tt.Get("post") + " " + insertId.ToString() + " - " + user.admin_user_name;
-            string message = comment.comment_text;
+            string subject = tt.Get("comment") + " - " + domain.website_name;
+            string message = tt.Get("post") + ": " + insertId.ToString() + "<br />"
+                + tt.Get("language") + ": " + comment.language_id.ToString() + "<br />"
+                + tt.Get("user_name") + ": " + user.admin_user_name + "<br /><br />" 
+                + comment.comment_text;
             Tools.SendEmailToHost("", subject, message);
 
             // Redirect the user to the post
@@ -787,8 +790,11 @@ namespace Annytab.Blogsite.Controllers
                 PostComment.Update(comment);
 
                 // Send a email to the administrator of the website
-                string subject = tt.Get("comment") + ",  " + tt.Get("post") + " " + comment.id.ToString() + " - " + user.admin_user_name;
-                string message = comment.comment_text;
+                string subject = tt.Get("comment") + " - " + domain.website_name;
+                string message = tt.Get("post") + ": " + comment.post_id.ToString() + "<br />"
+                    + tt.Get("language") + ": " + comment.language_id.ToString() + "<br />"
+                    + tt.Get("user_name") + ": " + user.admin_user_name + "<br /><br />" 
+                    + comment.comment_text;
                 Tools.SendEmailToHost("", subject, message);
             }
 
@@ -888,8 +894,11 @@ namespace Annytab.Blogsite.Controllers
             }
 
             // Send a email to the administrator of the website
-            string subject = tt.Get("rating") + ",  " + tt.Get("post") + " " + postRating.post_id.ToString() + " - " + user.admin_user_name;
-            string message = tt.Get("rating") + ": " + postRating.rating.ToString();
+            string subject = tt.Get("rating") + " - " + domain.website_name;
+            string message = tt.Get("post") + ": " + postRating.post_id.ToString() + "<br />"
+                + tt.Get("language") + ": " + postRating.language_id.ToString() + "<br />"
+                + tt.Get("user_name") + ": " + user.admin_user_name + "<br />" 
+                + tt.Get("rating") + ": " + postRating.rating.ToString();
             Tools.SendEmailToHost("", subject, message);
 
             // Update the rating for the post
