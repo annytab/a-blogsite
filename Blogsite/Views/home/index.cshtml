@@ -3,13 +3,6 @@
     // Paging variables
     Int32 page = 1;
     
-    // Get the layout type from the cookie
-    ViewBag.LayoutType = "standard";
-    if (Request.Cookies["LayoutType"] != null)
-    {
-        ViewBag.LayoutType = Request.Cookies["LayoutType"].Value;
-    }
-
     // Get the page number
     if (Request.Params["qp"] != null)
     {
@@ -83,14 +76,7 @@
     string read_more_tt = tt.Get("read_more");
 
     // Set the layout for the page
-    if (ViewBag.LayoutType == "mobile")
-    {
-        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_mobile_layout.cshtml" : "/Views/theme/front_mobile_layout.cshtml";
-    }
-    else
-    {
-        Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
-    }
+    Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
 }
 
 @* Title *@
@@ -115,7 +101,7 @@
 @* Top ads *@
 @foreach (Ad ad in adsTop)
 {
-    <div style="margin:10px 0px 10px 0px;">@Html.Raw(ad.ad_code)</div>
+    <div class="annytab-ad-slot-container">@Html.Raw(ad.ad_code)</div>
 }
 
 @* Sorting *@
@@ -187,7 +173,7 @@
 @* Bottom ads *@
 @foreach (Ad ad in adsBottom)
 {
-    <div style="margin:10px 0px 10px 0px;">@Html.Raw(ad.ad_code)</div>
+    <div class="annytab-ad-slot-container">@Html.Raw(ad.ad_code)</div>
 }
 
 @* Paging menu *@

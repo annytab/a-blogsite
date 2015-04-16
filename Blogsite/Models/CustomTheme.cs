@@ -102,162 +102,157 @@ public class CustomTheme
         Dictionary<string, string> templates = CustomThemeTemplate.GetAllByCustomThemeId(id, "user_file_name", "ASC");
         
         // Add templates that does not exist
-        if (templates.ContainsKey("front_category_menu.cshtml") == false) // 1
+        if (templates.ContainsKey("front_category_menu.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_category_menu.cshtml", "/Views/shared_front/_category_menu.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/shared_front/_category_menu.cshtml"), "Creates the category menu with leveling."));
         }
-        if (templates.ContainsKey("front_mobile_layout.cshtml") == false) // 2
-        {
-            CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_mobile_layout.cshtml", "/Views/shared_front/_mobile_layout.cshtml",
-                CustomThemeTemplate.GetMasterFileContent("/Views/shared_front/_mobile_layout.cshtml"), "Mobile layout for a mobile phone browser."));
-        }
-        if (templates.ContainsKey("front_paging_menu.cshtml") == false) // 3
+        if (templates.ContainsKey("front_paging_menu.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_paging_menu.cshtml", "/Views/shared_front/_paging_menu.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/shared_front/_paging_menu.cshtml"), "Creates the paging menu that shows under listed items in many files."));
         }
-        if (templates.ContainsKey("front_post_comments.cshtml") == false) // 4
+        if (templates.ContainsKey("front_post_comments.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_post_comments.cshtml", "/Views/shared_front/_post_comments.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/shared_front/_post_comments.cshtml"), "Shows the comments for a post."));
         }
-        if (templates.ContainsKey("front_post_files.cshtml") == false) // 5
+        if (templates.ContainsKey("front_post_files.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_post_files.cshtml", "/Views/shared_front/_post_files.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/shared_front/_post_files.cshtml"), "Show the files that can be downloaded for a post."));
         }
-        if (templates.ContainsKey("front_shared_scripts.cshtml") == false) // 6
+        if (templates.ContainsKey("front_shared_scripts.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_shared_scripts.cshtml", "/Views/shared_front/_shared_scripts.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/shared_front/_shared_scripts.cshtml"), "Common scripts for google analytics, google plus, facebook and more."));
         }
-        if (templates.ContainsKey("front_standard_layout.cshtml") == false) // 7
+        if (templates.ContainsKey("front_standard_layout.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_standard_layout.cshtml", "/Views/shared_front/_standard_layout.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/shared_front/_standard_layout.cshtml"), "Standard layout file for a normal browser."));
         }
-        if (templates.ContainsKey("author.cshtml") == false) // 8
+        if (templates.ContainsKey("author.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "author.cshtml", "/Views/home/author.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/home/author.cshtml"), "An information page about a author."));
         }
-        if (templates.ContainsKey("category.cshtml") == false) // 9
+        if (templates.ContainsKey("category.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "category.cshtml", "/Views/home/category.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/home/category.cshtml"), "Displays a category with its categories and products."));
         }
-        if (templates.ContainsKey("error.cshtml") == false) // 10
+        if (templates.ContainsKey("error.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "error.cshtml", "/Views/home/error.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/home/error.cshtml"), "The page that shows error messages."));
         }
-        if (templates.ContainsKey("home.cshtml") == false) // 11
+        if (templates.ContainsKey("home.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "home.cshtml", "/Views/home/index.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/home/index.cshtml"), "The entry page for the website."));
         }
-        if (templates.ContainsKey("information.cshtml") == false) // 12
+        if (templates.ContainsKey("information.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "information.cshtml", "/Views/home/information.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/home/information.cshtml"), "Displays the content of a static page."));
         }
-        if (templates.ContainsKey("post.cshtml") == false) // 13
+        if (templates.ContainsKey("post.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "post.cshtml", "/Views/home/post.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/home/post.cshtml"), "Displays a post with files, rating and comments."));
         }
-        if (templates.ContainsKey("search.cshtml") == false) // 14
+        if (templates.ContainsKey("search.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "search.cshtml", "/Views/home/search.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/home/search.cshtml"), "Displays a list of posts according to a search."));
         }
-        if (templates.ContainsKey("user_menu.cshtml") == false) // 15
+        if (templates.ContainsKey("user_menu.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "user_menu.cshtml", "/Views/user/_user_menu.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/user/_user_menu.cshtml"), "The menu for a signed in user."));
         }
-        if (templates.ContainsKey("edit_user_details.cshtml") == false) // 16
+        if (templates.ContainsKey("edit_user_details.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "edit_user_details.cshtml", "/Views/user/edit.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/user/edit.cshtml"), "The form where the user can edit his information."));
         }
-        if (templates.ContainsKey("edit_user_comments.cshtml") == false) // 17
+        if (templates.ContainsKey("edit_user_comments.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "edit_user_comments.cshtml", "/Views/user/edit_comments.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/user/edit_comments.cshtml"), "A list form where the user can edit his comments."));
         }
-        if (templates.ContainsKey("edit_user_ratings.cshtml") == false) // 18
+        if (templates.ContainsKey("edit_user_ratings.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "edit_user_ratings.cshtml", "/Views/user/edit_ratings.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/user/edit_ratings.cshtml"), "A list form where the user can edit his ratings."));
         }
-        if (templates.ContainsKey("forgot_password.cshtml") == false) // 19
+        if (templates.ContainsKey("forgot_password.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "forgot_password.cshtml", "/Views/user/forgot_password.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/user/forgot_password.cshtml"), "A form where a user can get his password."));
         }
-        if (templates.ContainsKey("user_start_page.cshtml") == false) // 20
+        if (templates.ContainsKey("user_start_page.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "user_start_page.cshtml", "/Views/user/index.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/user/index.cshtml"), "The start page for the user."));
         }
-        if (templates.ContainsKey("user_login.cshtml") == false) // 21
+        if (templates.ContainsKey("user_login.cshtml") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "user_login.cshtml", "/Views/user/login.cshtml",
                 CustomThemeTemplate.GetMasterFileContent("/Views/user/login.cshtml"), "The form where a user can log in to his account."));
         }
-        if (templates.ContainsKey("front_default_style.css") == false) // 22
+        if (templates.ContainsKey("front_default_style.css") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_default_style.css", "/Content/annytab_css/front_default_style.css",
-                CustomThemeTemplate.GetMasterFileContent("/Content/annytab_css/front_default_style.css"), "Css styling for the standard and the mobile layout."));
+                CustomThemeTemplate.GetMasterFileContent("/Content/annytab_css/front_default_style.css"), "Css styling that is shared between layouts."));
         }
-        if (templates.ContainsKey("front_mobile_layout.css") == false) // 23
+        if (templates.ContainsKey("front_medium_layout.css") == false)
+        {
+            CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_medium_layout.css", "/Content/annytab_css/front_medium_layout.css",
+                CustomThemeTemplate.GetMasterFileContent("/Content/annytab_css/front_medium_layout.css"), "Css styling for the medium layout."));
+        }
+        if (templates.ContainsKey("front_mobile_layout.css") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_mobile_layout.css", "/Content/annytab_css/front_mobile_layout.css",
-                CustomThemeTemplate.GetMasterFileContent("/Content/annytab_css/front_mobile_layout.css"), "Mobile layout css styling for the mobile layout file."));
+                CustomThemeTemplate.GetMasterFileContent("/Content/annytab_css/front_mobile_layout.css"), "Css styling for the mobile layout."));
         }
-        if (templates.ContainsKey("front_standard_layout.css") == false) // 24
+        if (templates.ContainsKey("front_standard_layout.css") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "front_standard_layout.css", "/Content/annytab_css/front_standard_layout.css",
-                CustomThemeTemplate.GetMasterFileContent("/Content/annytab_css/front_standard_layout.css"), "Standard layout css styling for the standard layout file."));
+                CustomThemeTemplate.GetMasterFileContent("/Content/annytab_css/front_standard_layout.css"), "Css styling for the standard layout."));
         }
-        if (templates.ContainsKey("rateit.css") == false) // 25
+        if (templates.ContainsKey("rateit.css") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "rateit.css", "/Content/annytab_css/rateit.css",
                 CustomThemeTemplate.GetMasterFileContent("/Content/annytab_css/rateit.css"), "The style for the rating component in posts."));
         }
-        if (templates.ContainsKey("annytab.category-functions.js") == false) // 26
+        if (templates.ContainsKey("annytab.category-functions.js") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "annytab.category-functions.js", "/Scripts/annytab_front/annytab.category-functions.js",
                 CustomThemeTemplate.GetMasterFileContent("/Scripts/annytab_front/annytab.category-functions.js"), "Functions that apply to the category page, where a category is displayed."));
         }
-        if (templates.ContainsKey("annytab.default-functions.js") == false) // 27
+        if (templates.ContainsKey("annytab.default-functions.js") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "annytab.default-functions.js", "/Scripts/annytab_front/annytab.default-functions.js",
                 CustomThemeTemplate.GetMasterFileContent("/Scripts/annytab_front/annytab.default-functions.js"), "Functions that apply to the entire website, both standard and mobile layouts."));
         }
-        if (templates.ContainsKey("annytab.home-functions.js") == false) // 28
+        if (templates.ContainsKey("annytab.home-functions.js") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "annytab.home-functions.js", "/Scripts/annytab_front/annytab.home-functions.js",
                 CustomThemeTemplate.GetMasterFileContent("/Scripts/annytab_front/annytab.home-functions.js"), "Functions that apply to the index page of the website, the home page."));
         }
-        if (templates.ContainsKey("annytab.mobile-layout-functions.js") == false) // 29
-        {
-            CustomThemeTemplate.Add(new CustomThemeTemplate(id, "annytab.mobile-layout-functions.js", "/Scripts/annytab_front/annytab.mobile-layout-functions.js",
-                CustomThemeTemplate.GetMasterFileContent("/Scripts/annytab_front/annytab.mobile-layout-functions.js"), "Functions that apply to the mobile layout for the website."));
-        }
-        if (templates.ContainsKey("annytab.post-functions.js") == false) // 30
+        if (templates.ContainsKey("annytab.post-functions.js") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "annytab.post-functions.js", "/Scripts/annytab_front/annytab.post-functions.js",
                 CustomThemeTemplate.GetMasterFileContent("/Scripts/annytab_front/annytab.post-functions.js"), "Functions that apply to the post page."));
         }
-        if (templates.ContainsKey("annytab.standard-layout-functions.js") == false) // 31
+        if (templates.ContainsKey("annytab.standard-layout-functions.js") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "annytab.standard-layout-functions.js", "/Scripts/annytab_front/annytab.standard-layout-functions.js",
                 CustomThemeTemplate.GetMasterFileContent("/Scripts/annytab_front/annytab.standard-layout-functions.js"), "Functions that apply to the standard layout for the website."));
         }
-        if (templates.ContainsKey("annytab.user-functions.js") == false) // 32
+        if (templates.ContainsKey("annytab.user-functions.js") == false)
         {
             CustomThemeTemplate.Add(new CustomThemeTemplate(id, "annytab.user-functions.js", "/Scripts/annytab_front/annytab.user-functions.js",
                 CustomThemeTemplate.GetMasterFileContent("/Scripts/annytab_front/annytab.user-functions.js"), "Functions that apply to the edit user details page."));

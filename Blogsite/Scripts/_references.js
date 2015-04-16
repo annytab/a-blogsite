@@ -10,7 +10,6 @@
 /// <reference path="annytab_front/annytab.category-functions.js" />
 /// <reference path="annytab_front/annytab.default-functions.js" />
 /// <reference path="annytab_front/annytab.home-functions.js" />
-/// <reference path="annytab_front/annytab.mobile-layout-functions.js" />
 /// <reference path="annytab_front/annytab.post-functions.js" />
 /// <reference path="annytab_front/annytab.standard-layout-functions.js" />
 /// <reference path="annytab_front/annytab.user-functions.js" />

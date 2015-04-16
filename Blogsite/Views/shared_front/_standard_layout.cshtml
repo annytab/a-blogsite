@@ -16,6 +16,7 @@
     // Get translated texts
     string logotype_tt = tt.Get("logotype");
     string background_image_tt = tt.Get("background_image");
+    string menu_tt = tt.Get("menu");
     string search_tt = tt.Get("search");
     string categories_tt = tt.Get("categories");
     string my_pages_tt = tt.Get("my_pages");
@@ -29,7 +30,6 @@
     string ratings_tt = tt.Get("ratings");
     string log_out_tt = tt.Get("log_out");
     string copyright_information_tt = tt.Get("copyright_information");
-    string mobile_tt = tt.Get("mobile");
 }
 
 <!DOCTYPE html>
@@ -42,7 +42,7 @@
     <link rel="canonical" href="@ViewBag.MetaCanonical" />
     <meta name="robots" content="@(domain.noindex == true ? "noindex, nofollow" : ViewBag.MetaRobots)" />
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=yes" />
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=yes" />
     <meta name="google" content="notranslate">
 
     @* Facebook meta tags *@
@@ -54,14 +54,16 @@
     <meta property="og:site_name" content="@domain.website_name" />
 
     @* Resources *@
-    <link href="@imageUrls.Get("small_icon")" rel="shortcut icon" type="image/x-icon" />
-    @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_standard_layout.css" : "/Content/theme/front_standard_layout.css")
-    @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_default_style.css" : "/Content/theme/front_default_style.css")
+    <link rel="icon" type="image/x-icon" href="@imageUrls.Get("small_icon")" />
+    <link rel="stylesheet" type="text/css" media="screen and (min-width:1366px)" href="@(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_standard_layout.css" : "/Content/theme/front_standard_layout.css")" />
+    <link rel="stylesheet" type="text/css" media="only screen and (min-width:1046px) and (max-width:1365px)" href="@(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_medium_layout.css" : "/Content/theme/front_medium_layout.css")" />
+    <link rel="stylesheet" type="text/css" media="only screen and (max-width:1045px)" href="@(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_mobile_layout.css" : "/Content/theme/front_mobile_layout.css")" />
+    <link rel="stylesheet" type="text/css" href="@(domain.custom_theme_id == 0 ? "/Content/annytab_css/front_default_style.css" : "/Content/theme/front_default_style.css")" />
 
 </head>
 <body>
     @* The background image *@
-    <img src="@imageUrls.Get("background_image")" class="annytab-background-image" alt="@background_image_tt" />
+    <img id="backgroundImage" data-src="@imageUrls.Get("background_image")" class="annytab-background-image" alt="@background_image_tt" />
 
     @* Master outer container *@
     <div class="annytab-layout-outer-container">
@@ -69,9 +71,18 @@
         @* Master inner container *@
         <div class="annytab-layout-inner-container">
 
-            @* Header *@
-            <div class="annytab-layout-header">
+            @* Standard header *@
+            <div class="annytab-layout-standard-header">
                 <a href="/"><img alt="@domain.website_name" class="annytab-logotype" src="@imageUrls.Get("default_logotype")" /></a>
+            </div>
+
+            @* Mobile header *@
+            <div class="annytab-layout-mobile-header">
+                <img id="toggleMobileMenu" alt="@menu_tt" src="/Content/images/annytab_design/menu_icon.png" style="z-index:1;height:100%;cursor:pointer;position:absolute;left:5px;top:0px;" />
+                <div class="annytab-basic-divider" style="position:absolute;left:47px;top:0px;height:42px;margin-left:5px;"></div>
+                <div class="annytab-basic-divider" style="position:absolute;right:47px;top:0px;height:42px;margin-right:5px;"></div>
+                <a href="/user/"><img alt="@my_pages_tt" src="/Content/images/annytab_design/my_pages_icon.png" style="z-index:1;height:100%;cursor:pointer;position:absolute;right:5px;top:0px;" /></a>
+                <a href="/"><img alt="@domain.website_name" class="annytab-logotype" src="@imageUrls.Get("mobile_logotype")" /></a>
             </div>
 
             @* Gradient *@
@@ -90,8 +101,8 @@
             </div>
 
             @* Left container *@
-            <div class="annytab-layout-left-content">
-                <div style="padding:10px 10px 10px 10px;">
+            <div id="mobileMenu" class="annytab-layout-left-content">
+                <div class="annytab-layout-menu-padding">
 
                     @* Search box *@
                     <div class="annytab-search-box">
@@ -142,13 +153,12 @@
                             @:<div><a href="/user/login" class="annytab-menu-link">@log_in_tt</a></div>
                         }
                     </div>
-
                 </div>
             </div>
 
             @* Main middle container *@
             <div class="annytab-layout-main-content">
-                <div style="padding:10px 10px 10px 0px;">
+                <div style="padding:10px;">
                     @RenderBody()
                 </div>
             </div>
@@ -158,8 +168,8 @@
 
             @* The footer *@
             <div class="annytab-layout-footer">
-                <div style="padding:10px 10px 10px 10px">
-                    <span>@Html.Raw(copyright_information_tt + " | ")</span><a href="/home/layout/mobile" style="color:#ffffff;text-decoration:underline;">@mobile_tt</a>
+                <div style="padding:10px;">
+                    <span>@Html.Raw(copyright_information_tt)</span>
                 </div>
             </div>
         </div>
