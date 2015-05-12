@@ -341,12 +341,6 @@ namespace Annytab.Blogsite.Controllers
             // Get the current domain
             Domain domain = Tools.GetCurrentDomain();
 
-            string layoutType = "standard";
-            if (Request.Cookies["LayoutType"] != null)
-            {
-                layoutType = Request.Cookies["LayoutType"].Value;
-            }
-
             // Get the form data
             string sort_field = collection["selectSortField"] != null ? collection["selectSortField"] : "id";
             string sort_order = collection["selectSortOrder"] != null ? collection["selectSortOrder"] : "ASC";
@@ -373,12 +367,6 @@ namespace Annytab.Blogsite.Controllers
         {
             // Get the current domain
             Domain domain = Tools.GetCurrentDomain();
-
-            string layoutType = "standard";
-            if (Request.Cookies["LayoutType"] != null)
-            {
-                layoutType = Request.Cookies["LayoutType"].Value;
-            }
 
             // Get the form data
             string page_name = collection["hiddenPageName"] != null ? collection["hiddenPageName"] : "";
@@ -408,12 +396,6 @@ namespace Annytab.Blogsite.Controllers
             // Get the current domain
             Domain domain = Tools.GetCurrentDomain();
 
-            string layoutType = "standard";
-            if (Request.Cookies["LayoutType"] != null)
-            {
-                layoutType = Request.Cookies["LayoutType"].Value;
-            }
-
             // Get the form data
             string keywords = collection["txtFormSearchBox"] != null ? collection["txtFormSearchBox"] : "";
             string sort_field = collection["selectSortField"] != null ? collection["selectSortField"] : "id";
@@ -441,12 +423,6 @@ namespace Annytab.Blogsite.Controllers
         {
             // Get the current domain
             Domain domain = Tools.GetCurrentDomain();
-
-            string layoutType = "standard";
-            if (Request.Cookies["LayoutType"] != null)
-            {
-                layoutType = Request.Cookies["LayoutType"].Value;
-            }
 
             // Get the form data
             Int32 author_id = 0;

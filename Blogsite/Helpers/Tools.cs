@@ -77,14 +77,57 @@ public static class Tools
         // Create a default stemmer
         Stemmer stemmer = new DefaultStemmer();
 
+        // Get the language code in lower case
+        string language_code = language.language_code.ToLower();
+
         // Get a stemmer depending on the language
-        if (language.language_code.ToLower() == "sv")
+        if (language_code == "da")
         {
-            stemmer = new SwedishStemmer();
-        }  
-        else if (language.language_code.ToLower() == "en")
+            stemmer = new DanishStemmer();
+        }
+        else if (language_code == "nl")
+        {
+            stemmer = new DutchStemmer();
+        }
+        else if (language_code == "en")
         {
             stemmer = new EnglishStemmer();
+        }
+        else if (language_code == "fi")
+        {
+            stemmer = new FinnishStemmer();
+        }
+        else if (language_code == "fr")
+        {
+            stemmer = new FrenchStemmer();
+        }
+        else if (language_code == "de")
+        {
+            stemmer = new GermanStemmer();
+        }
+        else if (language_code == "it")
+        {
+            stemmer = new ItalianStemmer();
+        }
+        else if (language_code == "no")
+        {
+            stemmer = new NorwegianStemmer();
+        }
+        else if (language_code == "pt")
+        {
+            stemmer = new PortugueseStemmer();
+        }
+        else if (language_code == "ro")
+        {
+            stemmer = new RomanianStemmer();
+        }
+        else if (language_code == "es")
+        {
+            stemmer = new SpanishStemmer();
+        }
+        else if (language_code == "sv")
+        {
+            stemmer = new SwedishStemmer();
         }
 
         // Return the stemmer
