@@ -7,7 +7,6 @@
 *.sln.docstates
 
 # Build results
-
 [Dd]ebug/
 [Rr]elease/
 x64/
@@ -107,20 +106,20 @@ csx
 AppPackages/
 
 # User specific files
-Blogsite/app.config
-Blogsite/DatabaseFiles/DatabaseVersion.xml.gz
+/Blogsite/app.config
+/Blogsite/DatabaseFiles/DatabaseVersion.xml.gz
 
 # Images and other files
-Blogsite/Content/administrators/
-Blogsite/Content/domains/
-Blogsite/Content/media/
-Blogsite/Content/images/user_design/
-Blogsite/Content/user_files/
-Blogsite/Content/themes/
-Blogsite/Content/posts/
+/Blogsite/Content/administrators/
+/Blogsite/Content/domains/
+/Blogsite/Content/media/
+/Blogsite/Content/images/user_design/
+/Blogsite/Content/user_files/
+/Blogsite/Content/themes/
+/Blogsite/Content/posts/
 
 # Developer documents
-Blogsite/DeveloperFiles/
+/Blogsite/DeveloperFiles/
 
 # Others
 sql/
@@ -170,3 +169,6 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+
+# Application host configuration
+/.vs/config/applicationhost.config
