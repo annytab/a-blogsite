@@ -206,7 +206,7 @@ public class WebsiteSetting
         settings = GetAll();
 
         // Create the cache
-        HttpContext.Current.Cache.Insert("WebsiteSettings", settings);
+        HttpContext.Current.Cache.Insert("WebsiteSettings", settings, null, DateTime.UtcNow.AddHours(2), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
 
         // Return the settings for the blog
         return settings;
