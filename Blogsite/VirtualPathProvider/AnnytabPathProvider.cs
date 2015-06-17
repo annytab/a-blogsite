@@ -14,7 +14,7 @@ public class AnnytabPathProvider : VirtualPathProvider
     #region Variables
 
     public static Dictionary<string, Dictionary<string, string>> virtualThemes;
-    public static DateTime absoluteExpiration;
+    public static Dictionary<string, DateTime> absoluteExpiration;
     public static string virtualThemeHash;
 
     #endregion
@@ -29,7 +29,7 @@ public class AnnytabPathProvider : VirtualPathProvider
     {
         // Set values for instance variables
         virtualThemes = new Dictionary<string, Dictionary<string, string>>(10);
-        absoluteExpiration = new DateTime(2000, 1, 1);
+        absoluteExpiration = new Dictionary<string, DateTime>(10);
         virtualThemeHash = "";
 
     } // End of the constructor
@@ -123,7 +123,7 @@ public class AnnytabPathProvider : VirtualPathProvider
         string themeId = "Theme_" + domain.custom_theme_id;
 
         // Check if the expiration date has passed
-        if (DateTime.Now > absoluteExpiration)
+        if (absoluteExpiration.ContainsKey(themeId) == true && DateTime.Now > absoluteExpiration[themeId])
         {
             RemoveThemeFromCache(themeId);
         }
@@ -135,7 +135,7 @@ public class AnnytabPathProvider : VirtualPathProvider
             virtualThemes.Add(themeId, CustomTheme.GetAllTemplatesById(domain.custom_theme_id));
 
             // Add the absolute expiration date and a new hash
-            absoluteExpiration = DateTime.Now.AddHours(4);
+            absoluteExpiration.Add(themeId, DateTime.Now.AddHours(4));
             virtualThemeHash = Guid.NewGuid().ToString();
         }
 
@@ -240,6 +240,12 @@ public class AnnytabPathProvider : VirtualPathProvider
         if(virtualThemes.ContainsKey(themeId) == true)
         {
             virtualThemes.Remove(themeId);
+        }
+
+        // Remove the absolute expiration
+        if(absoluteExpiration.ContainsKey(themeId) == true)
+        {
+            absoluteExpiration.Remove(themeId);
         }
 
     } // End of the RemoveThemeFromCache method
