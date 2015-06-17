@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Caching;
@@ -13,9 +12,8 @@ public class AnnytabPathProvider : VirtualPathProvider
 {
     #region Variables
 
-    public static Dictionary<string, Dictionary<string, string>> virtualThemes;
-    public static Dictionary<string, DateTime> absoluteExpiration;
-    public static string virtualThemeHash;
+    private string _virtualThemeHash;
+    private object lockObject = new object();
 
     #endregion
 
@@ -28,11 +26,37 @@ public class AnnytabPathProvider : VirtualPathProvider
         : base()
     {
         // Set values for instance variables
-        virtualThemes = new Dictionary<string, Dictionary<string, string>>(10);
-        absoluteExpiration = new Dictionary<string, DateTime>(10);
-        virtualThemeHash = "";
 
     } // End of the constructor
+
+    #endregion
+
+    #region Set and get the virtual theme hash
+
+    /// <summary>
+    /// Set the virtual theme hash (thread safe)
+    /// </summary>
+    private void SetVirtualThemeHash()
+    {
+        lock(lockObject)
+        {
+            _virtualThemeHash = Guid.NewGuid().ToString();
+        }
+
+    } // End of the SetVirtualThemeHash method
+
+    /// <summary>
+    /// Get the virtual theme hash (thread safe)
+    /// </summary>
+    /// <returns></returns>
+    private string GetVirtualThemeHash()
+    {
+        lock (lockObject)
+        {
+            return _virtualThemeHash;
+        }
+
+    } // End of the GetVirtualThemeHash method
 
     #endregion
 
@@ -122,25 +146,22 @@ public class AnnytabPathProvider : VirtualPathProvider
         // Create the theme id
         string themeId = "Theme_" + domain.custom_theme_id;
 
-        // Check if the expiration date has passed
-        if (absoluteExpiration.ContainsKey(themeId) == true && DateTime.Now > absoluteExpiration[themeId])
-        {
-            RemoveThemeFromCache(themeId);
-        }
+        // Get the virtual theme from cache
+        Dictionary<string, string> virtualTheme = (Dictionary<string, string>)HttpContext.Current.Cache[themeId];
 
-        // Check if the theme exists
-        if (virtualThemes.ContainsKey(themeId) == false)
+        // Check if the virtual theme is different from null
+        if (virtualTheme == null)
         {
-            // Add the theme
-            virtualThemes.Add(themeId, CustomTheme.GetAllTemplatesById(domain.custom_theme_id));
+            // Create the virtual theme
+            virtualTheme = CustomTheme.GetAllTemplatesById(domain.custom_theme_id);
 
-            // Add the absolute expiration date and a new hash
-            absoluteExpiration.Add(themeId, DateTime.Now.AddHours(4));
-            virtualThemeHash = Guid.NewGuid().ToString();
+            // Add the virtual theme to cache
+            HttpContext.Current.Cache.Insert(themeId, virtualTheme, null, DateTime.UtcNow.AddHours(4), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
+            SetVirtualThemeHash();
         }
 
         // Check if the file exists
-        if (virtualThemes.ContainsKey(themeId) == true && virtualThemes[themeId].ContainsKey(fileName) == true)
+        if (virtualTheme.ContainsKey(fileName) == true)
         {
             return true;
         }
@@ -190,6 +211,9 @@ public class AnnytabPathProvider : VirtualPathProvider
     /// <returns>The content of the file as a string</returns>
     public string GetFileContents(string virtualPath)
     {
+        // Create the string to return
+        string fileContent = "";
+
         // Get the file name
         string fileName = Path.GetFileName(virtualPath);
 
@@ -200,13 +224,22 @@ public class AnnytabPathProvider : VirtualPathProvider
         string themeId = "Theme_" + domain.custom_theme_id;
 
         // Get the dictionary
-        Dictionary<string, string> virtualFiles = virtualThemes[themeId];
+        Dictionary<string, string> virtualFiles = (Dictionary<string, string>)HttpContext.Current.Cache[themeId];
+
+        // Make sure that virtual files not is null
+        if(virtualFiles != null)
+        {
+            fileContent = virtualFiles[fileName];
+        }
 
         // Return the content
-        return virtualFiles[fileName];
-        
+        return fileContent;
+
     } // End of the GetFileContents method
 
+    /// <summary>
+    /// Get the cache dependency
+    /// </summary>
     public override CacheDependency GetCacheDependency(string virtualPath, System.Collections.IEnumerable virtualPathDependencies, DateTime utcStart)
     {
         if (IsPathVirtual(virtualPath))
@@ -214,17 +247,22 @@ public class AnnytabPathProvider : VirtualPathProvider
             return null;
         }
         return Previous.GetCacheDependency(virtualPath, virtualPathDependencies, utcStart);
-    }
 
+    } // End of the GetCacheDependency method
+
+    /// <summary>
+    /// Get a file hash
+    /// </summary>
     public override String GetFileHash(String virtualPath, System.Collections.IEnumerable virtualPathDependencies)
     {
         if (IsPathVirtual(virtualPath))
         {
-            return virtualThemeHash;
+            return GetVirtualThemeHash();   
         }
 
         return Previous.GetFileHash(virtualPath, virtualPathDependencies);
-    }
+
+    } // End of the GetFileHash method
 
     #endregion
 
@@ -237,15 +275,9 @@ public class AnnytabPathProvider : VirtualPathProvider
     public void RemoveThemeFromCache(string themeId)
     {
         // Remove the theme
-        if(virtualThemes.ContainsKey(themeId) == true)
+        if(HttpContext.Current.Cache[themeId] != null)
         {
-            virtualThemes.Remove(themeId);
-        }
-
-        // Remove the absolute expiration
-        if(absoluteExpiration.ContainsKey(themeId) == true)
-        {
-            absoluteExpiration.Remove(themeId);
+            HttpContext.Current.Cache.Remove(themeId);
         }
 
     } // End of the RemoveThemeFromCache method
