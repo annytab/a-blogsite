@@ -52,9 +52,6 @@ public class WebsiteSetting
     /// <param name="value">The value</param>
     public static void Add(string key, string value)
     {
-        // Clear the cache
-        Tools.RemoveKeyFromCache("WebsiteSettings");
-
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "INSERT INTO dbo.website_settings (id, value) VALUES (@id, @value);";
@@ -87,6 +84,9 @@ public class WebsiteSetting
             }
         }
 
+        // Clear the cache
+        Tools.RemoveKeyFromCache("WebsiteSettings");
+
     } // End of the Add method
 
     #endregion
@@ -100,9 +100,6 @@ public class WebsiteSetting
     /// <param name="value">The value</param>
     public static void Update(string key, string value)
     {
-        // Clear the cache
-        Tools.RemoveKeyFromCache("WebsiteSettings");
-
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "UPDATE dbo.website_settings SET value = @value WHERE id = @id;";
@@ -134,6 +131,9 @@ public class WebsiteSetting
                 }
             }
         }
+
+        // Clear the cache
+        Tools.RemoveKeyFromCache("WebsiteSettings");
 
     } // End of the Update method
 
