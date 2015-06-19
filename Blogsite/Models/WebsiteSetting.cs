@@ -53,7 +53,7 @@ public class WebsiteSetting
     public static void Add(string key, string value)
     {
         // Clear the cache
-        RemoveCachedSettings();
+        Tools.RemoveKeyFromCache("WebsiteSettings");
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
@@ -101,7 +101,7 @@ public class WebsiteSetting
     public static void Update(string key, string value)
     {
         // Clear the cache
-        RemoveCachedSettings();
+        Tools.RemoveKeyFromCache("WebsiteSettings");
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
@@ -205,9 +205,12 @@ public class WebsiteSetting
         // Get the settings
         settings = GetAll();
 
-        // Create the cache
-        HttpContext.Current.Cache.Insert("WebsiteSettings", settings, null, DateTime.UtcNow.AddHours(2), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
-
+        if(settings != null)
+        {
+            // Create the cache
+            HttpContext.Current.Cache.Insert("WebsiteSettings", settings, null, DateTime.UtcNow.AddHours(6), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
+        }
+        
         // Return the settings for the blog
         return settings;
 
@@ -269,24 +272,6 @@ public class WebsiteSetting
         return posts;
 
     } // End of the GetAll method
-
-    #endregion
-
-    #region Helper methods
-
-    /// <summary>
-    /// Remove the cached settings
-    /// </summary>
-    private static void RemoveCachedSettings()
-    {
-        // Make sure that the settings is different from null
-        if (HttpContext.Current.Cache["WebsiteSettings"] != null)
-        {
-            // Remove the settings
-            HttpContext.Current.Cache.Remove("WebsiteSettings");
-        }
-
-    } // End of the RemoveCachedSettings method
 
     #endregion
 

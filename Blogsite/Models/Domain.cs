@@ -194,7 +194,7 @@ public class Domain
         }
 
         // Remove the domain from cache
-        HttpContext.Current.Cache.Remove(post.domain_name);
+        Tools.RemoveKeyFromCache(post.domain_name);
 
     } // End of the Update method
 
@@ -391,7 +391,7 @@ public class Domain
             // Insert the domain in the cache
             if(domain != null)
             {
-                HttpContext.Current.Cache.Insert(domainName, domain, null, DateTime.UtcNow.AddHours(2), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
+                HttpContext.Current.Cache.Insert(domainName, domain, null, DateTime.UtcNow.AddHours(6), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
             }     
         }
 
@@ -668,7 +668,7 @@ public class Domain
         }
 
         // Remove the domain from cache
-        HttpContext.Current.Cache.Remove(domain.domain_name);
+        Tools.RemoveKeyFromCache(domain.domain_name);
 
         // Return the code for success
         return 0;

@@ -586,4 +586,18 @@ public static class Tools
 
     } // End of the IsImageJpeg method
 
+    /// <summary>
+    /// Remove the key from cache
+    /// </summary>
+    public static void RemoveKeyFromCache(string key)
+    {
+        // Make sure that the cache reference not is null
+        if (HttpContext.Current.Cache[key] != null)
+        {
+            // Remove the cached data by key
+            HttpContext.Current.Cache.Remove(key);
+        }
+
+    } // End of the RemoveKeyFromCache method
+
 } // End of the class
