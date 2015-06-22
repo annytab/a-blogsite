@@ -14,6 +14,9 @@ public class WebsiteSetting
     public string id;
     public string value;
 
+    // Create a static write lock
+    private static object writeLock = new object();
+
     #endregion
 
     #region Constructors
@@ -196,21 +199,32 @@ public class WebsiteSetting
         // Get the cached settings
         KeyStringList settings = (KeyStringList)HttpContext.Current.Cache["WebsiteSettings"];
 
-        // Check if the settings is different from null
-        if (settings != null)
+        // Check if settings is null
+        if(settings == null)
         {
-            return settings;
+            // Add a lock to only insert once
+            lock(writeLock)
+            {
+                // Check if the cache still is null
+                if(HttpContext.Current.Cache["WebsiteSettings"] == null)
+                {
+                    // Get settings from the database
+                    settings = GetAll();
+
+                    if (settings != null)
+                    {
+                        // Create the cache
+                        HttpContext.Current.Cache.Insert("WebsiteSettings", settings, null, DateTime.UtcNow.AddHours(5), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
+                    }
+                }
+                else
+                {
+                    // Get settings from cache
+                    settings = (KeyStringList)HttpContext.Current.Cache["WebsiteSettings"];
+                }
+            }
         }
 
-        // Get the settings
-        settings = GetAll();
-
-        if(settings != null)
-        {
-            // Create the cache
-            HttpContext.Current.Cache.Insert("WebsiteSettings", settings, null, DateTime.UtcNow.AddHours(6), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
-        }
-        
         // Return the settings for the blog
         return settings;
 
