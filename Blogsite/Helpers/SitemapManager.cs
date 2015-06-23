@@ -63,20 +63,20 @@ public static class SitemapManager
             string baseUrl = domain.web_address;
 
             // Add the baseurl
-            CreateUrlPost(xmlTextWriter, baseUrl, "1.0", changeFrequency, DateTime.Now);
+            CreateUrlPost(xmlTextWriter, baseUrl, "1.0", changeFrequency, DateTime.UtcNow);
 
             // Loop categories
             for (int i = 0; i < categories.Count; i++)
             {
                 // Create the url post
-                CreateUrlPost(xmlTextWriter, baseUrl + "/home/category/" + categories[i].page_name, priorityCategories, changeFrequency, DateTime.Now);
+                CreateUrlPost(xmlTextWriter, baseUrl + "/home/category/" + categories[i].page_name, priorityCategories, changeFrequency, DateTime.UtcNow);
             }
 
             // Loop posts
             for (int i = 0; i < posts.Count; i++)
             {
                 // Create the url post
-                CreateUrlPost(xmlTextWriter, baseUrl + "/home/post/" + posts[i].page_name, priorityPosts, changeFrequency, DateTime.Now);
+                CreateUrlPost(xmlTextWriter, baseUrl + "/home/post/" + posts[i].page_name, priorityPosts, changeFrequency, DateTime.UtcNow);
             }
 
             // Write the end tag for the xml document </urlset>

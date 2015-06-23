@@ -12,12 +12,6 @@
     string queryString = "/admin_default/comments" + QueryParams.GetQueryString(parameters);
     Administrator administrator = Administrator.GetSignedInAdministrator();
 
-    // Create a clean string with keywords
-    string cleanKeywords = parameters.keywords.Replace("+", "");
-
-    // Create an array with search words
-    string[] words = cleanKeywords.Split(' ');
-
     // Count the number of posts
     Int32 count = PostComment.GetCountByAdministratorId(administrator.id);
 
@@ -48,7 +42,7 @@
     // Set paging data
     ViewBag.CurrentPage = parameters.current_page;
     ViewBag.NumberOfPages = numberOfPages;
-    ViewBag.NavigateUrl = "/comments?kw=" + Server.UrlEncode(parameters.keywords) + "&sf=" + parameters.sort_field + "&so=" + parameters.sort_order + "&pz=" + parameters.page_size + "&qp={0}";
+    ViewBag.NavigateUrl = "/admin_default/comments?sf=" + parameters.sort_field + "&so=" + parameters.sort_order + "&pz=" + parameters.page_size + "&qp={0}";
 
     // Set the page title
     ViewBag.Title = my_comments_tt;

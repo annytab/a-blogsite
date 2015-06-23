@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using Annytab
 @{
     // Set the layout for the page
     Layout = "/Views/shared_admin/_standard_layout.cshtml";
@@ -12,14 +11,6 @@
     string queryString = "/admin_default" + QueryParams.GetQueryString(parameters);
     Administrator administrator = Administrator.GetSignedInAdministrator();
     KeyStringList tt = ViewBag.TranslatedTexts;
-
-    // Create a clean string with keywords
-    string cleanKeywords = parameters.keywords.Replace("+", "");
-
-    // Create an array with search words
-    string[] words = cleanKeywords.Split(' ');
-    Stemmer stemmer = Tools.GetStemmer(currentLanguage);
-    string[] steamWords = stemmer.GetSteamWords(words);
 
     // Count the number of posts
     Int32 count = Post.GetCountByAdministratorId(administrator.id, domain.back_end_language);
@@ -55,7 +46,7 @@
     // Set paging data
     ViewBag.CurrentPage = parameters.current_page;
     ViewBag.NumberOfPages = numberOfPages;
-    ViewBag.NavigateUrl = "/admin_default?kw=" + Server.UrlEncode(parameters.keywords) + "&sf=" + parameters.sort_field + "&so=" + parameters.sort_order + "&pz=" + parameters.page_size + "&qp={0}";
+    ViewBag.NavigateUrl = "/admin_default?sf=" + parameters.sort_field + "&so=" + parameters.sort_order + "&pz=" + parameters.page_size + "&qp={0}";
 
     // Set the page title
     ViewBag.Title = my_posts_tt;

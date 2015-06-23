@@ -45,8 +45,8 @@ public class Post
         this.meta_description = "";
         this.meta_keywords = "";
         this.page_name = "";
-        this.date_added = DateTime.Now;
-        this.date_updated = DateTime.Now;
+        this.date_added = DateTime.UtcNow;
+        this.date_updated = DateTime.UtcNow;
         this.rating = 0;
         this.page_views = 0;
         this.inactive = false;

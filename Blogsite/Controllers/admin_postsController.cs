@@ -336,7 +336,7 @@ namespace Annytab.Blogsite.Controllers
             post.meta_keywords = meta_keywords;
             post.page_name = page_name;
             post.date_added = AnnytabDataValidation.TruncateDateTime(date_added);
-            post.date_updated = DateTime.Now;
+            post.date_updated = DateTime.UtcNow;
             post.inactive = inactive;
 
             // Check if the user wants to do a search
@@ -526,7 +526,7 @@ namespace Annytab.Blogsite.Controllers
             translatedPost.meta_keywords = meta_keywords;
             translatedPost.page_name = page_name;
             translatedPost.date_added = AnnytabDataValidation.TruncateDateTime(date_added);
-            translatedPost.date_updated = DateTime.Now;
+            translatedPost.date_updated = DateTime.UtcNow;
             translatedPost.inactive = inactive;
 
             // Check if the user wants to do a search

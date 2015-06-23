@@ -66,9 +66,9 @@ public class SqlSessionStateProvider : SessionStateStoreProviderBase
         WebsiteSession session = new WebsiteSession();
         session.id = id;
         session.application_name = this.applicationName;
-        session.created_date = DateTime.Now;
-        session.expires_date = DateTime.Now.AddMinutes((Double)timeout);
-        session.lock_date = DateTime.Now;
+        session.created_date = DateTime.UtcNow;
+        session.expires_date = DateTime.UtcNow.AddMinutes((Double)timeout);
+        session.lock_date = DateTime.UtcNow;
         session.lock_id = 0;
         session.timeout_limit = timeout;
         session.locked = false;
@@ -114,9 +114,9 @@ public class SqlSessionStateProvider : SessionStateStoreProviderBase
         WebsiteSession session = new WebsiteSession();
         session.id = id;
         session.application_name = this.applicationName;
-        session.created_date = DateTime.Now;
-        session.expires_date = DateTime.Now.AddMinutes((Double)item.Timeout);
-        session.lock_date = DateTime.Now;
+        session.created_date = DateTime.UtcNow;
+        session.expires_date = DateTime.UtcNow.AddMinutes((Double)item.Timeout);
+        session.lock_date = DateTime.UtcNow;
         session.lock_id = 0;
         session.timeout_limit = item.Timeout;
         session.locked = false;
@@ -153,7 +153,7 @@ public class SqlSessionStateProvider : SessionStateStoreProviderBase
         session.id = id;
         session.application_name = this.applicationName;
         session.lock_id = (Int32)lockId;
-        session.expires_date = DateTime.Now.AddMinutes(this.sessionStateConfiguration.Timeout.TotalMinutes);
+        session.expires_date = DateTime.UtcNow.AddMinutes(this.sessionStateConfiguration.Timeout.TotalMinutes);
         session.locked = false;
 
         // Update the lock
@@ -170,7 +170,7 @@ public class SqlSessionStateProvider : SessionStateStoreProviderBase
         WebsiteSession session = new WebsiteSession();
         session.id = id;
         session.application_name = this.applicationName;
-        session.expires_date = DateTime.Now.AddMinutes(this.sessionStateConfiguration.Timeout.TotalMinutes);
+        session.expires_date = DateTime.UtcNow.AddMinutes(this.sessionStateConfiguration.Timeout.TotalMinutes);
 
         // Update the expiration date
         WebsiteSession.UpdateExpirationDate(session);
@@ -229,8 +229,8 @@ public class SqlSessionStateProvider : SessionStateStoreProviderBase
             // Update the session
             session.id = id;
             session.application_name = this.applicationName;
-            session.expires_date = DateTime.Now;
-            session.lock_date = DateTime.Now;
+            session.expires_date = DateTime.UtcNow;
+            session.lock_date = DateTime.UtcNow;
             session.locked = true;
 
             // Lock the session
@@ -245,7 +245,7 @@ public class SqlSessionStateProvider : SessionStateStoreProviderBase
 
         if (session != null)
         {
-            if (session.expires_date < DateTime.Now)
+            if (session.expires_date < DateTime.UtcNow)
             {
                 locked = false;
                 deleteData = true;
@@ -258,7 +258,7 @@ public class SqlSessionStateProvider : SessionStateStoreProviderBase
             // Set data
             serializedItems = session.session_items;
             lockId = session.lock_id;
-            lockAge = DateTime.Now.Subtract(session.lock_date);
+            lockAge = DateTime.UtcNow.Subtract(session.lock_date);
             actionFlags = (SessionStateActions)session.flags;
             timeout = session.timeout_limit;
         }

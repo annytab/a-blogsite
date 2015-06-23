@@ -197,7 +197,7 @@
         </div>
         <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">&nbsp;</div>
-            <div class="annytab-input-form-column-input"><input id="txtTranslatedDateAdded" name="txtTranslatedDateAdded" type="text" class="annytab-form-textbox" value="@(translatedPost != null ? translatedPost.date_added.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) /></div>
+            <div class="annytab-input-form-column-input"><input id="txtTranslatedDateAdded" name="txtTranslatedDateAdded" type="text" class="annytab-form-textbox" value="@(translatedPost != null ? translatedPost.date_added.ToString("yyyy-MM-dd") : DateTime.UtcNow.ToString("yyyy-MM-dd"))" @(languageId == 0 ? Html.Raw("readonly='readonly'") : Html.Raw("")) /></div>
         </div>
         <div class="annytab-input-form-row">
             <div class="annytab-input-form-column-label">@(inactive_tt + ":")</div>

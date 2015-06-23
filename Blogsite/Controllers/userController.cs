@@ -206,7 +206,7 @@ namespace Annytab.Blogsite.Controllers
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
                     adminCookie.HttpOnly = true;
                     adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
-                    adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.Expires = DateTime.UtcNow.AddDays(1);
                     Response.Cookies.Add(adminCookie);
 
                     // Redirect the user to the edit user page
@@ -217,7 +217,7 @@ namespace Annytab.Blogsite.Controllers
                     // Create the administrator cookie
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
-                    adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.Expires = DateTime.UtcNow.AddDays(1);
                     adminCookie.HttpOnly = true;
                     adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     Response.Cookies.Add(adminCookie);
@@ -344,7 +344,7 @@ namespace Annytab.Blogsite.Controllers
                     // Create the administrator cookie
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
-                    adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.Expires = DateTime.UtcNow.AddDays(1);
                     adminCookie.HttpOnly = true;
                     adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     Response.Cookies.Add(adminCookie);
@@ -357,7 +357,7 @@ namespace Annytab.Blogsite.Controllers
                     // Create the administrator cookie
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
-                    adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.Expires = DateTime.UtcNow.AddDays(1);
                     adminCookie.HttpOnly = true;
                     adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     Response.Cookies.Add(adminCookie);
@@ -635,7 +635,7 @@ namespace Annytab.Blogsite.Controllers
                     // Create the administrator cookie
                     HttpCookie adminCookie = new HttpCookie("Administrator");
                     adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
-                    adminCookie.Expires = DateTime.Now.AddDays(1);
+                    adminCookie.Expires = DateTime.UtcNow.AddDays(1);
                     adminCookie.HttpOnly = true;
                     adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                     Response.Cookies.Add(adminCookie);
@@ -726,7 +726,7 @@ namespace Annytab.Blogsite.Controllers
             comment.post_id = postId;
             comment.administrator_id = user.id;
             comment.language_id = languageId;
-            comment.comment_date = DateTime.Now;
+            comment.comment_date = DateTime.UtcNow;
             comment.comment_text = commentText;
 
             // Add the post comment
@@ -783,7 +783,7 @@ namespace Annytab.Blogsite.Controllers
             if(comment != null && comment.administrator_id == user.id)
             {
                 // Update values
-                comment.comment_date = DateTime.Now;
+                comment.comment_date = DateTime.UtcNow;
                 comment.comment_text = commentText;
 
                 // Update the comment
@@ -871,7 +871,7 @@ namespace Annytab.Blogsite.Controllers
             if (postRating != null && postRating.administrator_id == user.id)
             {
                 // Update values
-                postRating.rating_date = DateTime.Now;
+                postRating.rating_date = DateTime.UtcNow;
                 postRating.rating = userVote;
 
                 // Update the rating
@@ -886,7 +886,7 @@ namespace Annytab.Blogsite.Controllers
                 postRating.post_id = post_id;
                 postRating.administrator_id = user.id;
                 postRating.language_id = language_id;
-                postRating.rating_date = DateTime.Now;
+                postRating.rating_date = DateTime.UtcNow;
                 postRating.rating = userVote;
 
                 // Add the rating
@@ -973,7 +973,7 @@ namespace Annytab.Blogsite.Controllers
                 // Create the administrator cookie
                 HttpCookie adminCookie = new HttpCookie("Administrator");
                 adminCookie.Value = Tools.ProtectCookieValue(user.id.ToString(), "Administration");
-                adminCookie.Expires = DateTime.Now.AddDays(1);
+                adminCookie.Expires = DateTime.UtcNow.AddDays(1);
                 adminCookie.HttpOnly = true;
                 adminCookie.Secure = redirectHttps.ToLower() == "true" ? true : false;
                 Response.Cookies.Add(adminCookie);
@@ -1092,7 +1092,7 @@ namespace Annytab.Blogsite.Controllers
             // Delete the administrator cookie
             HttpCookie adminCookie = new HttpCookie("Administrator");
             adminCookie.Value = "";
-            adminCookie.Expires = DateTime.Now.AddDays(-1);
+            adminCookie.Expires = DateTime.UtcNow.AddDays(-1);
             adminCookie.HttpOnly = true;
             Response.Cookies.Add(adminCookie);
 
