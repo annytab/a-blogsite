@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Globalization;
-using System.Web.Security;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Annytab.Blogsite.Controllers
@@ -176,7 +169,7 @@ namespace Annytab.Blogsite.Controllers
                 user.facebook_user_id = facebookId;
                 Administrator.UpdateMasterPost(user);
 
-                // Redirect the customer to his start page
+                // Redirect the user to his start page
                 return RedirectToAction("index", "user");
             }
             else if (facebookId != "" && user == null)
@@ -251,7 +244,7 @@ namespace Annytab.Blogsite.Controllers
                 + "&redirect_uri=" + Server.UrlEncode(domain.web_address + "/user/google_login_callback") + "&response_type=code&client_id=" + domain.google_app_id
                 + "&access_type=offline";
 
-            // Redirect the customer
+            // Redirect the user
             return Redirect(url);
 
         } // End of the google_login method
@@ -288,7 +281,7 @@ namespace Annytab.Blogsite.Controllers
              // Check if this is a valid callback
             if (state != sessionState || code == "")
             {
-                // Redirect the customer
+                // Redirect the user
                 return Redirect("/");
             }
 
@@ -910,7 +903,7 @@ namespace Annytab.Blogsite.Controllers
         } // End of the edit_rating method
 
         // Delete a rating
-        // POST: /customer/delete_rating/1?languageId=1
+        // POST: /user/delete_rating/1?languageId=1
         [HttpGet]
         public ActionResult delete_rating(Int32 id = 0, Int32 languageId = 0)
         {
