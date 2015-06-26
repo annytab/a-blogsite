@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
 
@@ -94,7 +92,7 @@ namespace Annytab.Blogsite.Controllers
             List<Category> parentCategoryChain = Category.GetParentCategoryChain(currentCategory, currentDomain.front_end_language);
 
             // Create the bread crumb list
-            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(10);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
             for (int i = 0; i < parentCategoryChain.Count; i++)
             {
@@ -156,7 +154,7 @@ namespace Annytab.Blogsite.Controllers
             }
 
             // Create the bread crumb list
-            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(10);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
             for (int i = 0; i < parentCategoryChain.Count; i++)
             {

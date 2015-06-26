@@ -69,7 +69,7 @@ namespace Annytab.Blogsite.Controllers
             KeyStringList tt = StaticText.GetAll(currentDomain.front_end_language, "id", "ASC");
 
             // Create the bread crumb list
-            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("my_pages"), "/user"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("log_in"), "/user/login"));
@@ -379,7 +379,7 @@ namespace Annytab.Blogsite.Controllers
             KeyStringList tt = StaticText.GetAll(currentDomain.front_end_language, "id", "ASC");
 
             // Create the bread crumb list
-            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("my_pages"), "/user"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("forgot") + " " + tt.Get("password"), "/user/forgot_password"));
@@ -419,7 +419,7 @@ namespace Annytab.Blogsite.Controllers
             KeyStringList tt = StaticText.GetAll(currentDomain.front_end_language, "id", "ASC");
 
             // Create the bread crumb list
-            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("my_pages"), "/user"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("edit") + " " + tt.Get("user_details").ToLower(), "/user/edit"));
@@ -466,7 +466,7 @@ namespace Annytab.Blogsite.Controllers
             KeyStringList tt = StaticText.GetAll(currentDomain.front_end_language, "id", "ASC");
 
             // Create the bread crumb list
-            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("my_pages"), "/user"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("edit") + " " + tt.Get("comments").ToLower(), "/user/edit_comments"));
@@ -506,7 +506,7 @@ namespace Annytab.Blogsite.Controllers
             KeyStringList tt = StaticText.GetAll(currentDomain.front_end_language, "id", "ASC");
 
             // Create the bread crumb list
-            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+            List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("my_pages"), "/user"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("edit") + " " + tt.Get("ratings").ToLower(), "/user/edit_ratings"));
@@ -662,7 +662,7 @@ namespace Annytab.Blogsite.Controllers
             else
             {
                 // Create the bread crumb list
-                List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+                List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
                 breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
                 breadCrumbs.Add(new BreadCrumb(tt.Get("my_pages"), "/user"));
                 breadCrumbs.Add(new BreadCrumb(tt.Get("edit") + " " + tt.Get("user_details").ToLower(), "/user/edit"));
@@ -982,7 +982,7 @@ namespace Annytab.Blogsite.Controllers
                 string error_message = "&#149; " + tt.Get("error_login");
 
                 // Create the bread crumb list
-                List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+                List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
                 breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
                 breadCrumbs.Add(new BreadCrumb(tt.Get("my_pages"), "/user"));
                 breadCrumbs.Add(new BreadCrumb(tt.Get("log_in"), "/user/login"));
@@ -1056,7 +1056,7 @@ namespace Annytab.Blogsite.Controllers
             else
             {
                 // Create the bread crumb list
-                List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(2);
+                List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
                 breadCrumbs.Add(new BreadCrumb(translatedTexts.Get("start_page"), "/"));
                 breadCrumbs.Add(new BreadCrumb(translatedTexts.Get("my_pages"), "/user"));
                 breadCrumbs.Add(new BreadCrumb(translatedTexts.Get("forgot") + " " + translatedTexts.Get("password"), "/user/forgot_password"));
