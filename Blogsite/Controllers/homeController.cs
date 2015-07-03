@@ -258,6 +258,7 @@ namespace Annytab.Blogsite.Controllers
             ViewBag.CurrentDomain = currentDomain;
             ViewBag.CurrentLanguage = Language.GetOneById(currentDomain.front_end_language);
             ViewBag.Author = author;
+            ViewBag.UserSettings = (Dictionary<string, string>)Session["UserSettings"];
             ViewBag.CultureInfo = Tools.GetCultureInfo(ViewBag.CurrentLanguage);
 
             // Return the view

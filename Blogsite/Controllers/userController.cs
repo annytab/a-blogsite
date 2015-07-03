@@ -601,16 +601,14 @@ namespace Annytab.Blogsite.Controllers
             {
                 errorMessage += "&#149; " + tt.Get("error_invalid_jpeg") + "<br/>";
             }
+            if (authorImage.ContentLength > 262144)
+            {
+                errorMessage += "&#149; " + String.Format(tt.Get("error_image_size"), "256 kb") + "<br/>"; ;
+            }
 
             // Check if there is errors
             if (errorMessage == string.Empty)
             {
-                // Update the image
-                if (authorImage.ContentLength > 0)
-                {
-                    UpdateImage(id, authorImage);
-                }
-
                 // Check if we should add or update the user
                 if (user.id == 0)
                 {
@@ -654,6 +652,12 @@ namespace Annytab.Blogsite.Controllers
                     {
                         Administrator.UpdatePassword(user.id, PasswordHash.CreateHash(password));
                     }
+                }
+
+                // Update the image
+                if (authorImage.ContentLength > 0)
+                {
+                    UpdateImage(user.id, authorImage);
                 }
 
                 // Redirect the user to the start page
