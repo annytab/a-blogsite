@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -183,23 +182,22 @@ namespace Annytab.Blogsite.Controllers
             // Check if there is errors
             if (errorMessage == string.Empty)
             {
+                // Check if we should add the media file
+                if (postExists == false)
+                {
+                    // Add the media file
+                    Int64 insertId = MediaFile.Add(mediaFilePost);
+                    mediaFilePost.id = Convert.ToInt32(insertId);
+                }
+
                 // Update the media file
                 if (media_file_content.ContentLength > 0)
                 {
                     UpdateMediaFile(mediaFilePost, media_file_content);
                 }
 
-                // Check if we should add or update the media file
-                if (postExists == false)
-                {
-                    // Add the media file
-                    MediaFile.Add(mediaFilePost);
-                }
-                else
-                {
-                    // Update the media file
-                    MediaFile.Update(mediaFilePost);
-                }
+                // Update the media file
+                MediaFile.Update(mediaFilePost);
 
                 // Redirect the user to the list
                 return Redirect(returnUrl);
