@@ -45,7 +45,7 @@
 
     // Get posts by administrator id
     List<Post> posts = Post.GetActiveByAdministratorId(author.id, domain.front_end_language, pageSize, page, userSettings["sort_field"], userSettings["sort_order"]);
-    
+
     // Create the meta description
     string meta_description = StringHtmlExtensions.StripHtml(author.author_description);
     meta_description = StringHtmlExtensions.Truncate(meta_description, 180);
@@ -72,7 +72,7 @@
     ViewBag.MetaRobots = "noindex, follow";
 
     // Set paging data
-    ViewBag.NavigateUrl = "/home/author?qp={0}";
+    ViewBag.NavigateUrl = "/home/author/" + author.id.ToString() + "?qp={0}";
     ViewBag.CurrentPage = page;
     ViewBag.NumberOfPages = numberOfPages;
 

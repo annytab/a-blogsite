@@ -254,6 +254,7 @@
     <None Include="DeveloperFiles\db_testdata.sql" />
     <None Include="DeveloperFiles\db_update_settings.sql" />
     <None Include="DeveloperFiles\db_drop_statements.sql" />
+    <Content Include="DatabaseFiles\db_version_5.sql" />
     <Content Include="DatabaseFiles\db_version_4.sql" />
     <Content Include="DatabaseFiles\db_version_3.sql" />
     <Content Include="DatabaseFiles\db_version_2.sql" />

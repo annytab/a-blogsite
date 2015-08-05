@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
 @{
-    
+
     // Get form values
     Domain domain = ViewBag.CurrentDomain;
     Language language = ViewBag.CurrentLanguage;
@@ -30,6 +30,8 @@
     string ratings_tt = tt.Get("ratings");
     string log_out_tt = tt.Get("log_out");
     string copyright_information_tt = tt.Get("copyright_information");
+    string cookie_consent_tt = tt.Get("cookie_consent");
+    string ok_tt = tt.Get("ok");
 }
 
 <!DOCTYPE html>
@@ -62,6 +64,12 @@
 
 </head>
 <body>
+    @*Cookie consent*@
+    <div class="annytab-cookie-consent">
+        <span style="font-size:12px;line-height:27px;">@(cookie_consent_tt + " ")</span>
+        <button id="btnCookieConsent" type="button" class="annytab-form-button">@ok_tt</button>
+    </div>
+
     @* The background image *@
     <img id="backgroundImage" data-src="@imageUrls.Get("background_image")" class="annytab-background-image" alt="@background_image_tt" />
 
@@ -94,7 +102,7 @@
                 {
                     if (i > 0)
                     {
-                        <span> - </span>
+                        <span> // </span>
                     }
                     <a href="@breadCrumbs[i].link" rel="nofollow" style="font-size:12px;line-height:12px;">@breadCrumbs[i].name</a>
                 }
@@ -191,6 +199,8 @@
     <div id="animationContainer" class="annytab-loading-outer-container">
         <div id="animationImage" class="annytab-loading-inner-container"></div>
     </div>
+
+    <div id="fb-root"></div>
 
     @* Shared scripts *@
     @Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_shared_scripts.cshtml" : "/Views/theme/front_shared_scripts.cshtml")
