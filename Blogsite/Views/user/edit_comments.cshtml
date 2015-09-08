@@ -85,7 +85,7 @@
             @*A comment*@
             <div class="annytab-basic-inner-container">
                 <div style="margin:0px 0px 0px 2px;">
-                    <a href="@("/home/post/" + post.page_name + "#comments")"><span class="annytab-basic-text-bold">@post.title</span></a><span>@(" | ")</span><span class="annytab-basic-text-normal">@comments[i].comment_date.ToString("d", cultureInfo)</span><br />
+                    <a href="@Url.Content("/home/post/" + post.page_name + "#comments")"><span class="annytab-basic-text-bold">@post.title</span></a><span>@(" | ")</span><span class="annytab-basic-text-normal">@comments[i].comment_date.ToString("d", cultureInfo)</span><br />
                 </div>
                 <div style="margin:6px 6px 6px 2px;">
                     <textarea name="txtCommentText" class="annytab-form-textarea" rows="5" style="margin:0px;width:100%;">@comments[i].comment_text.Replace("<br />", Environment.NewLine)</textarea>

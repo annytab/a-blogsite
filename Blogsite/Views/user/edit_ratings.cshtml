@@ -86,7 +86,7 @@
             @*A rating*@
             <div class="annytab-basic-inner-container">
                 <div style="margin:0px 0px 0px 2px;">
-                    <a href="@("/home/post/" + post.page_name + "#comments")"><span class="annytab-basic-text-bold">@post.title</span></a><span>@(" | ")</span><span class="annytab-basic-text-normal">@postRatings[i].rating_date.ToString("d", cultureInfo)</span><br />
+                    <a href="@Url.Content("/home/post/" + post.page_name + "#comments")"><span class="annytab-basic-text-bold">@post.title</span></a><span>@(" | ")</span><span class="annytab-basic-text-normal">@postRatings[i].rating_date.ToString("d", cultureInfo)</span><br />
                 </div>
                 <div style="margin:6px 0px 6px 2px;">
                     <span class="annytab-basic-text-normal">@(rating_tt + ": ")</span>

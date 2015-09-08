@@ -120,7 +120,7 @@
     using (Html.BeginForm("login", "user", FormMethod.Post))
     {
         // Hidden data
-        <input name="hiddenReturnUrl" type="hidden" value="@("/home/post/" + post.page_name)" />
+        <input name="hiddenReturnUrl" type="hidden" value="@Url.Content("/home/post/" + post.page_name)" />
     
         // Login input form
         <div class="annytab-basic-container">

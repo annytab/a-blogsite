@@ -25,11 +25,11 @@
     {
         <button type="button" class="annytab-google-button" onclick="location.href='@Url.Action("google_login", "user")'"><img src="~/Content/images/annytab_design/google_plus.png" alt="Google plus" style="height:24px;" />&nbsp;@connect_tt</button>
     }
-    <button class="annytab-basic-button" onclick="location.href='@("/user")'">@start_page_tt</button>
-    <button class="annytab-basic-button" onclick="location.href='@("/user/edit")'">@(edit_tt + " " + user_details_tt.ToLower())</button>
-    <button class="annytab-basic-button" onclick="location.href='@("/user/edit_comments")'">@comments_tt</button>
-    <button class="annytab-basic-button" onclick="location.href='@("/user/edit_ratings")'">@ratings_tt</button>
-    <button class="annytab-basic-button" onclick="location.href='@("/user/logout")'">@log_out_tt</button>
+    <button class="annytab-basic-button" onclick="location.href='@Url.Content("/user")'">@start_page_tt</button>
+    <button class="annytab-basic-button" onclick="location.href='@Url.Content("/user/edit")'">@(edit_tt + " " + user_details_tt.ToLower())</button>
+    <button class="annytab-basic-button" onclick="location.href='@Url.Content("/user/edit_comments")'">@comments_tt</button>
+    <button class="annytab-basic-button" onclick="location.href='@Url.Content("/user/edit_ratings")'">@ratings_tt</button>
+    <button class="annytab-basic-button" onclick="location.href='@Url.Content("/user/logout")'">@log_out_tt</button>
 </div>
 
 <div class="annytab-basic-space"></div>

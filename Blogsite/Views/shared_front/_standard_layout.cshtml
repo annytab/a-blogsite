@@ -141,7 +141,7 @@
                         <div class="annytab-menu-title">@information_tt.ToUpper()</div>
                         @foreach (StaticPage page in informationPages)
                         {
-                            @:<div><a href="@("/home/information/" + page.page_name)" class="annytab-menu-link">@page.link_name</a></div>
+                            @:<div><a href="@Url.Content("/home/information/" + page.page_name)" class="annytab-menu-link">@page.link_name</a></div>
                         }
                     </div>
 

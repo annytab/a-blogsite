@@ -56,7 +56,7 @@
 
     @* Date and author*@
     <div style="display:block;margin:6px 2px 6px 2px;">
-        <span class="annytab-basic-text-normal">@(by_tt + ": ")</span><a href="@("/home/author/" + author.id)" class="annytab-basic-text-normal">@author.author_name</a><span>@(" | ")</span>
+        <span class="annytab-basic-text-normal">@(by_tt + ": ")</span><a href="@Url.Content("/home/author/" + author.id)" class="annytab-basic-text-normal">@author.author_name</a><span>@(" | ")</span>
         <span class="annytab-basic-text-normal">@(added_tt + ": " + post.date_added.ToString("d MMMM yyyy", cultureInfo))</span>
         <span>@(" | ")</span><span class="annytab-basic-text-normal">@(updated_tt + ": " + post.date_updated.ToString("d MMMM yyyy", cultureInfo))</span>
     </div>
