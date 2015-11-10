@@ -12,3 +12,6 @@
 
 /* Master page styling */
 .annytab-logotype{max-width:100%;}
+.annytab-menu-title{font-weight:bold;font-size:16px;color:#000000;line-height:20px;}
+.annytab-menu-link{font-size:12px;line-height:24px;margin:0px;vertical-align:middle;}
+.annytab-sub-menu-link{font-size:12px;line-height:24px;margin:0px;vertical-align:middle;}

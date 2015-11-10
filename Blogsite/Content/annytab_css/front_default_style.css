@@ -39,9 +39,6 @@ img {vertical-align:middle;}
 .annytab-search-textbox{display:inline;vertical-align:top;border:0px;width:200px;outline:none;margin:0px;padding:5px 0px 0px 0px;background-color:transparent;}
 .annytab-search-button{margin:1px 0px 0px 1px;border-radius:4px;width:22px;height:22px;background-color:transparent;background-image:url('/Content/images/annytab_design/magnifier.png');border-style:none;background-repeat:no-repeat;cursor:pointer;}
 .annytab-menu-box{border:1px solid #207298;border-radius:4px;margin:10px 0px 10px 0px;padding:5px;z-index:2}
-.annytab-menu-title{font-weight:bold;font-size:16px;color:#000000;line-height:20px;}
-.annytab-menu-link{font-size:12px;line-height:12px;margin:0px;vertical-align:middle;}
-.annytab-sub-menu-link{font-size:12px;line-height:12px;margin:0px;vertical-align:middle;}
 .annytab-menu-arrow-left{background-image:url('/Content/images/annytab_design/list_arrow_left.png');background-repeat:no-repeat;padding-left:14px;}
 .annytab-menu-arrow-down{background-image:url('/Content/images/annytab_design/list_arrow_down.png');background-repeat:no-repeat;padding-left:14px;}
 
