@@ -165,8 +165,10 @@ public class PostRating
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(post_id AS nvarchar(20)) LIKE @keyword_" + i.ToString()
-                + " OR CAST(administrator_id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + ")";
+            if (keywords[i].ToString() != "")
+            {
+                sql += " AND (post_id = @keyword_" + i.ToString() + " OR administrator_id = @keyword_" + i.ToString() + ")";
+            }
         }
 
         // Add the final touch to the sql string
@@ -178,11 +180,15 @@ public class PostRating
             // The using block is used to call dispose automatically even if there are an exception.
             using (SqlCommand cmd = new SqlCommand(sql, cn))
             {
-
                 // Add parameters for search keywords
                 for (int i = 0; i < keywords.Length; i++)
                 {
-                    cmd.Parameters.AddWithValue("@keyword_" + i.ToString(), "%" + keywords[i].ToString() + "%");
+                    if (keywords[i].ToString() != "")
+                    {
+                        Int32 number = 0;
+                        Int32.TryParse(keywords[i].ToString(), out number);
+                        cmd.Parameters.AddWithValue("@keyword_" + i.ToString(), number);
+                    }
                 }
 
                 // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
@@ -324,7 +330,6 @@ public class PostRating
             // The using block is used to call dispose automatically even if there are an exception.
             using (SqlCommand cmd = new SqlCommand(sql, cn))
             {
-
                 // Add parameters
                 cmd.Parameters.AddWithValue("@post_id", postId);
                 cmd.Parameters.AddWithValue("@language_id", languageId);
@@ -509,8 +514,10 @@ public class PostRating
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(post_id AS nvarchar(20)) LIKE @keyword_" + i.ToString() 
-                + " OR CAST(administrator_id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + ")";
+            if (keywords[i].ToString() != "")
+            {
+                sql += " AND (post_id = @keyword_" + i.ToString() + " OR administrator_id = @keyword_" + i.ToString() + ")";
+            }
         }
 
         // Add the final touch to the select string
@@ -529,7 +536,12 @@ public class PostRating
                 // Add parameters for search keywords
                 for (int i = 0; i < keywords.Length; i++)
                 {
-                    cmd.Parameters.AddWithValue("@keyword_" + i.ToString(), "%" + keywords[i].ToString() + "%");
+                    if (keywords[i].ToString() != "")
+                    {
+                        Int32 number = 0;
+                        Int32.TryParse(keywords[i].ToString(), out number);
+                        cmd.Parameters.AddWithValue("@keyword_" + i.ToString(), number);
+                    }
                 }
 
                 // Create a reader
@@ -717,6 +729,67 @@ public class PostRating
     } // End of the GetByAdministratorId method
 
     /// <summary>
+    /// Get ratings by administrator id
+    /// </summary>
+    /// <param name="administratorId">The administrator id</param>
+    /// <returns>A list of ratings</returns>
+    public static List<PostRating> GetAllByAdministratorId(Int32 administratorId)
+    {
+        // Create the list to return
+        List<PostRating> posts = new List<PostRating>(100);
+
+        // Create the connection string and the select statement
+        string connection = Tools.GetConnectionString();
+        string sql = "SELECT * FROM dbo.posts_ratings WHERE administrator_id = @administrator_id ORDER BY post_id ASC;";
+
+        // The using block is used to call dispose automatically even if there are an exception.
+        using (SqlConnection cn = new SqlConnection(connection))
+        {
+            // The using block is used to call dispose automatically even if there are an exception.
+            using (SqlCommand cmd = new SqlCommand(sql, cn))
+            {
+                // Add parameters
+                cmd.Parameters.AddWithValue("@administrator_id", administratorId);
+
+                // Create a reader
+                SqlDataReader reader = null;
+
+                // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
+                // avoid having our application crash in such cases.
+                try
+                {
+                    // Open the connection.
+                    cn.Open();
+
+                    // Fill the reader with data from the select command.
+                    reader = cmd.ExecuteReader();
+
+                    // Loop through the reader as long as there is something to read.
+                    while (reader.Read())
+                    {
+                        posts.Add(new PostRating(reader));
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    // Call Close when done reading to avoid memory leakage.
+                    if (reader != null)
+                        reader.Close();
+                }
+            }
+        }
+
+        // Return the list of posts
+        return posts;
+
+    } // End of the GetAllByAdministratorId method
+
+    /// <summary>
     /// Get ratings by post id
     /// </summary>
     /// <param name="postId">The post id</param>
@@ -747,7 +820,6 @@ public class PostRating
             // The using block is used to call dispose automatically even if there are an exception.
             using (SqlCommand cmd = new SqlCommand(sql, cn))
             {
-
                 // Add parameters
                 cmd.Parameters.AddWithValue("@post_id", postId);
                 cmd.Parameters.AddWithValue("@language_id", languageId);

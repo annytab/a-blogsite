@@ -81,11 +81,11 @@ public class DisplayItem
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT COUNT(*) FROM (SELECT C.id FROM dbo.categories_detail AS D INNER JOIN "
-            + "dbo.categories AS C ON D.category_id = C.id WHERE C.parent_category_id = @category_id "
+            + "dbo.categories AS C ON D.category_id = C.id AND C.parent_category_id = @category_id "
             + "AND D.language_id = @language_id AND D.inactive = 0 "
             + "UNION ALL "
             + "SELECT P.id FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id "
-            + "= P.id WHERE P.category_id = @category_id AND D.language_id = @language_id "
+            + "= P.id AND P.category_id = @category_id AND D.language_id = @language_id "
             + "AND D.inactive = 0) AS count;";
 
         // The using block is used to call dispose automatically even if there are an exception.
@@ -148,12 +148,12 @@ public class DisplayItem
         string connection = Tools.GetConnectionString();
         string sql = "SELECT C.id AS id, 0 AS administrator_id, D.title AS title, D.main_content AS main_content, D.page_name AS page_name, "
             + "D.date_added AS date_added, D.date_added AS date_updated, 0 AS rating, D.page_views AS page_views, 0 AS type_code "
-            + "FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C ON D.category_id = C.id WHERE C.parent_category_id = @category_id AND " 
+            + "FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C ON D.category_id = C.id AND C.parent_category_id = @category_id AND " 
             + "D.language_id = @language_id AND D.inactive = 0 "
             + "UNION ALL "
             + "SELECT P.id AS id, P.administrator_id AS administrator_id, D.title AS title, D.main_content AS main_content, D.page_name AS page_name, D.date_added AS date_added, " 
             + "D.date_updated AS date_updated, D.rating AS rating, D.page_views AS page_views, 1 AS type_code FROM dbo.posts_detail AS D INNER JOIN dbo.posts "
-            + "AS P ON D.post_id = P.id WHERE P.category_id = @category_id AND D.language_id = @language_id AND D.inactive = 0 "
+            + "AS P ON D.post_id = P.id AND P.category_id = @category_id AND D.language_id = @language_id AND D.inactive = 0 "
             + "ORDER BY " + sortField + " " + sortOrder + " OFFSET @pageNumber ROWS FETCH NEXT @pageSize ROWS ONLY;";
         
         // The using block is used to call dispose automatically even if there is a exception.
@@ -162,7 +162,6 @@ public class DisplayItem
             // The using block is used to call dispose automatically even if there is a exception.
             using (SqlCommand cmd = new SqlCommand(sql, cn))
             {
-
                 // Add parameters
                 cmd.Parameters.AddWithValue("@category_id", categoryId);
                 cmd.Parameters.AddWithValue("@language_id", languageId);

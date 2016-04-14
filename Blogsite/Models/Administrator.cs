@@ -311,14 +311,13 @@ public class Administrator
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(id) AS count FROM dbo.administrators_detail AS D INNER JOIN dbo.administrators AS A " 
-            + "ON D.administrator_id = A.id WHERE D.language_id = @language_id";
+        string sql = "SELECT COUNT(D.administrator_id) AS count FROM dbo.administrators_detail AS D INNER JOIN dbo.administrators AS A "
+            + "ON D.administrator_id = A.id AND D.language_id = @language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(A.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR A.admin_user_name LIKE @keyword_" + i.ToString()
-                + " OR D.author_name LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (A.admin_user_name LIKE @keyword_" + i.ToString() + " OR D.author_name LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -613,7 +612,7 @@ public class Administrator
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.administrators_detail AS D INNER JOIN dbo.administrators AS A ON D.administrator_id = A.id " 
-            + "WHERE A.id = @id AND D.language_id = @language_id;";
+            + "AND D.administrator_id = @id AND D.language_id = @language_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -859,7 +858,7 @@ public class Administrator
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.administrators_detail AS D INNER JOIN dbo.administrators AS A ON D.administrator_id = A.id " 
-            + "WHERE A.admin_user_name = @admin_user_name AND D.language_id = @language_id;";
+            + "AND A.admin_user_name = @admin_user_name AND D.language_id = @language_id;";
          
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -930,13 +929,12 @@ public class Administrator
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.administrators_detail AS D INNER JOIN dbo.administrators AS A " 
-            + "ON D.administrator_id = A.id WHERE D.language_id = @language_id";
+            + "ON D.administrator_id = A.id AND D.language_id = @language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(A.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR A.admin_user_name LIKE @keyword_" + i.ToString()
-                + " OR D.author_name LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (A.admin_user_name LIKE @keyword_" + i.ToString() + " OR D.author_name LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the select string
@@ -1059,7 +1057,7 @@ public class Administrator
     {
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "DELETE FROM dbo.administrators WHERE id = @id;";
+        string sql = "DELETE FROM dbo.administrators_detail WHERE administrator_id = @id;DELETE FROM dbo.administrators WHERE id = @id;";
 
         // The using block is used to call dispose automatically even if there is a exception.
         using (SqlConnection cn = new SqlConnection(connection))

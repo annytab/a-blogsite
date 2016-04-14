@@ -246,14 +246,13 @@ public class Language
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(id) AS count FROM dbo.languages_detail AS D INNER JOIN "
-            + "dbo.languages AS L ON D.language_id = L.id WHERE D.translation_language_id = @translation_language_id";
+        string sql = "SELECT COUNT(D.language_id) AS count FROM dbo.languages_detail AS D INNER JOIN "
+            + "dbo.languages AS L ON D.language_id = L.id AND D.translation_language_id = @translation_language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(L.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR D.name LIKE @keyword_" + i.ToString()
-                + " OR L.language_code LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.name LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -422,7 +421,7 @@ public class Language
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.languages_detail AS D INNER JOIN dbo.languages AS L ON "
-            + "D.language_id = L.id WHERE L.id = @id AND D.translation_language_id = @translation_language_id;";
+            + "D.language_id = L.id AND D.language_id = @id AND D.translation_language_id = @translation_language_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -497,7 +496,6 @@ public class Language
             // The using block is used to call dispose automatically even if there is a exception.
             using (SqlCommand cmd = new SqlCommand(sql, cn))
             {
-
                 // Create a reader
                 SqlDataReader reader = null;
 
@@ -554,7 +552,7 @@ public class Language
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.languages_detail AS D INNER JOIN dbo.languages AS L ON D.language_id = L.id "
-            + "WHERE D.translation_language_id = @translation_language_id ORDER BY " + sortField + " " + sortOrder + ";";
+            + "AND D.translation_language_id = @translation_language_id ORDER BY " + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -624,13 +622,12 @@ public class Language
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.languages_detail AS D INNER JOIN dbo.languages AS L ON "
-            + "D.language_id = L.id WHERE D.translation_language_id = @translation_language_id";
+            + "D.language_id = L.id AND D.translation_language_id = @translation_language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(L.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR D.name LIKE @keyword_" + i.ToString()
-                + " OR L.language_code LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.name LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the select string
@@ -704,7 +701,7 @@ public class Language
     {
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "DELETE FROM dbo.languages WHERE id = @id;";
+        string sql = "DELETE FROM dbo.languages_detail WHERE language_id = @id;DELETE FROM dbo.languages WHERE id = @id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))

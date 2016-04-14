@@ -384,8 +384,8 @@ public class Post
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE D.language_id = @language_id AND D.inactive = 0;";
+        string sql = "SELECT COUNT(D.post_id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
+            + "AND D.language_id = @language_id AND D.inactive = 0;";
 
         // The using block is used to call dispose automatically even if there is a exception
         using (SqlConnection cn = new SqlConnection(connection))
@@ -432,14 +432,13 @@ public class Post
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE D.language_id = @language_id";
+        string sql = "SELECT COUNT(D.post_id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
+            + "AND D.language_id = @language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(P.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR D.title LIKE @keyword_" + i.ToString()
-                + " OR D.meta_description LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.title LIKE @keyword_" + i.ToString() + " OR D.meta_keywords LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -496,14 +495,13 @@ public class Post
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE D.language_id = @language_id AND D.inactive = 0";
+        string sql = "SELECT COUNT(D.post_id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
+            + "AND D.language_id = @language_id AND D.inactive = 0";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (D.title LIKE @keyword_" + i.ToString() + " OR D.meta_description LIKE @keyword_" + i.ToString() 
-                + " OR D.meta_keywords LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.title LIKE @keyword_" + i.ToString() + " OR D.meta_keywords LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -560,8 +558,8 @@ public class Post
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE P.administrator_id = @administrator_id AND D.language_id = @language_id;";
+        string sql = "SELECT COUNT(D.post_id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
+            + "AND P.administrator_id = @administrator_id AND D.language_id = @language_id;";
 
         // The using block is used to call dispose automatically even if there is a exception
         using (SqlConnection cn = new SqlConnection(connection))
@@ -609,8 +607,8 @@ public class Post
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE P.administrator_id = @administrator_id AND D.language_id = @language_id AND D.inactive = 0;";
+        string sql = "SELECT COUNT(D.post_id) AS count FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
+            + "AND P.administrator_id = @administrator_id AND D.language_id = @language_id AND D.inactive = 0;";
 
         // The using block is used to call dispose automatically even if there is a exception
         using (SqlConnection cn = new SqlConnection(connection))
@@ -709,7 +707,7 @@ public class Post
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id " 
-            + "WHERE D.post_id = @id AND D.language_id = @language_id;";
+            + "AND D.post_id = @id AND D.language_id = @language_id;";
 
         // The using block is used to call dispose automatically even if there is a exception
         using (SqlConnection cn = new SqlConnection(connection))
@@ -771,7 +769,7 @@ public class Post
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id "
-            + "= P.id WHERE D.page_name = @page_name AND D.language_id = @language_id;";
+            + "= P.id AND D.page_name = @page_name AND D.language_id = @language_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -839,7 +837,7 @@ public class Post
         // Create the connection string and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE D.language_id = @language_id ORDER BY " + sortField + " " + sortOrder + ";";
+            + "AND D.language_id = @language_id ORDER BY " + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there is a exception
         using (SqlConnection cn = new SqlConnection(connection))
@@ -906,7 +904,7 @@ public class Post
         // Create the connection string and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE D.language_id = @language_id AND D.inactive = 0 ORDER BY " 
+            + "AND D.language_id = @language_id AND D.inactive = 0 ORDER BY " 
             + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there is a exception
@@ -976,7 +974,7 @@ public class Post
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE D.language_id = @language_id AND D.inactive = 0 ORDER BY " + sortField + " " 
+            + "AND D.language_id = @language_id AND D.inactive = 0 ORDER BY " + sortField + " " 
             + sortOrder + " OFFSET @pageNumber ROWS FETCH NEXT @pageSize ROWS ONLY;";
 
         // The using block is used to call dispose automatically even if there are an exception.
@@ -1048,7 +1046,7 @@ public class Post
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE P.category_id = @category_id AND D.language_id = @language_id "
+            + "AND P.category_id = @category_id AND D.language_id = @language_id "
             + "ORDER BY " + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there is a exception.
@@ -1118,7 +1116,7 @@ public class Post
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE P.category_id = @category_id AND D.language_id = @language_id AND D.inactive = 0 "
+            + "AND P.category_id = @category_id AND D.language_id = @language_id AND D.inactive = 0 "
             + "ORDER BY " + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there is a exception.
@@ -1191,7 +1189,7 @@ public class Post
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE P.administrator_id = @administrator_id AND D.language_id = @language_id "
+            + "AND P.administrator_id = @administrator_id AND D.language_id = @language_id "
             + "ORDER BY " + sortField + " " + sortOrder + " OFFSET @pageNumber ROWS FETCH NEXT @pageSize ROWS ONLY;";
 
         // The using block is used to call dispose automatically even if there is a exception.
@@ -1265,7 +1263,7 @@ public class Post
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE P.administrator_id = @administrator_id AND D.language_id = @language_id AND D.inactive = 0 "
+            + "AND P.administrator_id = @administrator_id AND D.language_id = @language_id AND D.inactive = 0 "
             + "ORDER BY " + sortField + " " + sortOrder + " OFFSET @pageNumber ROWS FETCH NEXT @pageSize ROWS ONLY;";
 
         // The using block is used to call dispose automatically even if there is a exception.
@@ -1318,6 +1316,68 @@ public class Post
     } // End of the GetActiveByAdministratorId method
 
     /// <summary>
+    /// Get all posts by a administrator
+    /// </summary>
+    /// <param name="administratorId">The id of the administrator</param>
+    /// <returns>A list of posts</returns>
+    public static List<Post> GetAllByAdministratorId(Int32 administratorId)
+    {
+        // Create the list to return
+        List<Post> posts = new List<Post>(10);
+
+        // Create the connection string and the sql statement.
+        string connection = Tools.GetConnectionString();
+        string sql = "SELECT id FROM dbo.posts WHERE administrator_id = @administrator_id ORDER BY id ASC;";
+
+        // The using block is used to call dispose automatically even if there is a exception.
+        using (SqlConnection cn = new SqlConnection(connection))
+        {
+            // The using block is used to call dispose automatically even if there is a exception.
+            using (SqlCommand cmd = new SqlCommand(sql, cn))
+            {
+                // Add parameters
+                cmd.Parameters.AddWithValue("@administrator_id", administratorId);
+
+                // Create a reader
+                SqlDataReader reader = null;
+
+                // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
+                // avoid having our application crash in such cases.
+                try
+                {
+                    // Open the connection.
+                    cn.Open();
+
+                    // Fill the reader with data from the select command.
+                    reader = cmd.ExecuteReader();
+
+                    // Loop through the reader as long as there is something to read.
+                    while (reader.Read())
+                    {
+                        Post post = new Post();
+                        post.id = Convert.ToInt32(reader["id"]);
+                        posts.Add(post);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    // Call Close when done reading to avoid memory leakage.
+                    if (reader != null)
+                        reader.Close();
+                }
+            }
+        }
+
+        // Return the list of posts
+        return posts;
+
+    } // End of the GetAllByAdministratorId method
+
+    /// <summary>
     /// Get posts that contains search keywords
     /// </summary>
     /// <param name="keywords">An array of keywords</param>
@@ -1339,13 +1399,12 @@ public class Post
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE D.language_id = @language_id";
+            + "AND D.language_id = @language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(P.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR D.title LIKE @keyword_" + i.ToString()
-                + " OR D.meta_description LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.title LIKE @keyword_" + i.ToString() + " OR D.meta_keywords LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -1428,13 +1487,12 @@ public class Post
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.posts_detail AS D INNER JOIN dbo.posts AS P ON D.post_id = P.id "
-            + "WHERE D.language_id = @language_id AND D.inactive = 0 ";
+            + "AND D.language_id = @language_id AND D.inactive = 0 ";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (D.title LIKE @keyword_" + i.ToString() + " OR D.meta_description LIKE @keyword_" + i.ToString()
-                + " OR D.meta_keywords LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.title LIKE @keyword_" + i.ToString() + " OR D.meta_keywords LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -1509,7 +1567,8 @@ public class Post
     {
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "DELETE FROM dbo.posts WHERE id = @id;";
+        string sql = "DELETE FROM dbo.posts_comments WHERE post_id = @id;DELETE FROM dbo.posts_ratings WHERE post_id = @id;"
+            + "DELETE FROM dbo.posts_files WHERE post_id = @id;DELETE FROM dbo.posts_detail WHERE post_id = @id;DELETE FROM dbo.posts WHERE id = @id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))

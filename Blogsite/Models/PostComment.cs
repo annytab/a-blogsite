@@ -175,8 +175,11 @@ public class PostComment
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR CAST(post_id AS nvarchar(20)) LIKE @keyword_" + i.ToString()
-                + " OR CAST(administrator_id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + ")";
+            if(keywords[i].ToString() != "")
+            {
+                sql += " AND (id = @keyword_" + i.ToString() + " OR post_id = @keyword_" + i.ToString()
+                + " OR administrator_id = @keyword_" + i.ToString() + ")";
+            }
         }
 
         // Add the final touch to the sql string
@@ -192,7 +195,12 @@ public class PostComment
                 // Add parameters for search keywords
                 for (int i = 0; i < keywords.Length; i++)
                 {
-                    cmd.Parameters.AddWithValue("@keyword_" + i.ToString(), "%" + keywords[i].ToString() + "%");
+                    if (keywords[i].ToString() != "")
+                    {
+                        Int32 number = 0;
+                        Int32.TryParse(keywords[i].ToString(), out number);
+                        cmd.Parameters.AddWithValue("@keyword_" + i.ToString(), number);
+                    }
                 }
 
                 // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
@@ -334,7 +342,6 @@ public class PostComment
             // The using block is used to call dispose automatically even if there are an exception.
             using (SqlCommand cmd = new SqlCommand(sql, cn))
             {
-
                 // Add parameters
                 cmd.Parameters.AddWithValue("@post_id", postId);
                 cmd.Parameters.AddWithValue("@language_id", languageId);
@@ -561,8 +568,11 @@ public class PostComment
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR CAST(post_id AS nvarchar(20)) LIKE @keyword_" + i.ToString()
-                + " OR CAST(administrator_id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + ")";
+            if (keywords[i].ToString() != "")
+            {
+                sql += " AND (id = @keyword_" + i.ToString() + " OR post_id = @keyword_" + i.ToString()
+                + " OR administrator_id = @keyword_" + i.ToString() + ")";
+            }
         }
 
         // Add the final touch to the select string
@@ -581,7 +591,12 @@ public class PostComment
                 // Add parameters for search keywords
                 for (int i = 0; i < keywords.Length; i++)
                 {
-                    cmd.Parameters.AddWithValue("@keyword_" + i.ToString(), "%" + keywords[i].ToString() + "%");
+                    if (keywords[i].ToString() != "")
+                    {
+                        Int32 number = 0;
+                        Int32.TryParse(keywords[i].ToString(), out number);
+                        cmd.Parameters.AddWithValue("@keyword_" + i.ToString(), number);
+                    }
                 }
 
                 // Create a reader
@@ -725,7 +740,6 @@ public class PostComment
             // The using block is used to call dispose automatically even if there are an exception.
             using (SqlCommand cmd = new SqlCommand(sql, cn))
             {
-
                 // Add parameters
                 cmd.Parameters.AddWithValue("@administrator_id", administratorId);
                 cmd.Parameters.AddWithValue("@language_id", languageId);
@@ -904,6 +918,61 @@ public class PostComment
         return 0;
 
     } // End of the DeleteOnId method
+
+    /// <summary>
+    /// Delete posts on administrator id
+    /// </summary>
+    /// <param name="administratorId">The id of an administrator</param>
+    /// <returns>An error code</returns>
+    public static Int32 DeleteOnAdministratorId(Int32 administratorId)
+    {
+        // Create the connection and the sql statement
+        string connection = Tools.GetConnectionString();
+        string sql = "DELETE FROM dbo.posts_comments WHERE administrator_id = @administrator_id;";
+
+        // The using block is used to call dispose automatically even if there is a exception
+        using (SqlConnection cn = new SqlConnection(connection))
+        {
+            // The using block is used to call dispose automatically even if there is a exception
+            using (SqlCommand cmd = new SqlCommand(sql, cn))
+            {
+                // Add parameters
+                cmd.Parameters.AddWithValue("@administrator_id", administratorId);
+
+                // The Try/Catch/Finally statement is used to handle unusual exceptions in the code to
+                // avoid having our application crash in such cases
+                try
+                {
+                    // Open the connection.
+                    cn.Open();
+
+                    // Execute the update
+                    cmd.ExecuteNonQuery();
+
+                }
+                catch (SqlException e)
+                {
+                    // Check for a foreign key constraint error
+                    if (e.Number == 547)
+                    {
+                        return 5;
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+        }
+
+        // Return the code for success
+        return 0;
+
+    } // End of the DeleteOnAdministratorId method
 
     #endregion
 

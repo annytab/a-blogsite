@@ -326,14 +326,13 @@ public class Category
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(C.id) AS count FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C ON D.category_id = C.id "
-            + "WHERE D.language_id = @language_id";
+        string sql = "SELECT COUNT(D.category_id) AS count FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C ON D.category_id = C.id "
+            + "AND D.language_id = @language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(C.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR D.title LIKE @keyword_" + i.ToString()
-                + " OR D.meta_description LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.title LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -441,7 +440,7 @@ public class Category
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C ON D.category_id = C.id " 
-            + "WHERE C.id = @id AND D.language_id = @language_id;";
+            + "AND D.category_id = @id AND D.language_id = @language_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -503,7 +502,7 @@ public class Category
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C ON D.category_id " 
-            +"= C.id WHERE D.page_name = @page_name AND D.language_id = @language_id;";
+            + "= C.id AND D.page_name = @page_name AND D.language_id = @language_id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
@@ -629,7 +628,7 @@ public class Category
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C "
-            + "ON D.category_id = C.id WHERE D.language_id = @language_id ORDER BY " 
+            + "ON D.category_id = C.id AND D.language_id = @language_id ORDER BY " 
             + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there are an exception.
@@ -697,7 +696,7 @@ public class Category
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C "
-            + "ON D.category_id = C.id WHERE D.language_id = @language_id AND D.inactive = 0 ORDER BY " 
+            + "ON D.category_id = C.id AND D.language_id = @language_id AND D.inactive = 0 ORDER BY " 
             + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there are an exception.
@@ -766,7 +765,7 @@ public class Category
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C "
-            + "ON D.category_id = C.id WHERE C.parent_category_id = @parent_category_id "
+            + "ON D.category_id = C.id AND C.parent_category_id = @parent_category_id "
             + "AND D.language_id = @language_id ORDER BY " + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there is a exception.
@@ -837,7 +836,7 @@ public class Category
         // Create the connection string and the sql statement.
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C "
-            + "ON D.category_id = C.id WHERE C.parent_category_id = @parent_category_id "
+            + "ON D.category_id = C.id AND C.parent_category_id = @parent_category_id "
             + "AND D.language_id = @language_id AND D.inactive = 0 ORDER BY " 
             + sortField + " " + sortOrder + ";";
 
@@ -847,7 +846,6 @@ public class Category
             // The using block is used to call dispose automatically even if there is a exception.
             using (SqlCommand cmd = new SqlCommand(sql, cn))
             {
-
                 // Add parameters
                 cmd.Parameters.AddWithValue("@parent_category_id", parentId);
                 cmd.Parameters.AddWithValue("@language_id", languageId);
@@ -911,13 +909,12 @@ public class Category
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.categories_detail AS D INNER JOIN dbo.categories AS C "
-            + "ON D.category_id = C.id WHERE D.language_id = @language_id";
+            + "ON D.category_id = C.id AND D.language_id = @language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(C.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR D.title LIKE @keyword_" + i.ToString()
-                + " OR D.meta_description LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.title LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the select string
@@ -991,7 +988,7 @@ public class Category
     {
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "DELETE FROM dbo.categories WHERE id = @id;";
+        string sql = "DELETE FROM dbo.categories_detail WHERE category_id = @id;DELETE FROM dbo.categories WHERE id = @id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))

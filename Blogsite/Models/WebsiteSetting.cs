@@ -154,7 +154,7 @@ public class WebsiteSetting
 
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT * FROM dbo.website_settings WHERE id = @id;";
+        string sql = "SELECT value FROM dbo.website_settings WHERE id = @id;";
 
         // The using block is used to call dispose automatically even if there are an exception
         using (SqlConnection cn = new SqlConnection(connection))

@@ -15,7 +15,7 @@
     string[] words = cleanKeywords.Split(' ');
 
     // Count the number of posts
-    Int32 count = Domain.GetCountBySearch(words);
+    Int32 count = Administrator.GetCountBySearch(words, domain.back_end_language);
 
     // Get the number of pages
     Int32 numberOfPages = Convert.ToInt32(Math.Ceiling(((double)count / parameters.page_size)));

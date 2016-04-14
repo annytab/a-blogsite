@@ -253,14 +253,13 @@ public class Weblink
 
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
-        string sql = "SELECT COUNT(W.id) AS count FROM dbo.weblinks_detail AS D INNER JOIN dbo.weblinks "
-            + "AS W ON D.weblink_id = W.id WHERE D.language_id = @language_id";
+        string sql = "SELECT COUNT(D.weblink_id) AS count FROM dbo.weblinks_detail AS D INNER JOIN dbo.weblinks "
+            + "AS W ON D.weblink_id = W.id AND D.language_id = @language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(W.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR D.link_name LIKE @keyword_" + i.ToString()
-                + " OR D.url LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.link_name LIKE @keyword_" + i.ToString() + " OR D.url LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -368,7 +367,7 @@ public class Weblink
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.weblinks_detail AS D INNER JOIN dbo.weblinks AS W ON D.weblink_id = W.id " 
-            + "WHERE D.weblink_id = @id AND D.language_id = @language_id;";
+            + "AND D.weblink_id = @id AND D.language_id = @language_id;";
 
         // The using block is used to call dispose automatically even if there is a exception
         using (SqlConnection cn = new SqlConnection(connection))
@@ -436,7 +435,7 @@ public class Weblink
         // Create the connection string and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.weblinks_detail AS D INNER JOIN dbo.weblinks AS W ON D.weblink_id = W.id "
-            + "WHERE D.language_id = @language_id ORDER BY " + sortField + " " + sortOrder + ";";
+            + "AND D.language_id = @language_id ORDER BY " + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there is a exception
         using (SqlConnection cn = new SqlConnection(connection))
@@ -503,7 +502,7 @@ public class Weblink
         // Create the connection string and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.weblinks_detail AS D INNER JOIN dbo.weblinks AS W ON D.weblink_id = W.id "
-            + "WHERE D.language_id = @language_id AND D.inactive = 0 ORDER BY " + sortField + " " + sortOrder + ";";
+            + "AND D.language_id = @language_id AND D.inactive = 0 ORDER BY " + sortField + " " + sortOrder + ";";
 
         // The using block is used to call dispose automatically even if there is a exception
         using (SqlConnection cn = new SqlConnection(connection))
@@ -573,13 +572,12 @@ public class Weblink
         // Create the connection string and the select statement
         string connection = Tools.GetConnectionString();
         string sql = "SELECT * FROM dbo.weblinks_detail AS D INNER JOIN dbo.weblinks AS W ON D.weblink_id = W.id " 
-            + "WHERE D.language_id = @language_id";
+            + "AND D.language_id = @language_id";
 
         // Append keywords to the sql string
         for (int i = 0; i < keywords.Length; i++)
         {
-            sql += " AND (CAST(W.id AS nvarchar(20)) LIKE @keyword_" + i.ToString() + " OR D.link_name LIKE @keyword_" + i.ToString() 
-                + " OR D.url LIKE @keyword_" + i.ToString() + ")";
+            sql += " AND (D.link_name LIKE @keyword_" + i.ToString() + " OR D.url LIKE @keyword_" + i.ToString() + ")";
         }
 
         // Add the final touch to the sql string
@@ -653,7 +651,7 @@ public class Weblink
     {
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
-        string sql = "DELETE FROM dbo.weblinks WHERE id = @id;";
+        string sql = "DELETE FROM dbo.weblinks_detail WHERE weblink_id = @id;DELETE FROM dbo.weblinks WHERE id = @id;";
 
         // The using block is used to call dispose automatically even if there are an exception.
         using (SqlConnection cn = new SqlConnection(connection))
