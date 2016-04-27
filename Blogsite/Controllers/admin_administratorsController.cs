@@ -554,24 +554,6 @@ namespace Annytab.Blogsite.Controllers
             // Check if we should delete the full post or just the translation
             if (languageId == 0 || languageId == currentDomain.back_end_language)
             {
-                // Delete post comments by administrator id
-                PostComment.DeleteOnAdministratorId(id);
-
-                // Delete post ratings by administrator id
-                List<PostRating> postRatings = PostRating.GetAllByAdministratorId(id);
-                for(int i = 0; i < postRatings.Count; i++)
-                {
-                    PostRating.DeleteOnId(postRatings[i].post_id, postRatings[i].administrator_id, postRatings[i].language_id);
-                    Post.UpdateRating(postRatings[i].post_id, postRatings[i].language_id);
-                }
-
-                // Delete posts by administrator id
-                List<Post> posts = Post.GetAllByAdministratorId(id);
-                for(int i = 0; i < posts.Count; i++)
-                {
-                    Post.DeleteOnId(posts[i].id);
-                }
-
                 // Delete the administrator and all the connected posts (CASCADE)
                 errorCode = Administrator.DeleteOnId(id);
 

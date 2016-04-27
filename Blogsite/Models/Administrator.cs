@@ -1055,6 +1055,24 @@ public class Administrator
     /// <returns>An error code</returns>
     public static Int32 DeleteOnId(Int32 id)
     {
+        // Delete post comments by administrator id
+        PostComment.DeleteOnAdministratorId(id);
+
+        // Delete post ratings by administrator id
+        List<PostRating> postRatings = PostRating.GetAllByAdministratorId(id);
+        for (int i = 0; i < postRatings.Count; i++)
+        {
+            PostRating.DeleteOnId(postRatings[i].post_id, postRatings[i].administrator_id, postRatings[i].language_id);
+            Post.UpdateRating(postRatings[i].post_id, postRatings[i].language_id);
+        }
+
+        // Delete posts by administrator id
+        List<Post> posts = Post.GetAllByAdministratorId(id);
+        for (int i = 0; i < posts.Count; i++)
+        {
+            Post.DeleteOnId(posts[i].id);
+        }
+
         // Create the connection and the sql statement
         string connection = Tools.GetConnectionString();
         string sql = "DELETE FROM dbo.administrators_detail WHERE administrator_id = @id;DELETE FROM dbo.administrators WHERE id = @id;";
