@@ -430,7 +430,7 @@ function previewPost()
     // Create the string to print
     var html = '<!DOCTYPE html><html><head><title>' + title + '</title>';
     html += theme == "0" ? '<link type="text/css" rel="stylesheet" href="/Content/annytab_css/front_default_style.css" />' : '<link type="text/css" rel="stylesheet" href="/Content/theme/front_default_style.css" />';
-    html += '<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"><\/script>';
+    html += '<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"><\/script>';
     html += '</head><body>';
 
     // Set the content for the body
