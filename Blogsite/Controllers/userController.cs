@@ -1034,8 +1034,10 @@ namespace Annytab.Blogsite.Controllers
             if(user != null)
             {
                 // Create the mail message
-                string subject = translatedTexts.Get("forgot") + " " + translatedTexts.Get("password");
-                string message = translatedTexts.Get("user_name") + ": " + user.admin_user_name + "<br />" + translatedTexts.Get("password") + ": " + password + "<br />";
+                string subject = translatedTexts.Get("forgot") + " " + translatedTexts.Get("password").ToLower() + " - " + currentDomain.website_name;
+                string message = translatedTexts.Get("user_name") + ": " + user.admin_user_name + "<br />" 
+                    + translatedTexts.Get("password") + ": " + password + "<br /><br />"
+                    + "<a href=\"" + currentDomain.web_address + "/user/login\">" + translatedTexts.Get("log_in") + "</a><br />";
 
                 // Try to send the email message
                 if(Tools.SendEmailToUser(user.email, subject, message) == false)
