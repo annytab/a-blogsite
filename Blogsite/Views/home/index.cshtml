@@ -94,14 +94,14 @@
 <div class="annytab-basic-space"></div>
 
 @* Description *@
-<p class="annytab-basic-bread-text">@Html.Raw(staticPage.main_content)</p>
+<div class="annytab-basic-bread-text">@Html.Raw(staticPage.main_content)</div>
 
 <div class="annytab-basic-space"></div>
 
 @* Top ads *@
 @foreach (Ad ad in adsTop)
 {
-    <div class="annytab-ad-slot-container">@Html.Raw(ad.ad_code)</div>
+    <div class="annytab-ad-slot-container-top">@Html.Raw(ad.ad_code)</div>
 }
 
 @* Sorting *@
@@ -173,14 +173,14 @@
 @* Bottom ads *@
 @foreach (Ad ad in adsBottom)
 {
-    <div class="annytab-ad-slot-container">@Html.Raw(ad.ad_code)</div>
+    <div class="annytab-ad-slot-container-bottom">@Html.Raw(ad.ad_code)</div>
 }
 
 @* Paging menu *@
 @Html.Partial(domain.custom_theme_id == 0 ? "/Views/shared_front/_paging_menu.cshtml" : "/Views/theme/front_paging_menu.cshtml")
 
 @section scripts {
-    <script>$("#txtSearch").focus();</script>
+    <script type="text/javascript">$("#txtSearch").focus();</script>
     @Scripts.Render("/Scripts/jquery.rateit.min.js")
     @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/rateit.css" : "/Content/theme/rateit.css")
     @Scripts.Render(domain.custom_theme_id == 0 ? "/Scripts/annytab_front/annytab.home-functions.js" : "/Scripts/theme/annytab.home-functions.js")

@@ -159,7 +159,7 @@
 }
 
 @section scripts {
-    <script>$("#txtSearch").focus();</script>
+    <script type="text/javascript">$("#txtSearch").focus();</script>
     @Scripts.Render("/Scripts/jquery.rateit.min.js")
     @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/rateit.css" : "/Content/theme/rateit.css")
 }

@@ -382,7 +382,7 @@ namespace Annytab.Blogsite.Controllers
             List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
             breadCrumbs.Add(new BreadCrumb(tt.Get("start_page"), "/"));
             breadCrumbs.Add(new BreadCrumb(tt.Get("my_pages"), "/user"));
-            breadCrumbs.Add(new BreadCrumb(tt.Get("forgot") + " " + tt.Get("password"), "/user/forgot_password"));
+            breadCrumbs.Add(new BreadCrumb(tt.Get("forgot") + " " + tt.Get("password").ToLower(), "/user/forgot_password"));
 
             // Set form values
             ViewBag.BreadCrumbs = breadCrumbs;
@@ -524,7 +524,6 @@ namespace Annytab.Blogsite.Controllers
             return currentDomain.custom_theme_id == 0 ? View() : View("/Views/theme/edit_user_ratings.cshtml");
 
         } // End of the edit_ratings form
-
 
         #endregion
 
@@ -1065,7 +1064,7 @@ namespace Annytab.Blogsite.Controllers
                 List<BreadCrumb> breadCrumbs = new List<BreadCrumb>(3);
                 breadCrumbs.Add(new BreadCrumb(translatedTexts.Get("start_page"), "/"));
                 breadCrumbs.Add(new BreadCrumb(translatedTexts.Get("my_pages"), "/user"));
-                breadCrumbs.Add(new BreadCrumb(translatedTexts.Get("forgot") + " " + translatedTexts.Get("password"), "/user/forgot_password"));
+                breadCrumbs.Add(new BreadCrumb(translatedTexts.Get("forgot") + " " + translatedTexts.Get("password").ToLower(), "/user/forgot_password"));
 
                 // Set values
                 ViewBag.BreadCrumbs = breadCrumbs;

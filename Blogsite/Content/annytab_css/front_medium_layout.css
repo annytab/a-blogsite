@@ -16,3 +16,7 @@
 .annytab-menu-title{font-weight:bold;font-size:16px;color:#000000;line-height:20px;}
 .annytab-menu-link{font-size:12px;line-height:16px;margin:0px;vertical-align:middle;}
 .annytab-sub-menu-link{font-size:12px;line-height:16px;margin:0px;vertical-align:middle;}
+
+/* Ads */
+.annytab-ad-slot-container-top{overflow:hidden;margin:10px 0px 10px 0px;}
+.annytab-ad-slot-container-bottom{overflow:hidden;margin:10px 0px 10px 0px;}

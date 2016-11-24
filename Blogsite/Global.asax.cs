@@ -32,6 +32,7 @@ namespace Annytab.Blogsite
 
             // Start the background worker to delete expired sessions
             Thread oThread = new Thread(new ThreadStart(SessionAgent.Run));
+            oThread.IsBackground = true;
             oThread.Start();
 
         } // End of the Application_Start method

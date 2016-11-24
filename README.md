@@ -5,6 +5,8 @@ This is a tool or a content management system (CMS) for a website that is based 
 
 You can find documentation, tutorials and a quick start guide at <a href="http://www.a-blogsite.com">a-blogsite.com (English)</a> or <a href="http://www.a-blogsite.se">a-blogsite.se (Swedish)</a>
 
+Quick start guide: <a href="http://www.a-blogsite.com/home/post/quick-start-guide-tutorial">a-blogsite.com (English)</a> or <a href="http://www.a-blogsite.se/home/post/snabbstartsguide-handledning">a-blogsite.se (Swedish)</a>
+
 You can see a demo of the blogsite at <a href="http://a-blogsite-demo.azurewebsites.net/">a-blogsite (demo)</a>
 
 This project has three branches, the master branch is used for development. The staging branch is used for testing on a live website and the production branch is used for live production sites.

@@ -38,12 +38,12 @@
     </div>
     <div class="annytab-author-right">
         <h1>@user.author_name</h1>
-        <span>@Html.Raw(user.author_description)</span>
+        <span class="annytab-basic-bread-text">@Html.Raw(user.author_description)</span>
     </div>
 </div>
 
 <div class="annytab-basic-space"></div>
 
 @section scripts {
-    <script>$("#txtSearch").focus();</script>
+    <script type="text/javascript">$("#txtSearch").focus();</script>
 }
