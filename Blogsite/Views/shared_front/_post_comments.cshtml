@@ -78,7 +78,7 @@
                 <div style="margin:6px 0px 6px 2px;">
                     <span class="annytab-basic-text-normal">@(rating_tt + ": ")</span>
                     <input id="userVote" name="userVote" type="range" value="@(userRating != null ? userRating.rating.ToString(CultureInfo.InvariantCulture) : "5")" step="0.25">
-                    <div class="rateit" data-rateit-backingfld="#userVote" data-rateit-resetable="false" data-rateit-ispreset="true"
+                    <div class="rateit" data-rateit-backingfld="#userVote" data-rateit-resetable="false" data-rateit-ispreset="true" 
                          data-rateit-min="0" data-rateit-max="5">
                     </div>
                 </div>
@@ -167,7 +167,7 @@
         @:<div class="annytab-basic-inner-container" >
             @:<a href=@("/home/author/" + commentUser.id) class="annytab-basic-text-bold">@commentUser.author_name</a><span>@(" | ")</span><span class="annytab-basic-text-normal">@(comment.comment_date.ToString("d", cultureInfo))</span><br />
             @:<div style="margin-bottom:5px;"></div>
-            @:<span class="annytab-basic-bread-text" itemprop="description">@Html.Raw(comment.comment_text)</span><br />
+            @:<span class="annytab-basic-bread-text">@Html.Raw(comment.comment_text)</span><br />
         @:</div>
     }
 </div>

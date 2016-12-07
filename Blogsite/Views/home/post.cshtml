@@ -7,13 +7,14 @@
     Administrator author = ViewBag.Author;
     KeyStringList tt = ViewBag.TranslatedTexts;
     CultureInfo cultureInfo = ViewBag.CultureInfo;
+    KeyStringList imageUrls = Tools.GetDomainImageUrls(domain.id);
     List<Ad> adsTop = Ad.GetByAdSlot("4", domain.front_end_language, "name", "ASC");
     List<Ad> adsBottom = Ad.GetByAdSlot("5", domain.front_end_language, "name", "ASC");
 
     // Count the number of comments
     Int32 commentCount = PostComment.GetCountByPostId(post.id, domain.front_end_language);
     ViewBag.CommentCount = commentCount;
-    
+
     // Count the number of ratings
     Int32 ratingCount = PostRating.GetCountByPostId(post.id, domain.front_end_language);
 
@@ -39,11 +40,13 @@
     Layout = domain.custom_theme_id == 0 ? "/Views/shared_front/_standard_layout.cshtml" : "/Views/theme/front_standard_layout.cshtml";
 }
 
-@* Google markup (Product) *@
+@* Google markup (Article) *@
 <div itemscope itemtype="http://schema.org/Article">
 
+    <meta itemscope itemprop="mainEntityOfPage" itemType="https://schema.org/WebPage" itemid="@ViewBag.MetaCanonical" />
+
     @* Title *@
-    <h1 itemprop="name">@post.title</h1>
+    <h1 itemprop="headline">@post.title</h1>
 
     @* Share content *@
     <div class="annytab-share-container">
@@ -56,16 +59,22 @@
 
     @* Date and author*@
     <div style="display:block;margin:6px 2px 6px 2px;">
-        <span class="annytab-basic-text-normal">@(by_tt + ": ")</span><a href="@Url.Content("/home/author/" + author.id)" class="annytab-basic-text-normal">@author.author_name</a><span>@(" | ")</span>
-        <span class="annytab-basic-text-normal">@(added_tt + ": " + post.date_added.ToString("d MMMM yyyy", cultureInfo))</span>
-        <span>@(" | ")</span><span class="annytab-basic-text-normal">@(updated_tt + ": " + post.date_updated.ToString("d MMMM yyyy", cultureInfo))</span>
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person" class="annytab-basic-text-normal">@(by_tt + ": ")
+        <a href="@Url.Content("/home/author/" + author.id)" class="annytab-basic-text-normal"><span itemprop="name">@author.author_name</span></a>
+        </span><span>@(" | ")</span>
+        <span class="annytab-basic-text-normal">@(added_tt + ": " + post.date_added.ToString("d MMMM yyyy", cultureInfo))</span><span>@(" | ")</span>
+        <span class="annytab-basic-text-normal">@(updated_tt + ": " + post.date_updated.ToString("d MMMM yyyy", cultureInfo))</span>
+        <meta itemprop="datePublished" content="@post.date_added.ToString("yyyy-MM-ddTHH:mm:ssK")" />
+        <meta itemprop="dateModified" content="@post.date_updated.ToString("yyyy-MM-ddTHH:mm:ssK")" />
     </div>
 
     @* Review and rating *@
-    <div itemscope itemtype="http://data-vocabulary.org/Review-aggregate" style="margin-bottom:5px;">
+    <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" style="margin-bottom:5px;">
         <div class="rateit" title="@post.rating.ToString()" data-rateit-value="@post.rating.ToString(CultureInfo.InvariantCulture)" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-        <span itemprop="itemreviewed" style="display:none;">@post.title</span><span>@(" | ")</span><span class="annytab-basic-text-normal" itemprop="rating">@(rating_tt + ": " + post.rating.ToString("##,0.##", cultureInfo))</span>
-        <span>@(" | ")</span><span class="annytab-basic-text-normal">@(votes_tt + ": ")</span><span itemprop="votes" class="annytab-basic-text-normal">@ratingCount</span><span>@(" | ")</span>
+        <span>@(" | ")</span>
+        <span class="annytab-basic-text-normal" itemprop="ratingValue" content="@post.rating.ToString(CultureInfo.InvariantCulture)">@(rating_tt + ": " + post.rating.ToString("##,0.##", cultureInfo))</span>
+        <meta itemprop="worstRating" content="0" /><meta itemprop="bestRating" content="5" />
+        <span>@(" | ")</span><span class="annytab-basic-text-normal">@(votes_tt + ": ")</span><span itemprop="ratingCount" class="annytab-basic-text-normal">@ratingCount</span><span>@(" | ")</span>
         <span class="annytab-basic-text-normal">@(page_views_tt + ": " + post.page_views.ToString())</span><span>@(" | ")</span>
         <a href="#comments" style="vertical-align:middle;">@(comments_tt + " (" + commentCount + ")")</a>
     </div>
@@ -79,7 +88,18 @@
     }
 
     @* Main content *@
-    <div itemprop="description" class="annytab-basic-bread-text">@Html.Raw(post.main_content)</div>
+    <div itemprop="articleBody" class="annytab-basic-bread-text">@Html.Raw(post.main_content)</div>
+    <meta itemprop="description" content="@ViewBag.MetaDescription" />
+
+    @* Publisher *@
+    <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+        <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+            <meta itemprop="url" content="@(domain.web_address + imageUrls.Get("big_icon"))">
+            <meta itemprop="width" content="512">
+            <meta itemprop="height" content="512">
+        </div>
+        <meta itemprop="name" content="@domain.website_name">
+    </div>
 
     @* Bottom ads *@
     @foreach (Ad ad in adsBottom)
@@ -100,6 +120,6 @@
 @section scripts {
     <script type="text/javascript">$("#txtSearch").focus();</script>
     @Scripts.Render(domain.custom_theme_id == 0 ? "/Scripts/annytab_front/annytab.post-functions.js" : "/Scripts/theme/annytab.post-functions.js")
-    @Scripts.Render("/Scripts/jquery.rateit.min.js")
     @Styles.Render(domain.custom_theme_id == 0 ? "/Content/annytab_css/rateit.css" : "/Content/theme/rateit.css")
+    @Scripts.Render("/Scripts/jquery.rateit.min.js")
 }

@@ -23,7 +23,7 @@ public static class Tools
     public static string GetConnectionString()
     {
         // Return the connection string
-        return CloudConfigurationManager.GetSetting("ConnectionString");
+        return CloudConfigurationManager.GetSetting("ConnectionString", false);
 
     } // End of the GetConnectionString method
 
@@ -34,7 +34,7 @@ public static class Tools
     public static string GetAzureStorageAccount()
     {
         // Return the connection string
-        return CloudConfigurationManager.GetSetting("AzureStorageAccount");
+        return CloudConfigurationManager.GetSetting("AzureStorageAccount", false);
 
     } // End of the GetAzureStorageAccount method
 
