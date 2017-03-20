@@ -32,6 +32,8 @@
     string copyright_information_tt = tt.Get("copyright_information");
     string cookie_consent_tt = tt.Get("cookie_consent");
     string ok_tt = tt.Get("ok");
+    string background_image = imageUrls.Get("background_image");
+    bool background_image_existed = File.Exists(Server.MapPath(background_image));
 }
 
 <!DOCTYPE html>
@@ -73,8 +75,10 @@
     </div>
 
     @* The background image *@
-    <img id="backgroundImage" data-src="@imageUrls.Get("background_image")" class="annytab-background-image" alt="@background_image_tt" />
-
+    @if (background_image_existed)
+    {
+        <img id="backgroundImage" data-src="@background_image" class="annytab-background-image" alt="@background_image_tt" />
+    }
     @* Master outer container *@
     <div class="annytab-layout-outer-container">
 
