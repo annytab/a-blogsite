@@ -171,5 +171,5 @@ $RECYCLE.BIN/
 # Mac desktop service store files
 .DS_Store
 
-# Application host configuration
-/.vs/config/applicationhost.config
+# Visual Studio folder
+/.vs

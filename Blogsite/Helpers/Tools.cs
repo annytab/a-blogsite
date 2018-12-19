@@ -9,7 +9,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Azure;
-using Annytab;
+using Annytab.Stemmer;
 
 /// <summary>
 /// This static class includes handy methods
