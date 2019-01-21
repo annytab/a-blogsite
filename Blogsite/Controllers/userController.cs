@@ -148,22 +148,18 @@ namespace Annytab.Blogsite.Controllers
             KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
             string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
 
-            // Get the access token
-            string access_token = await AnnytabExternalLogin.GetFacebookAccessToken(domain, code);
-
             // Get the facebook user
-            Dictionary<string, object> facebookUser = await AnnytabExternalLogin.GetFacebookUser(domain, access_token);
+            FacebookUser facebook_user = await AnnytabExternalLogin.GetFacebookUser(domain, code);
                 
             // Get the facebook data
-            string facebookId = facebookUser.ContainsKey("id") == true ? facebookUser["id"].ToString() : "";
-            string facebookName = facebookUser.ContainsKey("name") == true ? facebookUser["name"].ToString() : "";
-            string facebookEmail = facebookId + "_facebook";
+            string facebookId = facebook_user != null ? facebook_user.id : "";
+            string facebookName = facebook_user != null ? facebook_user.name : "";
 
             // Get the signed in user
             Administrator user = Administrator.GetSignedInAdministrator();
 
             // Check if the user exists or not
-            if (facebookId != "" && user != null)
+            if (string.IsNullOrEmpty(facebookId) == false && user != null)
             {
                 // Update the user
                 user.facebook_user_id = facebookId;
@@ -172,7 +168,7 @@ namespace Annytab.Blogsite.Controllers
                 // Redirect the user to his start page
                 return RedirectToAction("index", "user");
             }
-            else if (facebookId != "" && user == null)
+            else if (string.IsNullOrEmpty(facebookId) == false && user == null)
             {
                 // Check if we can find a user with the facebook id
                 user = Administrator.GetOneByFacebookUserId(facebookId);
@@ -182,7 +178,7 @@ namespace Annytab.Blogsite.Controllers
                 {
                     // Create a new administrator
                     user = new Administrator();
-                    user.admin_user_name = facebookEmail;
+                    user.admin_user_name = facebookId + "_facebook";
                     user.admin_password = PasswordHash.CreateHash(Tools.GeneratePassword());
                     user.admin_role = "User";
                     user.author_name = "-";
@@ -289,21 +285,18 @@ namespace Annytab.Blogsite.Controllers
             KeyStringList websiteSettings = WebsiteSetting.GetAllFromCache();
             string redirectHttps = websiteSettings.Get("REDIRECT-HTTPS");
 
-            // Get the access token
-            string access_token = await AnnytabExternalLogin.GetGoogleAccessToken(domain, code);
-
             // Get the google user
-            Dictionary<string, object> googleUser = await AnnytabExternalLogin.GetGoogleUser(domain, access_token);
+            GoogleUser google_user = await AnnytabExternalLogin.GetGoogleUser(domain, code);
 
             // Get the google data
-            string googleId = googleUser.ContainsKey("id") == true ? googleUser["id"].ToString() : "";
-            string googleName = googleUser.ContainsKey("displayName") == true ? googleUser["displayName"].ToString() : "";
+            string googleId = google_user != null ? google_user.id : "";
+            string googleName = google_user != null ? google_user.displayName : "";
 
             // Get the signed in user
             Administrator user = Administrator.GetSignedInAdministrator();
 
             // Check if the user exists or not
-            if (googleId != "" && user != null)
+            if (string.IsNullOrEmpty(googleId) == false && user != null)
             {
                 // Update the user
                 user.google_user_id = googleId;
@@ -312,7 +305,7 @@ namespace Annytab.Blogsite.Controllers
                 // Redirect the user to his start page
                 return RedirectToAction("index", "user");
             }
-            else if (googleId != "" && user == null)
+            else if (string.IsNullOrEmpty(googleId) == false && user == null)
             {
                 // Check if we can find a user with the google id
                 user = Administrator.GetOneByGoogleUserId(googleId);

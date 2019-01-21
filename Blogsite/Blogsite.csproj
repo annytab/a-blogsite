@@ -177,6 +177,7 @@
     <Compile Include="Helpers\AnnytabExternalLogin.cs" />
     <Compile Include="Helpers\AnnytabRequireHttpsAttribute.cs" />
     <Compile Include="Helpers\DatabaseManager.cs" />
+    <Compile Include="Helpers\DefaultHttpClient.cs" />
     <Compile Include="Helpers\KeyStringList.cs" />
     <Compile Include="Helpers\PasswordHash.cs" />
     <Compile Include="Helpers\QueryParams.cs" />
@@ -193,6 +194,11 @@
     <Compile Include="Models\CustomThemeTemplate.cs" />
     <Compile Include="Models\DisplayItem.cs" />
     <Compile Include="Models\Domain.cs" />
+    <Compile Include="Models\FacebookAuthorization.cs" />
+    <Compile Include="Models\FacebookError.cs" />
+    <Compile Include="Models\FacebookUser.cs" />
+    <Compile Include="Models\GoogleAuthorization.cs" />
+    <Compile Include="Models\GoogleUser.cs" />
     <Compile Include="Models\Language.cs" />
     <Compile Include="Models\MediaFile.cs" />
     <Compile Include="Models\Post.cs" />
